@@ -25,7 +25,7 @@ Enemy.prototype.constructor = Enemy;
 
 //update function
 Enemy.prototype.update = function() {
-  if(this.hp == 0) this.death();
+  if(this.hp <= 0) this.death();
 }
 Enemy.prototype.fire = function() {
   console.log("pew");

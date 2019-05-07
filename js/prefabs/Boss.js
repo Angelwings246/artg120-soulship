@@ -29,9 +29,10 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
-  this.MAX_HEALTH = 100;
-  this.current_hp = this.MAX_HEALTH;
+  this.MAX_HEALTH = 4;
+  this.hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
+
   
   //remove the default velocity from Enemy()
   this.top_pt.body.velocity.y = this.bot_pt.body.velocity.y = 0;
@@ -47,6 +48,9 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   //have a flag so that rotation can stop if needed
   this.rotating = false;
 
+  this.bullets = game.add.group();
+  this.dmg = 2;
+
 }
 
 
@@ -56,6 +60,18 @@ Boss.prototype.constructor = Boss;
 
 //update function
 Boss.prototype.update = function() {
+
+  this.hp = this.top_pt.hp + this.bot_pt.hp;
+  
+  if(this.top_pt.exists && this.top_pt.hp <= 0) {
+    this.top_pt.death();
+
+  }
+  if(this.bot_pt.exists && this.bot_pt.hp <= 0) this.bot_pt.death();
+
+  console.log("top = %d bot = %d", this.top_pt.hp, this.bot_pt.hp);
+
+
   if(this.rotating) {
     this.top_pt.rotation += 0.01;
     this.center_pt.rotation += 0.01;
@@ -66,7 +82,7 @@ Boss.prototype.update = function() {
     console.log(this.rotating)
   }
 
-  if(this.top_pt.hp == 0 && this.bot_pt.hp == 0) this.death();
+  if(this.top_pt.hp <= 0 && this.bot_pt.hp <= 0) this.death();
 }
 
 //fire function - doesn't actually override the Enemy fire function as Boss extends Phaser.Group.
@@ -74,8 +90,8 @@ Boss.prototype.update = function() {
 //Includes multiple fire types by calling different subfunctions
 Boss.prototype.fire = function() {
   //calculate the boss's current hp to see what phase it is in
-  this.hp = this.top_pt.hp + this.bot_pt.hp;
   
+
   var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
     case 0:
@@ -95,8 +111,8 @@ Boss.prototype.fire = function() {
 //      else this.fire3b();
 //      break;
     default:
-      this.top_pt.fire();
-      this.bot_pt.fire();
+      // this.top_pt.fire();
+      // this.bot_pt.fire();
       break;
   }  
   
@@ -109,13 +125,13 @@ Boss.prototype.fire1a = function() {
   this.firing_sound.play();
 
   console.log("phase 1");
-  //Bullet(game, x, y, speed, angle, color, ally, key, frame)
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0x0000ff, false, "bullet", 0);
-  game.add.existing(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0x0000ff, false, "bullet", 0);
-  game.add.existing(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0x0000ff, false, "bullet", 0);
-  game.add.existing(bullet);
+  //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF11043, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
 
 }
 //stuff
