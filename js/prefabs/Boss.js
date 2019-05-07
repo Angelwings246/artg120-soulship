@@ -8,6 +8,13 @@
 //key_side and frame_side are for the side/weak parts of the boss.
 function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   Phaser.Group.call(this, game);
+  
+  //store sounds
+  this.firing_sound = sounds[1];
+  this.death_sound = sounds[0];
+  
+  //due to protected keywords, the sprites in this group are named "_pt", like "part"
+  
   //create a normal sprite for the center 
   this.center_pt = this.create(3/4 * game.width, game.height/2, key_main, frame_main);
   this.center_pt.anchor.setTo(0.5);
@@ -23,12 +30,14 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
   this.MAX_HEALTH = 100;
+  this.current_hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
   
   //remove the default velocity from Enemy()
   this.top_pt.body.velocity.y = this.bot_pt.body.velocity.y = 0;
   
   //set up the rotation
+  //from Phaser Examples: pivot
   this.top_pt.anchor.setTo(0.5);
   this.bot_pt.anchor.setTo(0.5);
   this.bot_pt.rotation = Math.PI;
@@ -45,6 +54,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 Boss.prototype = Object.create(Phaser.Group.prototype); //create with the GROUP prototype! ... and hope it works
 Boss.prototype.constructor = Boss;
 
+//update function
 Boss.prototype.update = function() {
   if(this.rotating) {
     this.top_pt.rotation += 0.01;
@@ -59,17 +69,19 @@ Boss.prototype.update = function() {
   if(this.top_pt.hp == 0 && this.bot_pt.hp == 0) this.death();
 }
 
-Boss.prototype.death = function() {
-  console.log("ded");
-}
-
+//fire function - doesn't actually override the Enemy fire function as Boss extends Phaser.Group.
+//naming the function the same thing should make life easier when called in states
+//Includes multiple fire types by calling different subfunctions
 Boss.prototype.fire = function() {
+  //calculate the boss's current hp to see what phase it is in
+  this.hp = this.top_pt.hp + this.bot_pt.hp;
+  
   var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
-//    case 0:
-//      if(this.hp > this.MAX_HEALTH/2) this.fire1a();
-//      else this.fire1b();
-//      break;
+    case 0:
+      if(this.hp > this.MAX_HEALTH/2) this.fire1a();
+      else this.fire1b();
+      break;
 //    case 1:
 //      if(this.hp > this.MAX_HEALTH/2) this.fire2a();
 //      else this.fire2b();
@@ -87,6 +99,32 @@ Boss.prototype.fire = function() {
       this.bot_pt.fire();
       break;
   }  
-  console.log("pew pew" + pattern);
+  
+  console.log("pew pew " + pattern);
+}
 
+
+//stuff
+Boss.prototype.fire1a = function() {
+  this.firing_sound.play();
+
+  console.log("phase 1");
+  //Bullet(game, x, y, speed, angle, color, ally, key, frame)
+  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0x0000ff, false, "bullet", 0);
+  game.add.existing(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0x0000ff, false, "bullet", 0);
+  game.add.existing(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0x0000ff, false, "bullet", 0);
+  game.add.existing(bullet);
+
+}
+//stuff
+Boss.prototype.fire1b = function() {
+  console.log("phase 2");
+}
+
+
+//when the boss dies
+Boss.prototype.death = function() {
+  console.log("ded");
 }
