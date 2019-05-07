@@ -29,7 +29,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
-  this.MAX_HEALTH = 4;
+  this.MAX_HEALTH = 10;
   this.hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
 
@@ -46,7 +46,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   this.bot_pt.pivot.y = this.center_pt.height/4;
   
   //have a flag so that rotation can stop if needed
-  this.rotating = false;
+  this.rotating = true;
 
   this.bullets = game.add.group();
   this.dmg = 2;
@@ -61,17 +61,19 @@ Boss.prototype.constructor = Boss;
 //update function
 Boss.prototype.update = function() {
 
+  //calculate boss overall hp
   this.hp = this.top_pt.hp + this.bot_pt.hp;
   
+  //kill the individual tentacles if their health reaches 0
   if(this.top_pt.exists && this.top_pt.hp <= 0) {
     this.top_pt.death();
-
   }
-  if(this.bot_pt.exists && this.bot_pt.hp <= 0) this.bot_pt.death();
+  if(this.bot_pt.exists && this.bot_pt.hp <= 0) {
+    this.bot_pt.death();
+  }
 
-  console.log("top = %d bot = %d", this.top_pt.hp, this.bot_pt.hp);
 
-
+  //rotation
   if(this.rotating) {
     this.top_pt.rotation += 0.01;
     this.center_pt.rotation += 0.01;
@@ -94,10 +96,10 @@ Boss.prototype.fire = function() {
 
   var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
-    case 0:
-      if(this.hp > this.MAX_HEALTH/2) this.fire1a();
-      else this.fire1b();
-      break;
+    // case 0:
+    //   if(this.hp > this.MAX_HEALTH/2) this.fire1a();
+    //   else this.fire1b();
+    //   break;
 //    case 1:
 //      if(this.hp > this.MAX_HEALTH/2) this.fire2a();
 //      else this.fire2b();
@@ -111,8 +113,8 @@ Boss.prototype.fire = function() {
 //      else this.fire3b();
 //      break;
     default:
-      // this.top_pt.fire();
-      // this.bot_pt.fire();
+      if(this.hp > this.MAX_HEALTH/2) this.fire1a();
+      else this.fire1b();
       break;
   }  
   
@@ -135,8 +137,17 @@ Boss.prototype.fire1a = function() {
 
 }
 //stuff
+//for now phase 2 just slightly changes the color
 Boss.prototype.fire1b = function() {
+  this.firing_sound.play();
+
   console.log("phase 2");
+  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
+  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+  this.bullets.add(bullet);
 }
 
 

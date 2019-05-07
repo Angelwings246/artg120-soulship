@@ -9,7 +9,7 @@ function Pickup(game, x, y, key, frame) {
   
   //enable physics and add properties
   game.physics.arcade.enable(this);
-  this.velocity.x = 50;
+  this.body.velocity.x = -50;
 
 }
 

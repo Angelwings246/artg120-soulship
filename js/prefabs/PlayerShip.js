@@ -22,6 +22,11 @@ function PlayerShip(game, sounds, key, frame){
   this.FIRE_RATE = 30;//once every x frames
   this.time_since_last_shot = 0; //allows for lockout between shots when fire button is held
 
+
+  this.INVULN_FRAMES = 20;
+  this.time_since_dmg = 0; //have some invulnerability frames after being hit by an enemy
+
+
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -82,9 +87,9 @@ PlayerShip.prototype.update = function(){
     }
     this.time_since_last_shot++;
 	}
-
-
   if(this.keys.fire.justUp) this.time_since_last_shot = 0;
+
+  this.time_since_dmg++;
 }
 
 PlayerShip.prototype.fire = function() {
@@ -102,5 +107,8 @@ PlayerShip.prototype.fire = function() {
 
 
 PlayerShip.prototype.damage = function(dmg) {
-  this.hp -= dmg;
+  if(this.time_since_dmg >= this.INVULN_FRAMES) {
+    this.hp -= dmg;
+    this.time_since_dmg = 0;
+  }
 }
