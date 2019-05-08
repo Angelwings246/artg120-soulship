@@ -10,7 +10,7 @@ MainMenu.prototype = {
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
-			game.state.start('BossLevel');
+			game.state.start('Tutorial');
 		}
 	}
 };
