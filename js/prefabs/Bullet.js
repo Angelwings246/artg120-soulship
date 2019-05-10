@@ -4,10 +4,10 @@
 "use strict";
 
 /* Bullet constructor:
- * Speed - refers only to magnitude.  Velocity is calculated with angle in construction.
+ * Speed - refers only to magnitude.  Velocity is calculated with angle in construction.  (because speed is a scalar!)
 IMPORTANT: ANGLE - IN RADIANS, WITH THE BASE ASSET FACING THE RIGHT (at 0)  Positive = clockwise, negative = counter-clockwise
 Color - tints the bullet (format 0xFFFFFF).  The base asset is in greyscale.
-Ally - boolean (T/F).  T refers to a bullet fired by the player. F refers to a bullet fired by an enemy.*/
+*/
 function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   console.log("spawned bullet");
   //call Phaser.Sprite constructor (game, x, y, key, frame)
@@ -23,7 +23,7 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   this.body.velocity.x = speed * Math.cos(angle);
   this.body.velocity.y = speed * Math.sin(angle);
   
-  this.lifespan = 30000; //semi-arbitrary lifespan so that bullets do not last forever.  Value will be iterated upon as necessary.
+  this.lifespan = 15000; //semi-arbitrary lifespan so that bullets do not last forever.  Value will be iterated upon as necessary.
   this.dmg = damage;
 }
 

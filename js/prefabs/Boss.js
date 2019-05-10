@@ -1,5 +1,13 @@
-/**
- * 
+/** Prefab for the final Boss (dun dun duunnn)
+ * Extends Phaser.Group and functions as a group of 2 Enemy objects (which function as weak points)
+ * and a regular Sprite with no physics body (the central, intangible vortex).
+ * Does not move x-y but rotates around its center.
+ * Has 4 different fire types, each with 2 variations based upon the Boss's current HP, so 8 fire functions total.
+ * These fire types are called at random from a large fire() controller function.
+ * The Boss has a timer to manage the loop of each fire type: when a firing method is selected, it creates a loop
+ * that calls the respective firing variation/subfunction once per "wave" of shots, and the looping event is deleted 
+ * once the attack is finished.  
+ * This timer is DIFFERENT from how frequently the Boss uses its attacks, which is managed in the game state.
  */
 
 "use strict";
@@ -12,6 +20,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   //store sounds
   this.firing_sound = sounds[1];
   this.death_sound = sounds[0];
+  this.asteroid_sounds = sounds; //because the asteroids are enemy types, they will need a sound argument 
   
   //due to protected keywords, the sprites in this group are named "_pt", like "part"
   
@@ -49,11 +58,13 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   //have a flag so that rotation can stop if needed
   this.rotating = true;
 
+  //bullets are all grouped together for collision checks.
   this.bullets = game.add.group();
-  this.dmg = 2;
+  this.dmg = 2; //base dmg starts at 2
+  this.asteroids = game.add.group(); 
 
   this.timer = game.time.create(false); //timer for firing stuff
-  this.timer.start();
+  this.timer.start(); //remember to start it!
 }
 
 
@@ -65,7 +76,7 @@ Boss.prototype.constructor = Boss;
 Boss.prototype.update = function() {
   //calculate boss overall hp
   this.hp = this.top_pt.hp + this.bot_pt.hp;
-  if(this.hp < this.MAX_HEALTH) this.dmg ++;  //increase damage when low hp ?
+  if(this.hp < this.MAX_HEALTH) this.dmg = 3;  //increase damage when low hp ?
   
   //kill the individual tentacles if their health reaches 0
   if(this.top_pt.exists && this.top_pt.hp <= 0) {
@@ -93,46 +104,39 @@ Boss.prototype.update = function() {
 //fire function - doesn't actually override the Enemy fire function as Boss extends Phaser.Group.
 //naming the function the same thing should make life easier when called in states
 //Includes multiple fire types by calling different subfunctions
-Boss.prototype.fire = function() {
+Boss.prototype.fire = function(x, y) {
   //calculate the boss's current hp to see what phase it is in
   this.waves_fired = 0;
 
+  //randomly calls a subfunction, variations depending on HP
   var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
-  //   case 0:
-  //     if(this.hp > this.MAX_HEALTH/2) {
-  //       this.firing = this.timer.loop(500, this.fire1a, this);
-  //     }
-  //     else this.fire1b();
-  //     break;
-  //  case 1:
-     // this.firing_sound.play();
-     //   if(this.top_pt.body != null) {
-     //     var bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 90, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-     //     this.bullets.add(bullet);
-     //     var bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 90, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-     //     this.bullets.add(bullet);
-     //   }
-     //   break;
-//    case 2:
-//      if(this.hp > this.MAX_HEALTH/2) this.fire3a();
-//      else this.fire3b();
-//      break;
-//    case 3:
-//      if(this.hp > this.MAX_HEALTH/2) this.fire3a();
-//      else this.fire3b();
-//      break;
-    default:
+    case 0:
       if(this.hp > this.MAX_HEALTH/2)  this.firing = this.timer.loop(500, this.fire1a, this);
       else this.firing = this.timer.loop(750, this.fire1b, this);
       break;
+   case 1:
+      if(this.hp > this.MAX_HEALTH/2)  this.firing = this.timer.loop(500, this.fire2a, this);
+      else this.firing = this.timer.loop(500, this.fire2b, this);
+      break;
+   case 2:
+      if(this.hp > this.MAX_HEALTH/2)  this.firing = this.timer.loop(250, this.fire3a, this, x, y);
+      else this.firing = this.timer.loop(250, this.fire3b, this, x, y);
+      break;
+   case 3:
+      if(this.hp > this.MAX_HEALTH/2)  this.firing = this.timer.loop(500, this.fire4a, this);
+      else this.firing = this.timer.loop(750, this.fire4b, this);
+      break;
+    default:
+      break;
   }  
-  
   console.log("pew pew " + pattern);
 }
 
 
-//stuff
+/* --- Firing Type 1 Variation A ---
+*  Fires 4 waves of a 5-bullet spread, originating from the center vortex.
+*/
 Boss.prototype.fire1a = function() {
   if(this.waves_fired < 4) {
     this.firing_sound.play();
@@ -152,15 +156,17 @@ Boss.prototype.fire1a = function() {
     bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+21)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
     
-  this.waves_fired++;
+  this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing);
-
+  else this.timer.remove(this.firing); //remove timer when done
 }
-//stuff
-//for now phase 2 just slightly changes the color
+
+
+/* --- Firing Type 1 Variation B ---
+*  Fires 8 waves of a 7-bullet spread, originating from the center vortex.
+*/
 Boss.prototype.fire1b = function() {
-  if(this.waves_fired < 6) {
+  if(this.waves_fired < 8) {
     this.firing_sound.play();
     var i;
     if(this.waves_fired % 2 == 0) i = 1;
@@ -182,96 +188,249 @@ Boss.prototype.fire1b = function() {
     bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+23)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
     
-  this.waves_fired++;
+  this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing);
+  else this.timer.remove(this.firing); //remove timer when done
 }
 
-//stuff
+/* --- Firing Type 2 Variation A ---
+*  Fires 4 waves of 2 3-bullet spreads, each originating from a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*/
 Boss.prototype.fire2a = function() {
-
-  this.firing_sound.play();
-
-  console.log("phase 1");
-  //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
+  if(this.waves_fired < 4) {
+    this.firing_sound.play();
+    console.log("phase 1 " + this.waves_fired);
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+      var bullet;
+    if(this.top_pt != null) {
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);    
+    }
+    if(this.bot_pt != null){
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
 
 }
-//stuff
-//for now phase 2 just slightly changes the color
+
+/* --- Firing Type 2 Variation B ---
+*  Fires 4 waves of 2 5-bullet spreads, each originating from a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*/
 Boss.prototype.fire2b = function() {
-  this.firing_sound.play();
+  if(this.waves_fired < 4) {
+    this.firing_sound.play();
+    console.log("phase 1 " + this.waves_fired);
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+      var bullet;
+    if(this.top_pt.body != null) {
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);   
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet); 
+    }
+    if(this.bot_pt.body != null){
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
 
-  console.log("phase 2");
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
 }
 
-//stuff
-Boss.prototype.fire3a = function() {
-
-  this.firing_sound.play();
-
-  console.log("phase 1");
-  //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
+/* --- Firing Type 3 Variation A ---
+*  Fires 4 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
+*  One shot originates from the center and one originating from each a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*/
+Boss.prototype.fire3a = function(x, y) {
+if(this.waves_fired < 4) {
+    this.firing_sound.play();
+    console.log("phase 1 " + this.waves_fired);
+    
+    var bullet;
+    //do math stuff to calculate the angle of fire
+    var center_to_player = - Math.PI + Math.atan((this.center_pt.centerY - y)/(this.center_pt.centerX - x));
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 300, center_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
+    
+    if(this.top_pt.body != null) {
+      //do math stuff to calculate the angle of fire
+      var top_to_player = - Math.PI + Math.atan((this.top_pt.body.center.y - y)/(this.top_pt.body.center.x - x));
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 300,top_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    }
+    if(this.bot_pt.body != null){
+      //do math stuff to calculate the angle of fire
+      var bot_to_player = - Math.PI + Math.atan((this.bot_pt.body.center.y - y)/(this.bot_pt.body.center.x - x));
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 300, bot_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
 
 }
-//stuff
-//for now phase 2 just slightly changes the color
-Boss.prototype.fire3b = function() {
-  this.firing_sound.play();
 
-  console.log("phase 2");
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
+/* --- Firing Type 3 Variation B ---
+*  Fires 4 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
+*  One shot originates from the center and one originating from each a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*  Also spawns a random number of asteroids that spawn on the right side of the screen and travel to the left,
+*  which damage the player if they player collides with them.
+*/
+Boss.prototype.fire3b = function(x, y) {
+
+  //only spawn asteroids once, on the first wave
+  if(this.waves_fired == 0) {
+    var asteroid;
+    var num_asteroids = game.rnd.integerInRange(2, 5); //random number of asteroids
+    var asteroid_key;
+  for(let i = 0; i < num_asteroids; i++) {
+     
+     //switch between the two asteroid assets
+     if(i % 2 == 0) asteroid_key = "asteroid2";
+     else asteroid_key = "asteroid";
+     
+     //Enemy(game, x, y, sounds, key, frame)
+     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.asteroid_sounds, asteroid_key, 0);
+     asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
+     asteroid.body.velocity.x = -150; 
+     asteroid.body.velocity.y = 0; //remove velocity from the base Enemy type
+     this.asteroids.add(asteroid);
+   }
+
+  }
+  if(this.waves_fired < 4) {
+    this.firing_sound.play();
+    console.log("phase 1 " + this.waves_fired);
+    
+    var bullet;
+    //do math stuff to calculate the angle of fire
+    var center_to_player = - Math.PI + Math.atan((this.center_pt.centerY - y)/(this.center_pt.centerX - x));
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 300, center_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
+    
+    if(this.top_pt.body != null) {
+      //do math stuff to calculate the angle of fire
+      var top_to_player = - Math.PI + Math.atan((this.top_pt.body.center.y - y)/(this.top_pt.body.center.x - x));
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 300,top_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    }
+    if(this.bot_pt.body != null){
+      //do math stuff to calculate the angle of fire
+      var bot_to_player = - Math.PI + Math.atan((this.bot_pt.body.center.y - y)/(this.bot_pt.body.center.x - x));
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 300, bot_to_player, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
 }
 
-//stuff
+/* --- Firing Type 4 Variation A ---
+*  Fires 3 waves of 3 3-bullet spreads.
+*  One shot originates from the center and one originating from each a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*/
 Boss.prototype.fire4a = function() {
-
-  this.firing_sound.play();
-
-  console.log("phase 1");
-  //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
+  if(this.waves_fired < 3) {
+    this.firing_sound.play();
+    console.log("phase 1 " + this.waves_fired);
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    if(this.top_pt.body != null) {
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);    
+    }
+    if(this.bot_pt.body != null){
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
 
 }
-//stuff
-//for now phase 2 just slightly changes the color
-Boss.prototype.fire4b = function() {
-  this.firing_sound.play();
 
-  console.log("phase 2");
-  var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
-  bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
-  this.bullets.add(bullet);
+/* --- Firing Type 4 Variation B ---
+*  Fires 6 waves of 3 3-bullet spreads.
+*  One shot originates from the center and one originating from each a tentacle.
+*  If a tentacle has been destroyed, it does not shoot.
+*/
+Boss.prototype.fire4b = function() {
+  if(this.waves_fired < 6) {
+    this.firing_sound.play();
+    console.log("phase 2 " + this.waves_fired);
+    //Bullet(game, x, y, speed, angle, color, damage, key, frame)
+      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    if(this.top_pt.body != null) {
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);    
+    }
+    if(this.bot_pt.body != null){
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      this.bullets.add(bullet);
+    } 
+    this.waves_fired++; //count the number of times this subfunction has looped
+  }
+  else this.timer.remove(this.firing); //remove timer when done
+
 }
 
 //when the boss dies

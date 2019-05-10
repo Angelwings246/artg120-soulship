@@ -1,4 +1,7 @@
-// Player Ship prefab
+/* Prefab for the PlayerShip
+* Allows 8-directional movement, shooting (hold for a constant fire rate or tap to spam), 
+* and brief invulnerability after taking damage.
+*/
 "use strict";
 
 // create Player ship constructor 
@@ -10,14 +13,14 @@ function PlayerShip(game, sounds, key, frame){
   this.anchor.set(0.5);
   this.body.setSize(40, 34, 2, 15);
 
-
-  this.rotation = Math.PI;
-  this.body.collideWorldBounds = true;
+  this.rotation = Math.PI; //fix sprite direction
+  this.body.collideWorldBounds = true; //don't let it go offscreen
 
 	//set up sounds
   this.firing_sound = sounds[1];
   this.death_sound = sounds[0];
 
+  //bullets are all grouped together for collision checks
   this.bullets = game.add.group();
   this.dmg = 1;
 
@@ -28,9 +31,8 @@ function PlayerShip(game, sounds, key, frame){
   this.time_since_last_shot = 0; //allows for lockout between shots when fire button is held
 
 
-  this.INVULN_FRAMES = 20;
-  this.time_since_dmg = 0; //have some invulnerability frames after being hit by an enemy
-
+  this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
+  this.time_since_dmg = 0; //keeps track of when i-frames reset 
 
 }
 
@@ -86,17 +88,22 @@ PlayerShip.prototype.update = function(){
 		this.body.velocity.x = 0; 	
 	}
 
+  //when the fire button is held, shoot at a constant rate
 	if(this.keys.fire.isDown){
     if(this.time_since_last_shot % this.FIRE_RATE == 0){
       this.fire();
     }
     this.time_since_last_shot++;
 	}
+
+  //when the fire button is released, reset the counter.  this allows for quick spamming if desired.
   if(this.keys.fire.justUp) this.time_since_last_shot = 0;
 
+  //count up for checking invulnerability
   this.time_since_dmg++;
 }
 
+//player shoots a bullet and loses 1 hp
 PlayerShip.prototype.fire = function() {
   console.log("pew " + this.time_since_last_shot);
   this.firing_sound.play();
@@ -105,13 +112,17 @@ PlayerShip.prototype.fire = function() {
   var bullet = new Bullet(game, this.body.center.x + this.width/2, this.body.center.y, 300, 0, 0x43DFF8, true, "bullet", 0);
   this.bullets.add(bullet);
 
+  //reset counter
   this.time_since_last_shot = 0;
 
   this.hp--;
 }
 
-
+//it turns out this function already exists with Phaser.Sprite, but since I want to call .destroy() instead
+//of .kill() (which calls when health = 0), I'll just override it and use .hp
 PlayerShip.prototype.damage = function(dmg) {
+  //check if the player is currently invulerable (due to recent damage)
+  //if time_since_dmg < INVULN_FRAMES, the player is invulnerable and nothing happens
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
