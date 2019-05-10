@@ -16,9 +16,11 @@ BossLevel.prototype = {
     game.load.image("player", "player ship.png");
     game.load.image("enemy", "enemy.png");
     game.load.image("bullet", "bullet.png");
-    game.load.image("boss main", "bossVortex.png");
-    game.load.image("boss tentacle", "Boss Tentacle.png");
+    game.load.image("boss main", "vortex.png");
+    game.load.image("boss tentacle", "tentacle.png");
     game.load.image("heal", "hpDrop.png");
+    game.load.image("stars", "Stars.png");
+    game.load.image("stars2", "Stars2.png");
 
     game.load.path = "assets/audio/";
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
@@ -29,7 +31,17 @@ BossLevel.prototype = {
 	},
 	create: function(){
 	  
-	this.background = game.add.sprite(0, 0, "background");
+    this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
+    this.background.autoScroll(-25, 0);
+    game.add.existing(this.background);
+    this.stars = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars");
+    this.stars.autoScroll(-71, 0);
+    this.stars.alpha = 0.9;
+    game.add.existing(this.stars);
+    this.stars2 = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars2");
+    this.stars2.autoScroll(-43, 0);
+    game.add.existing(this.stars2);
+    this.stars2.alpha = 0.4;
 
     //set up sounds
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew")];
@@ -48,7 +60,7 @@ BossLevel.prototype = {
     //timer for boss firing pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
-    this.timer.loop(500, this.fire, this) //calls once every x milliseconds
+    this.phase1 = this.timer.loop(5000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
     this.timer.start(); //don't forget to start timer
 
     //text to show HP before we get bars working
@@ -65,6 +77,13 @@ BossLevel.prototype = {
       game.physics.arcade.overlap(this.boss, this.player.bullets, this.damage);
       game.physics.arcade.overlap(this.player, this.pickups, this.heal);
       game.physics.arcade.overlap(this.player, this.boss, this.crashing);
+
+      //adjust timing
+      if(this.boss.hp < this.boss.MAX_HEALTH/2) {
+          this.phase2 = this.timer.loop(10000, this.fire, this);
+          this.timer.remove(this.phase1);
+      }
+      
 
       //update text
       this.player_hp_text.text = "Player HP: " + this.player.hp; //update each frame because we don't know when the player will fire
@@ -105,6 +124,7 @@ BossLevel.prototype = {
 	fire: function() {
 	  this.boss.fire(); //simply call the fire function of boss, which has all of the functionality set up
 	  console.log(this.boss.bullets);
+
     },
     damage: function(character, bullet) {
         //because of naming conventions, this should work for both the enemy AND the player

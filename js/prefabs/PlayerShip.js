@@ -5,10 +5,15 @@
 function PlayerShip(game, sounds, key, frame){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
-	Phaser.Sprite.call(this, game, game.width/2, game.height/2, key, frame);
+	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
-	this.anchor.set(0.5);
-	
+  this.anchor.set(0.5);
+  this.body.setSize(40, 34, 2, 15);
+
+
+  this.rotation = Math.PI;
+  this.body.collideWorldBounds = true;
+
 	//set up sounds
   this.firing_sound = sounds[1];
   this.death_sound = sounds[0];
@@ -97,7 +102,7 @@ PlayerShip.prototype.fire = function() {
   this.firing_sound.play();
 
   //Bullet(game, x, y, speed, angle, color, ally, key, frame)
-  var bullet = new Bullet(game, this.body.center.x + this.width/2, this.body.center.y, 100, 0, 0x43DFF8, true, "bullet", 0);
+  var bullet = new Bullet(game, this.body.center.x + this.width/2, this.body.center.y, 300, 0, 0x43DFF8, true, "bullet", 0);
   this.bullets.add(bullet);
 
   this.time_since_last_shot = 0;

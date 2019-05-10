@@ -14,7 +14,7 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   Phaser.Sprite.call(this, game, x, y, key, frame);
   game.physics.arcade.enable(this);
   this.tint = color;
-  this.body.setSize(2, 1, 5, 5); //make the trail part of the bullet not have collision
+  this.body.setSize(5, 6); //make the trail part of the bullet not have collision
  
   //set up the direction and velocity
   this.anchor.set(0.5);
