@@ -12,14 +12,19 @@
 
 "use strict";
 
-//key_main and frame_main are for the center part of the boss.
-//key_side and frame_side are for the side/weak parts of the boss.
+/*Boss constructor:
+ * sounds - array of sounds that the enemy will play upon certain events. 
+ * ORDER OF SOUNDS: Death, Shooting, [Being] Hit
+ * key_main and frame_main are for the center part of the boss.
+ * key_side and frame_side are for the side/weak parts of the boss.
+*/
 function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   Phaser.Group.call(this, game);
   
   //store sounds
-  this.firing_sound = sounds[1];
   this.death_sound = sounds[0];
+  this.firing_sound = sounds[1];
+  this.hit_sound = sounds[2];
   this.asteroid_sounds = sounds; //because the asteroids are enemy types, they will need a sound argument 
   
   //due to protected keywords, the sprites in this group are named "_pt", like "part"
@@ -95,10 +100,14 @@ Boss.prototype.update = function() {
   }
   if(game.input.keyboard.addKey(Phaser.KeyCode.R).justPressed()) {
     this.rotating = !this.rotating;
-    console.log(this.rotating)
   }
 
+  //when both parts are dead, so is the boss
   if(this.top_pt.hp <= 0 && this.bot_pt.hp <= 0) this.death();
+
+  //because we have overridden Phaser.Group, we have to manually call the children's update
+  if(this.top_pt.exists && this.top_pt.hp > 0) this.top_pt.update();
+  if(this.bot_pt.exists && this.bot_pt.hp > 0)this.bot_pt.update();
 }
 
 //fire function - doesn't actually override the Enemy fire function as Boss extends Phaser.Group.
@@ -145,15 +154,15 @@ Boss.prototype.fire1a = function() {
     else i = 0;
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-    var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+13)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+    var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+13)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+15)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+15)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+17)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+17)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+19)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+19)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+21)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+21)/18 * Math.PI, 0xF11043, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
     
   this.waves_fired++; //count the number of times this subfunction has looped
@@ -173,19 +182,19 @@ Boss.prototype.fire1b = function() {
     else i = 0;
     console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-    var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+11)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+11)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+13)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+13)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+15)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+15)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+17)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+17)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+19)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+19)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+21)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+21)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, (i+23)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
+    bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+23)/18 * Math.PI, 0xFF0800, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
     
   this.waves_fired++; //count the number of times this subfunction has looped
@@ -203,20 +212,20 @@ Boss.prototype.fire2a = function() {
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
-    if(this.top_pt != null) {
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+    if(this.top_pt.body != null) {
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);    
     }
-    if(this.bot_pt != null){
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+    if(this.bot_pt.body != null){
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
@@ -236,27 +245,27 @@ Boss.prototype.fire2b = function() {
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
     if(this.top_pt.body != null) {
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);   
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet); 
     }
     if(this.bot_pt.body != null){
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 3/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 4/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 6/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 7/5 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
@@ -323,7 +332,7 @@ Boss.prototype.fire3b = function(x, y) {
      //Enemy(game, x, y, sounds, key, frame)
      asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.asteroid_sounds, asteroid_key, 0);
      asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
-     asteroid.body.velocity.x = -150; 
+     asteroid.body.velocity.x = -100; 
      asteroid.body.velocity.y = 0; //remove velocity from the base Enemy type
      this.asteroids.add(asteroid);
    }
@@ -367,26 +376,26 @@ Boss.prototype.fire4a = function() {
     this.firing_sound.play();
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     if(this.top_pt.body != null) {
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);    
     }
     if(this.bot_pt.body != null){
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
@@ -405,26 +414,26 @@ Boss.prototype.fire4b = function() {
     this.firing_sound.play();
     console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
-      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     if(this.top_pt.body != null) {
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.top_pt.body.center.x, this.top_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);    
     }
     if(this.bot_pt.body != null){
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 3/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
-      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 50, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
+      bullet = new Bullet(game, this.bot_pt.body.center.x, this.bot_pt.body.center.y, 100, 5/4 * Math.PI, 0xF96A4B, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
     } 
     this.waves_fired++; //count the number of times this subfunction has looped

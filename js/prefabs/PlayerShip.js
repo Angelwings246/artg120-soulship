@@ -4,7 +4,10 @@
 */
 "use strict";
 
-// create Player ship constructor 
+/*PlayerShip constructor:
+ * sounds - array of sounds that the enemy will play upon certain events. 
+ * ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
+ */
 function PlayerShip(game, sounds, key, frame){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
@@ -17,8 +20,10 @@ function PlayerShip(game, sounds, key, frame){
   this.body.collideWorldBounds = true; //don't let it go offscreen
 
 	//set up sounds
-  this.firing_sound = sounds[1];
   this.death_sound = sounds[0];
+  this.firing_sound = sounds[1];
+  this.hit_sound = sounds[2];
+  this.low_hp_sound = sounds[3];
 
   //bullets are all grouped together for collision checks
   this.bullets = game.add.group();
@@ -32,7 +37,7 @@ function PlayerShip(game, sounds, key, frame){
 
 
   this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
-  this.time_since_dmg = 0; //keeps track of when i-frames reset 
+  this.time_since_dmg = 20; //keeps track of when i-frames reset, start off vulnerable
 
 }
 
@@ -101,6 +106,29 @@ PlayerShip.prototype.update = function(){
 
   //count up for checking invulnerability
   this.time_since_dmg++;
+
+   //feedback for taking damage: flash red, then blink during invulnerability
+  if(this.time_since_dmg < this.INVULN_FRAMES) {
+    if(this.time_since_dmg < 4) this.tint = 0xFF0000;
+    else if(this.time_since_dmg % 4 == 0) {
+      this.tint = 0xFFFFFF;
+      this.alpha = 0.5;
+    }
+    else {
+      this.alpha = 1;
+    }
+  }
+  //make sure to turn stuff back to normal
+  else {
+    this.tint = 0xFFFFFF;
+    this.alpha = 1;
+  }
+
+  //play the annoying low hp sound when health is low
+  if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
+
+
+
 }
 
 //player shoots a bullet and loses 1 hp
@@ -126,5 +154,6 @@ PlayerShip.prototype.damage = function(dmg) {
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
+    if(this.hp > 0) this.hit_sound.play();
   }
 }

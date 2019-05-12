@@ -7,6 +7,7 @@ GameOver.prototype = {
   },
 	create: function(){
 		game.stage.backgroundColor = '#facade';
+    game.sound.stopAll();
 
     //Victory message
     if(this.victory) game.add.text(game.width/2, game.height/3, 'Congrats you did it');

@@ -14,6 +14,7 @@ BossLevel.prototype = {
     game.load.image("background", "bg.png");
 
     game.load.image("player", "player ship.png");
+    game.load.image("player broken", "player ship broken.png");
     game.load.image("enemy", "enemy.png");
     game.load.image("bullet", "bullet.png");
     game.load.image("boss main", "vortex.png");
@@ -23,12 +24,20 @@ BossLevel.prototype = {
     game.load.image("stars2", "Stars2.png");
     game.load.image("asteroid", "Asteroid.png");
     game.load.image("asteroid2", "Asteroid2.png");
+    game.load.image("hp bar", "hp bar.png");
+    game.load.image("red", "hp red.png");
 
 
     game.load.path = "assets/audio/";
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
     game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
-//    game.load.audio("music", ["music.mp3", "music.ogg"]);
+    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
+    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
+    game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
+    game.load.audio("heal", ["HealthUp.mp3"]);
+
+    game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
+    game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
 	  
 
 	},
@@ -47,14 +56,22 @@ BossLevel.prototype = {
     this.stars2.alpha = 0.4;
 
     //set up sounds
-    this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew")];
+    //ORDER OF SOUNDS: Death, Shooting, [Being] Hit
+    this.boss_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit boss")];
+
+    //ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
+    this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
+
+    this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
-    this.boss = new Boss(game, this.enemy_sounds, "boss main", 0, "boss tentacle", 0);
+    //ORDER OF SOUNDS: Death, Shooting, [Being] Hit
+    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "boss tentacle", 0);
     game.add.existing(this.boss);
 
-    //Playership(game, sounds, key, frame)    
-    this.player = new PlayerShip(game, this.enemy_sounds, "player", 0);
+    //Playership(game, sounds, key, frame)  
+    //ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
+    this.player = new PlayerShip(game, this.player_sounds, "player", 0);
     game.add.existing(this.player);
 
     this.pickups = game.add.group();
@@ -63,6 +80,7 @@ BossLevel.prototype = {
     //timer for boss firing pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
+    this.timer.add(0, this.fire, this); //fire at the start
     this.phase1 = this.timer.loop(5000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
     this.timer.start(); //don't forget to start timer
 
@@ -72,8 +90,20 @@ BossLevel.prototype = {
 
     this.victory = false; //switch to true if the player wins
 
+    this.intro = game.add.audio("intro");
+    this.intro.play();
+    this.music = game.add.audio("loop", 1, true);
+
+    this.health_bar = game.add.image(100, 550, "red");
+    this.hp_width = 316;
+    game.add.image(100, 550, "hp bar");
+
 	},
 	update: function() {
+      
+      //transition from the intro music to the loop
+      this.intro.onStop.add(function () {this.music.play()}, this);
+
       //collision checks
       //NOTE: Boss is an extension of Phaser.Group, so this should work.  Hopefully. 
 
@@ -88,7 +118,7 @@ BossLevel.prototype = {
       //adjust timing of shots - in phase 2 (i.e. when the boss is < 50% HP) the attacks are more powerful
       //thus, to compensate, they fire less frequently
       if(this.boss.hp < this.boss.MAX_HEALTH/2 && this.phase2 == null) {
-          this.phase2 = this.timer.loop(10000, this.fire, this);
+          this.phase2 = this.timer.loop(15000, this.fire, this);
           this.timer.remove(this.phase1);
       }
       
@@ -96,6 +126,8 @@ BossLevel.prototype = {
       //update text
       this.player_hp_text.text = "Player HP: " + this.player.hp; //update each frame because we don't know when the player will fire
       this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
+
+      this.health_bar.width = this.hp_width * this.player.hp/this.player.PLAYER_MAX_HP;
     
       //spawn a health pack when the first part of the boss dies
       if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {
@@ -113,6 +145,7 @@ BossLevel.prototype = {
 	  // also debug button to go to game over
 	  if(this.player.hp <= 0 || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
+        game.sound.stopAll();
         game.state.start('GameOver', true, false, this.victory);
 	  }
       //debug cred: Nathan Altice inputs08.js
@@ -148,6 +181,7 @@ BossLevel.prototype = {
     heal: function(player, pickup) {
         player.hp += this.HEALING;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP;
+        this.heal_sound.play();
         pickup.destroy();
     },
     //called when the player crashes into an enemy_sounds
