@@ -133,7 +133,7 @@ PlayerShip.prototype.update = function(){
 
 //player shoots a bullet and loses 1 hp
 PlayerShip.prototype.fire = function() {
-  console.log("pew " + this.time_since_last_shot);
+  console.log("pew");
   this.firing_sound.play();
 
   //Bullet(game, x, y, speed, angle, color, ally, key, frame)

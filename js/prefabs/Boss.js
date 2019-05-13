@@ -118,6 +118,7 @@ Boss.prototype.fire = function(x, y) {
   this.waves_fired = 0;
 
   //randomly calls a subfunction, variations depending on HP
+  //calling a subfunction creates a timer that repeatedly calls the respective firing type
   var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
     case 0:
