@@ -34,7 +34,7 @@ BossLevel.prototype = {
     game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
     game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
     game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
-    game.load.audio("heal", ["HealthUp.mp3"]);
+    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
 
     game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
     game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
