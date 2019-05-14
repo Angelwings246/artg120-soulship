@@ -25,8 +25,8 @@ function Enemy(game, x, y, sounds, key, frame) {
   //adds a flag so that some enemies cannot shoot even if fire() is called
   this.can_fire = true;
 
-  this.INVULN_FRAMES = 10;
-  this.time_since_dmg = 10;
+  this.INVULN_FRAMES = 12;
+  this.time_since_dmg = 12;
 }
 
 //assign prototype and constructor

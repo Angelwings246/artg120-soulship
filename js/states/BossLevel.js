@@ -130,6 +130,7 @@ BossLevel.prototype = {
 
       //update player hp bar
       this.health_bar.width = this.hp_width * this.player.hp/this.player.PLAYER_MAX_HP;
+      //health bar flashes right after taking damage 
       if(this.player.time_since_dmg < 4) this.health_bar.alpha = 0.7;
       else this.health_bar.alpha = 1;
     
