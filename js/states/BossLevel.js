@@ -23,6 +23,7 @@ BossLevel.prototype = {
     game.load.path = "assets/audio/";
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
     game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
+    game.load.audio("BossTheme", ["BossLevelTheme.mp3", "BossLevelTheme.ogg"]);
 //    game.load.audio("music", ["music.mp3", "music.ogg"]);
 	  
 
@@ -33,6 +34,8 @@ BossLevel.prototype = {
 
     //set up sounds
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew")];
+    this.BGM = game.add.audio("BossTheme");
+    this.BGM.play('', 0, 1, true);
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
     this.boss = new Boss(game, this.enemy_sounds, "boss main", 0, "boss tentacle", 0);
