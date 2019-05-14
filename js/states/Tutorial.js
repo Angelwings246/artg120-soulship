@@ -1,4 +1,4 @@
-// Tutorial Level 
+// Tutorial Level State
 'use strict';
 var timer;
 var Tutorial = function(game) {};

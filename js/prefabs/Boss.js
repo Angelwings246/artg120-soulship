@@ -19,6 +19,7 @@
  * key_side and frame_side are for the side/weak parts of the boss.
 */
 function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
+  //call Phaser.Group constructor
   Phaser.Group.call(this, game);
   
   //store sounds
@@ -44,7 +45,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
-  this.MAX_HEALTH = 4;
+  this.MAX_HEALTH = 20;
   this.hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
 
@@ -98,6 +99,7 @@ Boss.prototype.update = function() {
     this.center_pt.rotation += 0.01;
     this.bot_pt.rotation += 0.01;
   }
+  //a button to toggle rotation for testing purposes
   if(game.input.keyboard.addKey(Phaser.KeyCode.R).justPressed()) {
     this.rotating = !this.rotating;
   }
