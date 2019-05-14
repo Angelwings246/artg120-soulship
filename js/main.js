@@ -1,7 +1,9 @@
-// Soul Ship (Working Title)
-// by Hunter Lynch, Angel Tan, Taylor Fagundes
-// 5/1/19
-// Enjoy!
+/* Soul Ship (Working Title)
+* by Hunter Lynch, Angel Tan, Taylor Fagundes
+* First Prototype Build: 5/13/19
+* GitHub repository: https://github.com/Angelwings246/artg120-soulship
+* Enjoy!
+*/
 
 // main.js, heavily inspired by Nathan Altice main.js
 
