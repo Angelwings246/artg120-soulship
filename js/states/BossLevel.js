@@ -31,6 +31,8 @@ BossLevel.prototype = {
     game.load.path = "assets/audio/";
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
     game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
+
+
     game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
     game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
     game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
@@ -61,6 +63,7 @@ BossLevel.prototype = {
     this.music = game.add.audio("loop", 1, true);
 
     //set up sounds
+
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit
     this.boss_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit boss")];
 

@@ -12,7 +12,7 @@ GameOver.prototype = {
     game.load.image("background", "bg.png");
   },
 	create: function(){
-		// game.stage.backgroundColor = '#facade';
+
     game.sound.stopAll();
     game.add.image(0, 0, "background");
     //Victory message
@@ -23,6 +23,7 @@ GameOver.prototype = {
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
 			game.state.start('BossLevel');
+
 		}
 	}
 };
