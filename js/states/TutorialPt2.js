@@ -73,6 +73,7 @@ TutorialPt2.prototype = {
     //add the group of enemies and a counter for enemies spawned
     this.enemies = game.add.group();
     this.enemies_spawned = 0;
+    this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();
@@ -94,8 +95,6 @@ TutorialPt2.prototype = {
     this.movement = false; //flag to lock player movement
 
     this.ready = false; //swap to true when the player is deemed ready to move on
-
-    this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 	},
 	update: function(){
 
@@ -203,10 +202,11 @@ TutorialPt2.prototype = {
   },
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level
   ending: function() {
-    this.warning_text.text = "SYSTEMS RESTORED";
+    this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
     this.warning_text.fill = "#00FFFF";
+    game.add.text(game.width/8, 200,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
-    this.timer.add(5000, game.state.start, game.state, "BossLevel");
+    this.timer.add(7000, game.state.start, game.state, "BossLevel");
   }
 
 };
