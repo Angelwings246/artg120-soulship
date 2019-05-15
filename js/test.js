@@ -34,11 +34,9 @@ Play.prototype = {
       
       this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew")];
       //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
-      this.enemy1 = new Boss(game, this.enemy_sounds, "boss main", 0, "boss tentacle", 0);
-//      this.enemy1 = new Enemy(game, 500, 1/4 * game.height, this.enemy_sounds, "boss main", 0);
+      // this.enemy1 = new Boss(game, this.enemy_sounds, "boss main", 0, "boss tentacle", 0);
+     this.enemy1 = new Enemy(game, 500, 1/4 * game.height, this.enemy_sounds, "boss main", 0);
       var boss = game.add.existing(this.enemy1);
-      console.log("enemy " + this.enemy1);
-      console.log(boss);
     },
     update: function() {
       if(this.enemy1 != null && game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
