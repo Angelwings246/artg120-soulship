@@ -26,6 +26,7 @@ Tutorial.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 		if (timer == 5){
 			game.state.start('TutorialPt1');
+
 		}
 	}
 };

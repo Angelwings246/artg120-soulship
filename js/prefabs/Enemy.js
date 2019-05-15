@@ -27,6 +27,9 @@ function Enemy(game, x, y, sounds, key, frame) {
 
   this.INVULN_FRAMES = 10;
   this.time_since_dmg = 10;
+
+  this.bullets = game.add.group();
+  this.dmg = 1;
 }
 
 //assign prototype and constructor
@@ -64,13 +67,13 @@ Enemy.prototype.fire = function() {
     console.log("pew");
     this.firing_sound.play();
 
-    //Bullet(game, x, y, speed, angle, color, ally, key, frame)
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 50, 3/4 * Math.PI, 0xff0000, false, "bullet", 0);
-    game.add.existing(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 50, Math.PI, 0xff0000, false, "bullet", 0);
-    game.add.existing(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 50, 5/4 * Math.PI, 0xff0000, false, "bullet", 0);
-    game.add.existing(bullet);
+// Bullet(game, x, y, speed, angle, color, damage, key, frame) 
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
+    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
+    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
   }
 }
 
