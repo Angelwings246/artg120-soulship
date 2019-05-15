@@ -82,8 +82,8 @@ TutorialPt2.prototype = {
     //timer for boss firing pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
-    this.timer.add(2000, this.spawn, this); 
-    this.timer.loop(10000, this.fire, this); 
+    this.timer.loop(2000, this.spawn, this); 
+    this.timer.loop(5000, this.fire, this); 
     this.timer.start(); //don't forget to start timer
 
     this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!",{fontSize: "32px", fill:"#FF0000"});
