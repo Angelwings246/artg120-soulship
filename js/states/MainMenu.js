@@ -17,7 +17,7 @@ MainMenu.prototype = {
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
-			game.state.start('TutorialPt1');
+			game.state.start('Tutorial');
 		}
 	}
 };

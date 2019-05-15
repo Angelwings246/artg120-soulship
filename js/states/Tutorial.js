@@ -1,32 +1,76 @@
-// Tutorial Level State
+// Tutorial Part 1 Level State
 'use strict';
-var timer;
+
+var frames;
+
 var Tutorial = function(game) {};
 Tutorial.prototype = {
 	preload: function() {
     //preload assets
-    game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
+
   },
 	create: function(){
 
-		//Temporary tutorial displays controls briefly
-		// game.stage.backgroundColor = '#facade';
-		game.add.image(0, 0, "background");
+    //set up scrolling background with multiple layers of stars
+    //scroll speed is set to all be coprime so the loops are less frequent/obvious
+    var timer = 0;  
+	this.timer = game.time.create(false);
+	this.timer.add(1000, this.dialogue1, this);
+	this.timer.add(4000, this.dialogue2, this);
+	this.timer.add(8000, this.dialogue3, this);
+	this.timer.add(15000, this.dialogue4, this);
+	this.timer.start();
+	timer = (Math.floor(this.timer.seconds))+1;
+	// allow blackout background w/ text first
+	game.stage.backgroundColor = '#000000';
 
-		var warningText = game.add.text(100, 200,'Use WASD to move\n' +
-			'Spacebar to shoot (tap to spam, hold for continuous fire)\n'+
-			'Each shot you fire hurts you!\n' +
-			'Prepare to fight your greatest fears in 5 seconds....', {fontSize: "28px", fill:"#FFFFFF"});
-		timer = 0;
-		this.timer = game.time.create(false);
-		this.timer.start();
 	},
+
+	dialogue1: function(){
+		//Tutorial Dialogue/Instructions
+		var intro1 = game.add.text(game.width/2 -200, game.height/2,'Captain! Come in Captain!', {fontSize: "28px", fill:"#FFFFFF"});
+		intro1.anchor.setTo = 0.5;
+		intro1.alpha = 0;
+
+		var tween = game.add.tween(intro1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+	},
+
+	dialogue2: function(){
+		//Tutorial Dialogue/Instructions
+		var intro2 = game.add.text(game.width/2 -400, game.height/2, 'Get ahold of yourself! You are in the middle of an asteroid belt!', {fontSize: "28px", fill:"#FFFFFF"});
+		intro2.anchor.setTo = 0.5;
+		intro2.alpha = 0;
+
+		var tween = game.add.tween(intro2).to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+	},
+
+	dialogue3: function(){
+		//Tutorial Dialogue/Instructions
+		var intro3 = game.add.text(game.width/2 -400, game.height/2 -50, 'Remember how to pilot your ship? \nUse the WASD buttons on your terminal to steer and \nthe OUTER-spacebar to fire your weapons', {fontSize: "28px", fill:"#FFFFFF"});
+		intro3.anchor.setTo = 0.5;
+		intro3.alpha = 0;
+		var tween = game.add.tween(intro3).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+	},
+
+	dialogue4: function(){
+		//Tutorial Dialogue/Instructions
+		var intro4 = game.add.text(game.width/2 -300, game.height/2, 'Hazards inbound! Be careful Captain, and stay safe. \nWe will reconvene soon.', {fontSize: "28px", fill:"#FFFFFF"});
+		intro4.anchor.setTo = 0.5;
+		intro4.alpha = 0;
+		
+		var tween = game.add.tween(intro4).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+	},
+
+
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
-		if (timer == 5){
-			game.state.start('TutorialPt1');
+		console.log(timer);
+    if (timer >= 25){ 
+	    game.state.start('TutorialPt1');
+	}
 
-		}
+
+
+
 	}
 };
