@@ -94,6 +94,7 @@ TutorialPt2.prototype = {
 
     this.movement = false; //flag to lock player movement
 
+    this.shots_fired = 0; //count the number of times the player has shot
     this.ready = false; //swap to true when the player is deemed ready to move on
 	},
 	update: function(){
@@ -113,13 +114,22 @@ TutorialPt2.prototype = {
     }
     
     //the player is ready to continue once all enemies are spawned and destroyed
-    if(this.enemies_spawned >= 10 && this.enemies.countLiving() == 0 && !this.ready) {
+    if(this.enemies_spawned >= 5 && this.enemies.countLiving() == 0 && !this.ready) {
       this.ready = true;
         if(this.pickups.countLiving() == 0) { //if there is none already, spawn a health pack so the ending can be triggered
         var pickup = new Pickup(game, game.width, game.height/2, "heal", 0);
         this.pickups.add(pickup);
       }
     }
+    // flash warning every time player shoots 
+    if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
+      var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- WARNING! Hull Unstable!', {fontSize: "28px", fill:"#FF0000"});
+      warning1.anchor.setTo = 0.5;
+      warning1.alpha = 0;
+      var tween = game.add.tween(warning1).to( {alpha: 1}, 500, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+      this.shots_fired++;
+    }
+
 
     //restart upon death
     if(this.player.hp <= 0) game.state.start('TutorialPt2');
@@ -151,7 +161,7 @@ TutorialPt2.prototype = {
   //spawns an enemy that goes straight towards the player
 	spawn: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-    if(this.enemies_spawned < 10) {
+    if(this.enemies_spawned < 5) {
   		var enemy = new Enemy(game, game.width + 100, game.height/2, this.enemy_sounds, "enemy", 0);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;

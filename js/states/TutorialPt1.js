@@ -81,6 +81,11 @@ TutorialPt1.prototype = {
 		this.tentacle.scale.setTo(2);
 		this.tentacle.body.angularVelocity = 300;
 
+	// implement warning signals
+	this.timer.add(24000, this.warning1, this);
+	this.timer.add(26000, this.warning2, this);
+	this.timer.add(28000, this.warning3, this);
+
 	},
 
 	spawn: function(){
@@ -117,7 +122,29 @@ TutorialPt1.prototype = {
             player.damage(3); //arbitrary number for now
             enemy.destroy(); 
         }
+
+
     },
+
+
+    warning1: function(){
+			var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
+			warning1.anchor.setTo = 0.5;
+			warning1.alpha = 0;
+			var tween = game.add.tween(warning1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		},
+	warning2: function(){
+			var warning2 = game.add.text(game.width/2 +100 , 250,'Unknown Threat', {fontSize: "28px", fill:"#FF0000"});
+			warning2.anchor.setTo = 0.5;
+			warning2.alpha = 0;
+			var tween = game.add.tween(warning2).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		},
+	warning3: function(){
+			var warning3 = game.add.text(100, 100,'COORDINATES SET, \nRECALCULATING', {fontSize: "28px", fill:"#FF0000"});
+			warning3.anchor.setTo = 0.5;
+			warning3.alpha = 0;
+			var tween = game.add.tween(warning3).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		},
 
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
@@ -138,12 +165,12 @@ TutorialPt1.prototype = {
 			this.timer.remove(this.spawning);
 		}
 	}
-	if (timer == 20 && frames%50 == 0){
+	if (timer == 20 && frames%32 == 0){
 
 		this.playerposx = this.player.body.x;
 		this.playerposy = this.player.body.y;
-		console.log('posx'+this.playerposx);
-		console.log('posy'+this.playerposy);
+		//console.log('posx'+this.playerposx);
+		//console.log('posy'+this.playerposy);
 
 	}
 
@@ -160,25 +187,7 @@ TutorialPt1.prototype = {
 	if(timer >= 23){
 		this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
-		if (timer >= 24){
-			var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
-			warning1.anchor.setTo = 0.5;
-			warning1.alpha = 0;
-			var tween = game.add.tween(warning1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		}
-		if (timer >= 25){
-			var warning2 = game.add.text(game.width/2 +100 , 250,'Unknown Threat', {fontSize: "28px", fill:"#FF0000"});
-			warning2.anchor.setTo = 0.5;
-			warning2.alpha = 0;
-			var tween = game.add.tween(warning2).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		}
-		if (timer >= 26){
-			var warning3 = game.add.text(100, 100,'COORDINATES SET, \nRECALCULATING', {fontSize: "28px", fill:"#FF0000"});
-			warning3.anchor.setTo = 0.5;
-			warning3.alpha = 0;
-			var tween = game.add.tween(warning3).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		}
-		if (timer >= 29){
+		if (timer >= 30){
 			game.state.start('TutorialPt2');
 		}
 	}
