@@ -25,7 +25,7 @@ Tutorial.prototype = {
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
 		if (timer == 5){
-			game.state.start('BossLevel');
+			game.state.start('TutorialPt1');
 		}
 	}
 };
