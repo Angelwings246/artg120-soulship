@@ -221,7 +221,7 @@ TutorialPt2.prototype = {
   ending: function() {
     this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
     this.warning_text.fill = "#00FFFF";
-    game.add.text(game.width/8, 170,"!-NOTE: UNKNOWN THREAT UNRESOLVED-!",{fontSize: "32px", fill:"#FFFF00"});
+    game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
     game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.timer.add(7000, game.state.start, game.state, "BossLevel");
