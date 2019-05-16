@@ -10,11 +10,11 @@ var BossLevel = function(game){};
 BossLevel.prototype = {
     init: function() {
       this.main = {
-          up: Phaser.KeyCode.UP,
-          down: Phaser.KeyCode.DOWN,
-          left: Phaser.KeyCode.LEFT,
-          right: Phaser.KeyCode.RIGHT,
-           fire: Phaser.KeyCode.SPACEBAR
+          'up': Phaser.KeyCode.UP,
+          'down': Phaser.KeyCode.DOWN,
+          'left': Phaser.KeyCode.LEFT,
+          'right': Phaser.KeyCode.RIGHT,
+          'fire': Phaser.KeyCode.SPACEBAR
        };
       this.alt = {
           'up': Phaser.KeyCode.W, 
