@@ -82,13 +82,9 @@ PlayerShip.prototype.update = function(){
   */
   var movement = 0;
 
-  // if(this.main.up.isDown || this.alt.up.isDown) console.log("yay");
-  // console.log("up is down: " + this.main.up.isDown + " duration = " + this.main.up.duration);
-  // console.log("down is down: " + this.main.down.isDown + " duration = " + this.main.down.duration);
-
   /*all functions must check both the rebindable "main" keybind settings and the "alternate" keybind settings
   * the way this is implemented, you technically can play using both key settings at the same time - as in, pressing W and LEFT.
-  * ...with some exceptions.  Pressing W and DOWN and similar opposing combinations freeze you due to the implementation ofthe switch-case
+  * ...with some exceptions.  Pressing W and DOWN and similar opposing combinations freeze you due to the implementation of the switch-case
   * (two opposing buttons add up to 8, which is default case, which is intentional, so that pressing both simultaneously does nothing.)
   */
   
@@ -163,42 +159,6 @@ PlayerShip.prototype.update = function(){
       break;
   }
 
-	// // allow basic non-diagonal directional movement
-	// if(this.main.up.isDown || this.alt.up.isDown){
-	// 	this.body.velocity.y = -200; 	
-	// }else
-	// if(this.main.down.isDown || this.alt.down.isDown){
-	// 	this.body.velocity.y = 200; 	
-	// }else
-	// if(this.main.left.isDown || this.alt.left.isDown){
-	// 	this.body.velocity.x = -250; 	
-	// }else
-	// if(this.main.right.isDown || this.alt.up.isDown){
-	// 	this.body.velocity.x = 250; 	
-	// }
-	// // allow diagonal movement
-	// // needs touching up to make more fluid
-	// else
-	// if(game.input.keyboard.isDown(Phaser.Keyboard.W) && game.input.keyboard.isDown(Phaser.Keyboard.D)){
-	// 	this.body.velocity.y = -200; 
-	// 	this.body.velocity.x = 250; 		
-	// }else
-	// if(game.input.keyboard.isDown(Phaser.Keyboard.W) && game.input.keyboard.isDown(Phaser.Keyboard.A)){
-	// 	this.body.velocity.y = -200; 	
-	// 	this.body.velocity.x = -250; 	
-	// }else
-	// if(game.input.keyboard.isDown(Phaser.Keyboard.A) && game.input.keyboard.isDown(Phaser.Keyboard.S)){
-	// 	this.body.velocity.x = -250; 	
-	// 	this.body.velocity.y = 200; 	
-	// }else
-	// if(game.input.keyboard.isDown(Phaser.Keyboard.S) && game.input.keyboard.isDown(Phaser.Keyboard.D)){
-	// 	this.body.velocity.y = 200; 	
-	// 	this.body.velocity.x = 250; 	
-	// }else{
-	// 	this.body.velocity.y = 0; 	
-	// 	this.body.velocity.x = 0; 	
-	// }
-
   //when the fire button is held, shoot at a constant rate
 	if(this.main.fire.isDown || this.alt.fire.isDown){
     if(this.time_since_last_shot % this.FIRE_RATE == 0){
@@ -232,8 +192,6 @@ PlayerShip.prototype.update = function(){
 
   //play the annoying low hp sound when health is low
   if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
-
-
 
 }
 
