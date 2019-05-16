@@ -74,10 +74,11 @@ PlayerShip.prototype.update = function(){
   /*movement is a variable refreshed every update cycle that tracks which keys should count as being "held down" for the sake of movement.
   * my main issue with the standard 
   * if(left)
-  * else if (right) implementation is that holding left and tapping right does NOT change direction to the right,
-  * however holding right and tapping left DOES change direction to the left
+  * else if (right) 
+  * implementation is that holding left and tapping right does NOT change direction to the right,
+  * however holding right and tapping left DOES change direction to the left....
   * thus, to standardize this, i have taken duration (how long the key has been held) into account, as well as using incrementation of the 
-  * movement variable to detect diagonal movement without checking each key twice.  
+  * movement variable to detect diagonal movement without having to check each key twice.  
   * the variable is then passed into a switch-case to change the ship's velocity
   */
   var movement = 0;
