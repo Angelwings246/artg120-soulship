@@ -64,8 +64,7 @@ Tutorial.prototype = {
 
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
-		console.log(timer);
-    if (timer >= 25){ 
+    if (timer >= 25 || game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()){ 
 	    game.state.start('TutorialPt1');
 	}
 

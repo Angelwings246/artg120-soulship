@@ -127,8 +127,8 @@ TutorialPt1.prototype = {
     },
 
 
-    warning1: function(){
-			var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
+  warning1: function(){
+	    var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
 			warning1.anchor.setTo = 0.5;
 			warning1.alpha = 0;
 			var tween = game.add.tween(warning1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
@@ -148,7 +148,6 @@ TutorialPt1.prototype = {
 
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
-		console.log(timer);
 		frames++;
 
 	if (this.hp <= 0){
@@ -166,7 +165,7 @@ TutorialPt1.prototype = {
 		}
 	}
 	if (timer == 20 && frames%32 == 0){
-
+    //locate the player's current position
 		this.playerposx = this.player.body.x;
 		this.playerposy = this.player.body.y;
 		//console.log('posx'+this.playerposx);
@@ -175,10 +174,11 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 21 ){
+    //lock player movement
 		this.player.body.x = this.playerposx;
 		this.player.body.y = this.playerposy;
 		this.player.body.velocity.x = this.player.body.velocity.y = 0;
-
+    //move the tentacle through the player's location
 		this.tentacle.body.velocity.x = (this.playerposx - game.width/2);
 		this.tentacle.body.velocity.y = this.playerposy + 100;
 
@@ -192,6 +192,6 @@ TutorialPt1.prototype = {
 		}
 	}
 
-
+  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) game.state.start('TutorialPt2');
 	}
 };

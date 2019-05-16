@@ -72,13 +72,16 @@ TutorialPt2.prototype = {
 
     //add the group of enemies and a counter for enemies spawned
     this.enemies = game.add.group();
-    this.enemies_spawned = 0;
+    
+    //put as constant for adjustments
+    this.NUM_ENEMIES = 7;
+
+    this.enemies_spawned = 0; //track enemies already spawned
     this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();
     this.HEALING = 5; //value of heal pickup
-
 
     //timer for boss firing pattern
     //cred: Nathan Altice Paddle Parkour Redux
@@ -87,7 +90,7 @@ TutorialPt2.prototype = {
     this.timer.loop(5000, this.fire, this); 
     this.timer.start(); //don't forget to start timer
 
-    this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!",{fontSize: "32px", fill:"#FF0000"});
+    this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!",{fontSize: "32px", fill:"#FF0000"});
 
     //player's hp bar is from a prefab
     this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
@@ -114,7 +117,7 @@ TutorialPt2.prototype = {
     }
     
     //the player is ready to continue once all enemies are spawned and destroyed
-    if(this.enemies_spawned >= 5 && this.enemies.countLiving() == 0 && !this.ready) {
+    if(this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 0 && !this.ready) {
       this.ready = true;
         if(this.pickups.countLiving() == 0) { //if there is none already, spawn a health pack so the ending can be triggered
         var pickup = new Pickup(game, game.width, game.height/2, "heal", 0);
@@ -123,10 +126,14 @@ TutorialPt2.prototype = {
     }
     // flash warning every time player shoots 
     if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
-      var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- WARNING! Hull Unstable!', {fontSize: "28px", fill:"#FF0000"});
+      var warning1 = game.add.text(game.width/4 - 75, game.height/3,'WARNING! WEAPONS ACTIVATION \nCAUSING FURTHER DAMAGE!', {fontSize: "28px", fill:"#FF0000"});
       warning1.anchor.setTo = 0.5;
       warning1.alpha = 0;
-      var tween = game.add.tween(warning1).to( {alpha: 1}, 500, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+      var tween = game.add.tween(warning1).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+      var warning2 = game.add.text(120, game.height/2 + 180,'WARNING! Hull Unstable!', {fontSize: "28px", fill:"#FF0000"});
+      warning2.anchor.setTo = 0.5;
+      warning2.alpha = 0;
+      var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
     }
 
@@ -140,8 +147,8 @@ TutorialPt2.prototype = {
     game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
     game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
 
-    //for testing purposes, R triggers the ending of the tutorial
-    if(game.input.keyboard.addKey(Phaser.KeyCode.R).justPressed()) this.ending();
+    //for testing purposes, Q triggers the ending of the tutorial
+    if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 		
     //debug cred: Nathan Altice inputs08.js
     if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
@@ -161,8 +168,8 @@ TutorialPt2.prototype = {
   //spawns an enemy that goes straight towards the player
 	spawn: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-    if(this.enemies_spawned < 5) {
-  		var enemy = new Enemy(game, game.width + 100, game.height/2, this.enemy_sounds, "enemy", 0);
+    if(this.enemies_spawned < this.NUM_ENEMIES) {
+  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
@@ -214,7 +221,8 @@ TutorialPt2.prototype = {
   ending: function() {
     this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
     this.warning_text.fill = "#00FFFF";
-    game.add.text(game.width/8, 200,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
+    game.add.text(game.width/8, 170,"!-NOTE: UNKNOWN THREAT UNRESOLVED-!",{fontSize: "32px", fill:"#FFFF00"});
+    game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.timer.add(7000, game.state.start, game.state, "BossLevel");
   }
