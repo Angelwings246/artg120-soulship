@@ -7,8 +7,9 @@
 /*PlayerShip constructor:
  * sounds - array of sounds that the enemy will play upon certain events. 
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
+ * main and alt are objects containing keybind settings, each with properies "up", "down", "left", "right", and "fire"
  */
-function PlayerShip(game, sounds, key, frame){
+function PlayerShip(game, sounds, key, frame, main, alt){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
@@ -39,6 +40,9 @@ function PlayerShip(game, sounds, key, frame){
   this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
   this.time_since_dmg = 20; //keeps track of when i-frames reset, start off vulnerable
 
+  this.main = main;
+  this.alt = alt;
+
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -49,13 +53,13 @@ PlayerShip.prototype.constructor = PlayerShip;
 // update it to allow ship functions
 PlayerShip.prototype.update = function(){
   
-  //set up keys
-  this.keys = game.input.keyboard.addKeys({
-    'up': [Phaser.KeyCode.W, Phaser.KeyCode.UP], 'down': [Phaser.KeyCode.S, Phaser.KeyCode.DOWN],
-    'left': [Phaser.KeyCode.A, Phaser.KeyCode.LEFT], 'right': [Phaser.KeyCode.D, Phaser.KeyCode.RIGHT],
-    'fire': Phaser.KeyCode.SPACEBAR});
+  // //set up keys
+  // this.keys = game.input.keyboard.addKeys({
+  //   'up': [Phaser.KeyCode.W, Phaser.KeyCode.UP], 'down': [Phaser.KeyCode.S, Phaser.KeyCode.DOWN],
+  //   'left': [Phaser.KeyCode.A, Phaser.KeyCode.LEFT], 'right': [Phaser.KeyCode.D, Phaser.KeyCode.RIGHT],
+  //   'fire': Phaser.KeyCode.SPACEBAR});
 
-  if(this.keys.up.isDown) console.log("yay");
+  if(this.main.up.isDown || this.alt.up.isDown) console.log("yay");
   
 	// allow basic non-diagonal directional movement
 	if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
@@ -93,16 +97,16 @@ PlayerShip.prototype.update = function(){
 		this.body.velocity.x = 0; 	
 	}
 
-  //when the fire button is held, shoot at a constant rate
-	if(this.keys.fire.isDown){
-    if(this.time_since_last_shot % this.FIRE_RATE == 0){
-      this.fire();
-    }
-    this.time_since_last_shot++;
-	}
+ //  //when the fire button is held, shoot at a constant rate
+	// if(this.keys.fire.isDown){
+ //    if(this.time_since_last_shot % this.FIRE_RATE == 0){
+ //      this.fire();
+ //    }
+ //    this.time_since_last_shot++;
+	// }
 
-  //when the fire button is released, reset the counter.  this allows for quick spamming if desired.
-  if(this.keys.fire.justUp) this.time_since_last_shot = 0;
+ //  //when the fire button is released, reset the counter.  this allows for quick spamming if desired.
+ //  if(this.keys.fire.justUp) this.time_since_last_shot = 0;
 
   //count up for checking invulnerability
   this.time_since_dmg++;

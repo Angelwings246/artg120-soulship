@@ -8,6 +8,22 @@
 
 var BossLevel = function(game){};
 BossLevel.prototype = {
+    init: function() {
+      this.main = {
+          up: Phaser.KeyCode.UP,
+          down: Phaser.KeyCode.DOWN,
+          left: Phaser.KeyCode.LEFT,
+          right: Phaser.KeyCode.RIGHT,
+           fire: Phaser.KeyCode.SPACEBAR
+       };
+      this.alt = {
+          'up': Phaser.KeyCode.W, 
+          'down': Phaser.KeyCode.S,
+          'left': Phaser.KeyCode.A, 
+          'right': Phaser.KeyCode.D,
+          'fire': Phaser.KeyCode.SPACEBAR
+       };
+    },
 	preload: function(){
     
     //preload assets
@@ -77,7 +93,7 @@ BossLevel.prototype = {
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0);
+    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
     game.add.existing(this.player);
 
     //group of pickups (for now, just a heal)
