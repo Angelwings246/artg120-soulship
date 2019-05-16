@@ -35,7 +35,7 @@ function PlayerShip(game, sounds, key, frame){
   this.FIRE_RATE = 30;//once every x frames
   this.time_since_last_shot = 0; //allows for lockout between shots when fire button is held
 
-
+  this.inTutorial = false;
   this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
   this.time_since_dmg = 20; //keeps track of when i-frames reset, start off vulnerable
 
@@ -142,8 +142,9 @@ PlayerShip.prototype.fire = function() {
 
   //reset counter
   this.time_since_last_shot = 0;
-
-  this.hp--;
+  if (!this.inTutorial){
+  	this.hp--;
+  }
 }
 
 //it turns out this function already exists with Phaser.Sprite, but since I want to call .destroy() instead

@@ -97,11 +97,8 @@ BossLevel.prototype = {
 
     this.victory = false; //switch to true if the player wins
 
-    //hp bar displaying player health
-    this.health_bar = game.add.image(115, 542, "red");
-    this.hp_width = 298; 
-    game.add.image(100, 525, "hp bar");
-
+    //player health bar is from a prefab
+    this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
 	},
 	update: function() {
       
@@ -112,7 +109,6 @@ BossLevel.prototype = {
       //NOTE: Boss is an extension of Phaser.Group, so this should work.  Hopefully. 
 
       this.boss.bullets.forEach(this.bullet_collision, this);
-      // game.physics.arcade.overlap(this.player, this.boss.bullets, this.damage);
       game.physics.arcade.overlap(this.boss.asteroids, this.player.bullets, this.damage);
       game.physics.arcade.overlap(this.boss, this.player.bullets, this.damage);
       game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
@@ -125,18 +121,11 @@ BossLevel.prototype = {
           this.phase2 = this.timer.loop(15000, this.fire, this);
           this.timer.remove(this.phase1);
       }
-      
+     
 
       //update text
-      // this.player_hp_text.text = "Player HP: " + this.player.hp; //update each frame because we don't know when the player will fire
       this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
 
-      //update player hp bar
-      this.health_bar.width = this.hp_width * this.player.hp/this.player.PLAYER_MAX_HP;
-      //health bar flashes right after taking damage 
-      if(this.player.time_since_dmg < 4) this.health_bar.alpha = 0.7;
-      else this.health_bar.alpha = 1;
-    
       //spawn a health pack when the first part of the boss dies
       if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {
         //Pickup(game, x, y, key, frame)
