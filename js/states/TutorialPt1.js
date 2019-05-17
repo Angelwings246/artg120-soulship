@@ -158,7 +158,7 @@ TutorialPt1.prototype = {
 
 
 	if (this.player.hp <= 0){
-		game.state.start("TutorialPt1");
+		game.state.start("TutorialPt1", true, false, this.main, this.alt);
 	}
 	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
 	game.physics.arcade.overlap(this.player, this.asteroids, this.crashing, null, this);

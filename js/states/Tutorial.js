@@ -70,7 +70,7 @@ Tutorial.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 
     if (timer >= 25 || game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()){ 
-	    game.state.start('TutorialPt1');
+	    game.state.start('TutorialPt1', true, false, this.main, this.alt);
 	}
 
 	}

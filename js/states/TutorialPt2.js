@@ -145,7 +145,7 @@ TutorialPt2.prototype = {
 
 
     //restart upon death
-    if(this.player.hp <= 0) game.state.start('TutorialPt2');
+    if(this.player.hp <= 0) game.state.start('TutorialPt2', true, false, this.main, this.alt);
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
