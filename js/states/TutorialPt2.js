@@ -16,7 +16,7 @@ TutorialPt2.prototype = {
 
     game.load.image("player", "player ship.png");
     game.load.image("player broken", "player ship broken.png");
-    game.load.image("enemy", "enemy.png");
+    game.load.atlas("enemy", "enemy.png", "enemy.json");
     game.load.image("bullet", "bullet.png");
     game.load.image("heal", "hpDrop.png");
     game.load.image("stars", "Stars.png");
@@ -176,7 +176,7 @@ TutorialPt2.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
 
     if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0);
+  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;

@@ -6,7 +6,7 @@
  * sounds - array of sounds that the enemy will play upon certain events. 
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit
  */
-function Enemy(game, x, y, sounds, key, frame) {
+function Enemy(game, x, y, sounds, key, frame, animated) {
   console.log("enemy spawning at x: %s y: %s", x, y);
   //call Phaser.Sprite constructor (game, x, y, key, frame)
   Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -31,9 +31,11 @@ function Enemy(game, x, y, sounds, key, frame) {
   this.bullets = game.add.group();
   this.dmg = 1;
 
+  this.animated = animated;
   //add animations
+  if(this.animated) {
   this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
-
+  }
 }
 
 //assign prototype and constructor
@@ -42,7 +44,7 @@ Enemy.prototype.constructor = Enemy;
 
 //update function
 Enemy.prototype.update = function() {
-  this.animations.play("idle");
+  if(this.animated) this.animations.play("idle");
   if(this.hp <= 0) this.death();
 
   //feedback for taking damage: flash red, then blink during invulnerability

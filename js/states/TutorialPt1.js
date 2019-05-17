@@ -17,7 +17,7 @@ TutorialPt1.prototype = {
     game.load.image("background", "bg.png");
     game.load.image("player", "player ship.png");
     game.load.image("bullet", "bullet.png");
-    game.load.image("enemy", "enemy.png");
+    game.load.atlas("enemy", "enemy.png", "enemy.json");
     game.load.image("asteroid", "Asteroid.png");
     game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("stars", "Stars.png");
@@ -104,7 +104,7 @@ TutorialPt1.prototype = {
      else asteroid_key = "asteroid";
      
      //Enemy(game, x, y, sounds, key, frame)
-     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, asteroid_key, 0);
+     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, asteroid_key, 0, false);
      asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
      asteroid.body.velocity.x = game.rnd.integerInRange(-200, -100); 
      asteroid.body.velocity.y = game.rnd.integerInRange(-20, 20); //remove velocity from the base Enemy type

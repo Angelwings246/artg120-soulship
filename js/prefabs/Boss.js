@@ -32,8 +32,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   
   //Enemy types for the weak spots.  Note that .create() cannot be used because of constructor difference
   //Enemy(game, x, y, sounds, key, frame)
-  var top_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side);
-  var bot_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side);
+  var top_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, true);
+  var bot_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, true);
   //add them to group
   this.top_pt = this.add(top_pt);
   this.bot_pt = this.add(bot_pt);
@@ -335,7 +335,7 @@ Boss.prototype.fire3b = function(x, y) {
      else asteroid_key = "asteroid";
      
      //Enemy(game, x, y, sounds, key, frame)
-     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.asteroid_sounds, asteroid_key, 0);
+     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.asteroid_sounds, asteroid_key, 0, false);
      asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
      asteroid.body.velocity.x = -100; 
      asteroid.body.velocity.y = 0; //remove velocity from the base Enemy type
