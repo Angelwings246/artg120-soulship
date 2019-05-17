@@ -3,6 +3,10 @@
 var timer;
 var Tutorial = function(game) {};
 Tutorial.prototype = {
+	init: function(main, alt) {
+    this.main = main;
+    this.alt = alt;
+  },
 	preload: function() {
     //preload assets
     game.load.path = "assets/img/";
@@ -25,7 +29,7 @@ Tutorial.prototype = {
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
 		if (timer == 5){
-			game.state.start('BossLevel');
+			game.state.start('BossLevel', true, false, this.main, this.alt);
 		}
 	}
 };

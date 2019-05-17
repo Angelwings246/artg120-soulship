@@ -5,6 +5,10 @@ var frames;
 
 var TutorialPt1 = function(game) {};
 TutorialPt1.prototype = {
+  init: function(main, alt) {
+    this.main = main;
+    this.alt = alt;
+  },
 	preload: function() {
     //preload assets
 
@@ -67,7 +71,7 @@ TutorialPt1.prototype = {
     this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0);
+    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
     game.add.existing(this.player);
     this.player.inTutorial = true;
 	this.asteroids = game.add.group();
@@ -188,10 +192,10 @@ TutorialPt1.prototype = {
 		this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
 		if (timer >= 30){
-			game.state.start('TutorialPt2');
+			game.state.start('TutorialPt2', true, false, this.main, this.alt);
 		}
 	}
 
-  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) game.state.start('TutorialPt2');
+  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) game.state.start('TutorialPt2', true, false, this.main, this.alt);
 	}
 };

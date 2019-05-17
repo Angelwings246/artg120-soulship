@@ -2,7 +2,11 @@
 'use strict';
 var timer;
 var TutorialPt2 = function(game) {};
-TutorialPt2.prototype = {
+TutorialPt2.prototype = {  
+  init: function(main, alt) {
+    this.main = main;
+    this.alt = alt;
+  },
 	preload: function() {
     
     //preload assets
@@ -65,7 +69,7 @@ TutorialPt2.prototype = {
     this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
 
     //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0);
+    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
     game.add.existing(this.player);
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
@@ -224,7 +228,7 @@ TutorialPt2.prototype = {
     game.add.text(game.width/8, 170,"!-NOTE: UNKNOWN THREAT UNRESOLVED-!",{fontSize: "32px", fill:"#FFFF00"});
     game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
-    this.timer.add(7000, game.state.start, game.state, "BossLevel");
+    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt);
   }
 
 };

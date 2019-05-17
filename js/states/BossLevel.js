@@ -8,22 +8,10 @@
 
 var BossLevel = function(game){};
 BossLevel.prototype = {
-    init: function() {
-      this.main = {
-          'up': Phaser.KeyCode.UP,
-          'down': Phaser.KeyCode.DOWN,
-          'left': Phaser.KeyCode.LEFT,
-          'right': Phaser.KeyCode.RIGHT,
-          'fire': Phaser.KeyCode.SPACEBAR
-       };
-      this.alt = {
-          'up': Phaser.KeyCode.W, 
-          'down': Phaser.KeyCode.S,
-          'left': Phaser.KeyCode.A, 
-          'right': Phaser.KeyCode.D,
-          'fire': Phaser.KeyCode.SPACEBAR
-       };
-    },
+  init: function(main, alt) {
+    this.main = main;
+    this.alt = alt;
+  },
 	preload: function(){
     
     //preload assets
