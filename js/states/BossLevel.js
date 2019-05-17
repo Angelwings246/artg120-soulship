@@ -147,7 +147,7 @@ BossLevel.prototype = {
 	  if(this.player.hp <= 0 || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
         game.sound.stopAll();
-        game.state.start('GameOver', true, false, this.victory);
+        game.state.start('GameOver', true, false, this.victory, this.main, this.alt);
 	  }
       //debug cred: Nathan Altice inputs08.js
       if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {

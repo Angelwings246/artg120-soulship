@@ -2,9 +2,11 @@
 
 var GameOver = function(game) {};
 GameOver.prototype = {
-  init: function(victory){
+  init: function(victory, main, alt){
     //keep track of whether the player won or lost
     this.victory = victory;
+    this.main = main;
+    this.alt = alt;
   },
   preload: function() {
     //preload assets
@@ -22,7 +24,7 @@ GameOver.prototype = {
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
-			game.state.start('BossLevel');
+			game.state.start('BossLevel', true, false, this.main, this.alt);
 
 		}
 	}
