@@ -100,7 +100,7 @@ TutorialPt2.prototype = {
     this.shots_fired = 0; //count the number of times the player has shot
     this.ready = false; //swap to true when the player is deemed ready to move on
 
-
+    //store the location of the final enemy when it dies
     this.lastX = game.width;
     this.lastY = game.height/2;
 	},
@@ -114,16 +114,10 @@ TutorialPt2.prototype = {
       this.player.body.y = this.startY;
     }
 
-    //spawn a health pickup if the player gets too low, because this is the tutorial. We're being nice.
-    // if(this.player.hp < this.player.PLAYER_MAX_HP/3 && this.pickups.countLiving() == 0) {
-    //   var pickup = new Pickup(game, game.width, game.height/2, "heal", 0);
-    //   this.pickups.add(pickup);
-    // }
-    
     //the player is ready to continue once all enemies are spawned and destroyed
     if(this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 0 && !this.ready) {
       this.ready = true;
-        //if there is none already, spawn a health pack so the ending can be triggered
+        //spawn a health pack so the ending can be triggered
         var pickup = new Pickup(game, this.lastX, this.lastY, "heal", 0);
         this.pickups.add(pickup);
       
