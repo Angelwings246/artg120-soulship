@@ -71,6 +71,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 
   this.timer = game.time.create(false); //timer for firing stuff
   this.timer.start(); //remember to start it!
+
+
 }
 
 
@@ -109,7 +111,7 @@ Boss.prototype.update = function() {
 
   //because we have overridden Phaser.Group, we have to manually call the children's update
   if(this.top_pt.exists && this.top_pt.hp > 0) this.top_pt.update();
-  if(this.bot_pt.exists && this.bot_pt.hp > 0)this.bot_pt.update();
+  if(this.bot_pt.exists && this.bot_pt.hp > 0) this.bot_pt.update();
 }
 
 //fire function - doesn't actually override the Enemy fire function as Boss extends Phaser.Group.

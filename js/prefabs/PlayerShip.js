@@ -7,8 +7,10 @@
 /*PlayerShip constructor:
  * sounds - array of sounds that the enemy will play upon certain events. 
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
+ * main and alt are objects containing keybind settings, each with properies "up", "down", "left", "right", and "fire".
+ * The properties are KeyCodes (NUMBERS that correspond to keys, NOT the keys themselves) and these objects will have to be passed from state to state.
  */
-function PlayerShip(game, sounds, key, frame){
+function PlayerShip(game, sounds, key, frame, main, alt){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
@@ -39,6 +41,26 @@ function PlayerShip(game, sounds, key, frame){
   this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
   this.time_since_dmg = 20; //keeps track of when i-frames reset, start off vulnerable
 
+  /*set up keys based off the keybind setting objects passed in from constructor
+  * game.input.keyboard.addKeys() creates an object with the properties 'string':KeyCode.  
+  * in other words, this.main is an object with the properties 'up', 'down', 'left', 'right', 'fire'
+  * adn each of these properties contains a Phaser.Key Object
+  */
+  this.main = game.input.keyboard.addKeys({
+    'up': main.up,
+    'down': main.down,
+    'left': main.left,
+    'right': main.right,
+    'fire': main.fire});
+  this.alt = game.input.keyboard.addKeys({
+    'up': alt.up,
+    'down': alt.down,
+    'left': alt.left,
+    'right': alt.right,
+    'fire': alt.fire});
+
+  console.log(this.main);
+  console.log(this.alt);
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -48,53 +70,98 @@ PlayerShip.prototype.constructor = PlayerShip;
 
 // update it to allow ship functions
 PlayerShip.prototype.update = function(){
-  
-  //set up keys
-  this.keys = game.input.keyboard.addKeys({
-    'up': [Phaser.KeyCode.W, Phaser.KeyCode.UP], 'down': [Phaser.KeyCode.S, Phaser.KeyCode.DOWN],
-    'left': [Phaser.KeyCode.A, Phaser.KeyCode.LEFT], 'right': [Phaser.KeyCode.D, Phaser.KeyCode.RIGHT],
-    'fire': Phaser.KeyCode.SPACEBAR});
 
-  if(this.keys.up.isDown) console.log("yay");
+  /*movement is a variable refreshed every update cycle that tracks which keys should count as being "held down" for the sake of movement.
+  * my main issue with the standard 
+  * if(left)
+  * else if (right) 
+  * implementation is that holding left and tapping right does NOT change direction to the right,
+  * however holding right and tapping left DOES change direction to the left....
+  * thus, to standardize this, i have taken duration (how long the key has been held) into account, as well as using incrementation of the 
+  * movement variable to detect diagonal movement without having to check each key twice.  
+  * the variable is then passed into a switch-case to change the ship's velocity
+  */
+  var movement = 0;
+
+  /*all functions must check both the rebindable "main" keybind settings and the "alternate" keybind settings
+  * the way this is implemented, you technically can play using both key settings at the same time - as in, pressing W and LEFT.
+  * ...with some exceptions.  Pressing W and DOWN and similar opposing combinations freeze you due to the implementation of the switch-case
+  * (two opposing buttons add up to 8, which is default case, which is intentional, so that pressing both simultaneously does nothing.)
+  */
   
-	// allow basic non-diagonal directional movement
-	if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
-		this.body.velocity.y = -200; 	
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
-		this.body.velocity.y = 200; 	
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.A)){
-		this.body.velocity.x = -250; 	
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-		this.body.velocity.x = 250; 	
-	}
-	// allow diagonal movement
-	// needs touching up to make more fluid
-	else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.W) && game.input.keyboard.isDown(Phaser.Keyboard.D)){
-		this.body.velocity.y = -200; 
-		this.body.velocity.x = 250; 		
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.W) && game.input.keyboard.isDown(Phaser.Keyboard.A)){
-		this.body.velocity.y = -200; 	
-		this.body.velocity.x = -250; 	
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.A) && game.input.keyboard.isDown(Phaser.Keyboard.S)){
-		this.body.velocity.x = -250; 	
-		this.body.velocity.y = 200; 	
-	}else
-	if(game.input.keyboard.isDown(Phaser.Keyboard.S) && game.input.keyboard.isDown(Phaser.Keyboard.D)){
-		this.body.velocity.y = 200; 	
-		this.body.velocity.x = 250; 	
-	}else{
-		this.body.velocity.y = 0; 	
-		this.body.velocity.x = 0; 	
-	}
+  //only pressing up OR if both are down, pressed up more recently than pressed down 
+  if((this.main.up.isDown && this.main.down.isUp) || (this.main.up.isDown && this.main.up.duration < this.main.down.duration) ||
+        (this.alt.up.isDown && this.alt.down.isUp) || (this.alt.up.isDown && this.alt.up.duration < this.alt.down.duration)) {
+   movement += 1;
+  }
+  //only pressing left OR if both are down, pressed left more recently than pressed right
+  if((this.main.left.isDown && this.main.right.isUp) || (this.main.left.isDown && this.main.left.duration < this.main.right.duration) ||
+        (this.alt.left.isDown && this.alt.right.isUp) || (this.alt.left.isDown && this.alt.left.duration < this.alt.right.duration)) {
+    movement += 3;
+  }
+
+  //only pressing right OR if both are down, pressed right more recently than pressed left
+  if((this.main.right.isDown && this.main.left.isUp) || (this.main.right.isDown && this.main.right.duration < this.main.left.duration) ||
+    (this.alt.right.isDown && this.alt.left.isUp) || (this.alt.right.isDown && this.alt.right.duration < this.alt.left.duration)) {
+    movement += 5;
+  }
+
+  //only pressing down OR if both are down, pressed down more recently than pressed up
+  if((this.main.down.isDown && this.main.up.isUp) || (this.main.down.isDown && this.main.down.duration < this.main.up.duration) || 
+    (this.alt.down.isDown && this.alt.up.isUp) || (this.alt.down.isDown && this.alt.down.duration < this.alt.up.duration)) {
+    movement += 7;
+  }
+
+  /*the switch-case for movement.  the numbers look strange, but they have been chosen in a specific way, so that the diagonals are
+  * equal to the two cardinals added together, and that no numbers have been repeated.  in other words, i'm trying to minimize bugs.
+  * ODD cases are the cardinal directions (up, down, left, right) and EVEN cases are the diagonal directions.
+  * each case is labelled, but you may also refer to this diagram:
+  *    4    1    6
+  *     \   |   /
+  *  3-- default --5
+  *     /   |   \
+  *    10   7    12
+  */
+  switch(movement) {
+    case 1: //up
+      this.body.velocity.y = -200;
+      this.body.velocity.x = 0;
+      break;
+    case 3: //left
+      this.body.velocity.y = 0;
+      this.body.velocity.x = -250;
+      break;
+    case 4: //up-left
+      this.body.velocity.y = -200;
+      this.body.velocity.x = -250;
+      break;
+    case 5: //right
+      this.body.velocity.y = 0;
+      this.body.velocity.x = 250;
+      break;
+    case 6: //up-right
+      this.body.velocity.y = -200;
+      this.body.velocity.x = 250;
+      break;
+    case 7: //down
+      this.body.velocity.y = 200; 
+      this.body.velocity.x = 0;
+      break;
+    case 10: //down-left
+      this.body.velocity.y = 200;
+      this.body.velocity.x = -250;
+      break;
+    case 12: //down-right
+      this.body.velocity.y = 200;
+      this.body.velocity.x = 250;
+      break;
+    default: //no movement
+      this.body.velocity.x = this.body.velocity.y = 0;     
+      break;
+  }
 
   //when the fire button is held, shoot at a constant rate
-	if(this.keys.fire.isDown){
+	if(this.main.fire.isDown || this.alt.fire.isDown){
     if(this.time_since_last_shot % this.FIRE_RATE == 0){
       this.fire();
     }
@@ -102,7 +169,7 @@ PlayerShip.prototype.update = function(){
 	}
 
   //when the fire button is released, reset the counter.  this allows for quick spamming if desired.
-  if(this.keys.fire.justUp) this.time_since_last_shot = 0;
+  if(this.main.fire.justUp || this.alt.fire.justUp) this.time_since_last_shot = 0;
 
   //count up for checking invulnerability
   this.time_since_dmg++;
@@ -126,8 +193,6 @@ PlayerShip.prototype.update = function(){
 
   //play the annoying low hp sound when health is low
   if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
-
-
 
 }
 

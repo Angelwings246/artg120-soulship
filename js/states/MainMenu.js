@@ -2,6 +2,22 @@
 
 var MainMenu = function(game) {};
 MainMenu.prototype = {
+	init: function() {
+      this.main = {
+          'up': Phaser.KeyCode.UP,
+          'down': Phaser.KeyCode.DOWN,
+          'left': Phaser.KeyCode.LEFT,
+          'right': Phaser.KeyCode.RIGHT,
+          'fire': Phaser.KeyCode.SPACEBAR
+       };
+      this.alt = {
+          'up': Phaser.KeyCode.W, 
+          'down': Phaser.KeyCode.S,
+          'left': Phaser.KeyCode.A, 
+          'right': Phaser.KeyCode.D,
+          'fire': Phaser.KeyCode.SPACEBAR
+       };
+	},
 	preload: function() {
     //preload assets
 	  game.load.path = "assets/img/";
@@ -17,7 +33,7 @@ MainMenu.prototype = {
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
-			game.state.start('Tutorial');
+			game.state.start('Tutorial', true, false, this.main, this.alt);
 		}
 	}
 };

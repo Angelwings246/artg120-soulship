@@ -25,12 +25,15 @@ function Enemy(game, x, y, sounds, key, frame) {
   //adds a flag so that some enemies cannot shoot even if fire() is called
   this.can_fire = true;
 
-
   this.INVULN_FRAMES = 10;
   this.time_since_dmg = 10;
 
   this.bullets = game.add.group();
   this.dmg = 1;
+
+  //add animations
+  this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
+
 }
 
 //assign prototype and constructor
@@ -39,6 +42,7 @@ Enemy.prototype.constructor = Enemy;
 
 //update function
 Enemy.prototype.update = function() {
+  this.animations.play("idle");
   if(this.hp <= 0) this.death();
 
   //feedback for taking damage: flash red, then blink during invulnerability

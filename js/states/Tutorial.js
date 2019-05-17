@@ -5,6 +5,10 @@ var frames;
 
 var Tutorial = function(game) {};
 Tutorial.prototype = {
+	init: function(main, alt) {
+    this.main = main;
+    this.alt = alt;
+  },
 	preload: function() {
     //preload assets
 
@@ -64,13 +68,9 @@ Tutorial.prototype = {
 
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
-		console.log(timer);
     if (timer >= 25){ 
 	    game.state.start('TutorialPt1');
 	}
-
-
-
 
 	}
 };
