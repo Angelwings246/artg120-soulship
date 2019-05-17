@@ -27,6 +27,10 @@ function Enemy(game, x, y, sounds, key, frame) {
 
   this.INVULN_FRAMES = 12;
   this.time_since_dmg = 12;
+
+  //add animations
+  this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
+
 }
 
 //assign prototype and constructor
@@ -35,6 +39,7 @@ Enemy.prototype.constructor = Enemy;
 
 //update function
 Enemy.prototype.update = function() {
+  this.animations.play("idle");
   if(this.hp <= 0) this.death();
 
   //feedback for taking damage: flash red, then blink during invulnerability

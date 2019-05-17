@@ -207,7 +207,6 @@ PlayerShip.prototype.fire = function() {
 
   //reset counter
   this.time_since_last_shot = 0;
-
   this.hp--;
 }
 

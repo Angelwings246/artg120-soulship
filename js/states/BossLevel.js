@@ -35,7 +35,7 @@ BossLevel.prototype = {
     game.load.image("enemy", "enemy.png");
     game.load.image("bullet", "bullet.png");
     game.load.image("boss main", "vortex.png");
-    game.load.image("boss tentacle", "tentacle.png");
+    game.load.image("tentacle", "tentacle.png");
     game.load.image("heal", "hpDrop.png");
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
@@ -43,6 +43,7 @@ BossLevel.prototype = {
     game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("hp bar", "hp bar.png");
     game.load.image("red", "hp red.png");
+    game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
 
     game.load.path = "assets/audio/";
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
@@ -89,7 +90,7 @@ BossLevel.prototype = {
     this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
-    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "boss tentacle", 0);
+    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3");
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
