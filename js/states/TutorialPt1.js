@@ -132,7 +132,6 @@ TutorialPt1.prototype = {
     },
 
 
-
   warning1: function(){
 	    var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
 			warning1.anchor.setTo = 0.5;
@@ -156,8 +155,10 @@ TutorialPt1.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 		frames++;
 
-	if (this.hp <= 0){
-		game.state.start(TutorialPt1);
+
+
+	if (this.player.hp <= 0){
+		game.state.start("TutorialPt1");
 	}
 	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
 	game.physics.arcade.overlap(this.player, this.asteroids, this.crashing, null, this);
@@ -202,5 +203,6 @@ TutorialPt1.prototype = {
 	}
 
   if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) game.state.start('TutorialPt2', true, false, this.main, this.alt);
+
 	}
 };

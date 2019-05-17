@@ -81,6 +81,7 @@ TutorialPt2.prototype = {
 
     //put as constant for adjustments
     this.NUM_ENEMIES = 7;
+
     this.enemies_spawned = 0; //track enemies already spawned
     this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 
@@ -105,6 +106,10 @@ TutorialPt2.prototype = {
 
     this.shots_fired = 0; //count the number of times the player has shot
     this.ready = false; //swap to true when the player is deemed ready to move on
+
+    //store the location of the final enemy when it dies
+    this.lastX = game.width;
+    this.lastY = game.height/2;
 	},
 	update: function(){
 
@@ -116,20 +121,13 @@ TutorialPt2.prototype = {
       this.player.body.y = this.startY;
     }
 
-    //spawn a health pickup if the player gets too low, because this is the tutorial. We're being nice.
-    if(this.player.hp < this.player.PLAYER_MAX_HP/3 && this.pickups.countLiving() == 0) {
-      var pickup = new Pickup(game, game.width, game.height/2, "heal", 0);
-      this.pickups.add(pickup);
-    }
-    
     //the player is ready to continue once all enemies are spawned and destroyed
-
     if(this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 0 && !this.ready) {
       this.ready = true;
-        if(this.pickups.countLiving() == 0) { //if there is none already, spawn a health pack so the ending can be triggered
-        var pickup = new Pickup(game, game.width, game.height/2, "heal", 0);
+        //spawn a health pack so the ending can be triggered
+        var pickup = new Pickup(game, this.lastX, this.lastY, "heal", 0);
         this.pickups.add(pickup);
-      }
+      
     }
     // flash warning every time player shoots 
     if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
@@ -151,10 +149,9 @@ TutorialPt2.prototype = {
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
-    game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage);
+    game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
     game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
     game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
-
 
     //for testing purposes, Q triggers the ending of the tutorial
     if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
@@ -196,6 +193,10 @@ TutorialPt2.prototype = {
     //the character, be it player or enemy, takes damage
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
+    if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
+      this.lastX = character.body.x;
+      this.lastY = character.body.y;
+    }
     if(character.body != null) {
       character.damage(bullet.dmg);
       bullet.destroy(); //destroy instead of kill to free memory
@@ -213,7 +214,7 @@ TutorialPt2.prototype = {
   crashing: function(player, enemy) {
     if(enemy.body != null) {
       player.damage(3); //arbitrary number for now
-      if(enemy.parent != this.boss) enemy.destroy(); //destroy non-boss enemies upon crashing
+      enemy.destroy(); //destroy non-boss enemies upon crashing
     }
   },
   //because once an enemy is killed, its bullets property becomes unreachable, transfer all bullets
@@ -232,7 +233,7 @@ TutorialPt2.prototype = {
     this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
     this.warning_text.fill = "#00FFFF";
 
-    game.add.text(game.width/8, 170,"!-NOTE: UNKNOWN THREAT UNRESOLVED-!",{fontSize: "32px", fill:"#FFFF00"});
+    game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
     game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt);
