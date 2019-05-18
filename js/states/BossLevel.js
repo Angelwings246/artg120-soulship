@@ -31,6 +31,7 @@ BossLevel.prototype = {
     game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("hp bar", "hp bar.png");
     game.load.image("red", "hp red.png");
+    game.load.image("glow", "hp bar glow.png");
     game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
 
     game.load.path = "assets/audio/";
@@ -117,7 +118,7 @@ BossLevel.prototype = {
       game.physics.arcade.overlap(this.boss.asteroids, this.player.bullets, this.damage);
       game.physics.arcade.overlap(this.boss, this.player.bullets, this.damage);
       game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
-      game.physics.arcade.overlap(this.player, this.boss, this.crashing, null, this);
+      game.physics.arcade.collide(this.player, this.boss, this.crashing, null, this);
       game.physics.arcade.overlap(this.player, this.boss.asteroids, this.crashing, null, this);
 
       //adjust timing of shots - in phase 2 (i.e. when the boss is < 50% HP) the attacks are more powerful
@@ -171,7 +172,7 @@ BossLevel.prototype = {
     //the character, be it player or enemy, takes damage
     damage: function(character, bullet) {
         //because of naming conventions, this should work for both the enemy AND the player
-        if(character.body != null) {
+        if(character.body != null && (character instanceof Enemy || character instanceof PlayerShip)) { //don't try to call on things that don't take damage
             character.damage(bullet.dmg);
             bullet.destroy(); //destroy instead of kill to free memory
         }
@@ -185,7 +186,7 @@ BossLevel.prototype = {
     },
     //called when the player crashes into an enemy_sounds
     crashing: function(player, enemy) {
-        if(enemy.body != null) {
+        if(enemy.body != null && enemy instanceof Enemy) { //don't get hurt for colliding with vortex...for now.
             player.damage(3); //arbitrary number for now
             if(enemy.parent != this.boss) enemy.destroy(); //destroy non-boss enemies upon crashing
         }

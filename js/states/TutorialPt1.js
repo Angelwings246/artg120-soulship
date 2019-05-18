@@ -25,6 +25,8 @@ TutorialPt1.prototype = {
     game.load.image("heal", "hpDrop.png");
     game.load.image("hp bar", "hp bar pt 1.png");
     game.load.image("corrupt bar", "hp bar.png");
+        game.load.image("glow", "hp bar glow.png");
+
     game.load.image("red", "hp red.png");
     game.load.image("tentacle", "tentacle.png");
 
@@ -194,7 +196,7 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 23){
-		this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+		this.health_bar.outer.loadTexture("corrupt bar");
 
 		if (timer >= 30){
 

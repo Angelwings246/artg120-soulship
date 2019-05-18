@@ -42,6 +42,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   //create a normal sprite for the center 
   this.center_pt = this.create(3/4 * game.width, game.height/2, key_main, frame_main);
   this.center_pt.anchor.setTo(0.5);
+  game.physics.arcade.enable(this.center_pt);
+  this.center_pt.body.setCircle(125);
 
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
@@ -49,6 +51,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   this.hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
 
+  this.top_pt.body.immovable = this.bot_pt.body.immovable = this.center_pt.body.immovable = true;
   
   //remove the default velocity from Enemy()
   this.top_pt.body.velocity.y = this.bot_pt.body.velocity.y = 0;
@@ -281,7 +284,7 @@ Boss.prototype.fire2b = function() {
 
 /* --- Firing Type 3 Variation A ---
 *  Fires 4 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
-*  One shot originates from the center and one originating from each a tentacle.
+*  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 */
 Boss.prototype.fire3a = function(x, y) {
@@ -316,7 +319,7 @@ if(this.waves_fired < 4) {
 
 /* --- Firing Type 3 Variation B ---
 *  Fires 4 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
-*  One shot originates from the center and one originating from each a tentacle.
+*  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 *  Also spawns a random number of asteroids that spawn on the right side of the screen and travel to the left,
 *  which damage the player if they player collides with them.
@@ -373,7 +376,7 @@ Boss.prototype.fire3b = function(x, y) {
 
 /* --- Firing Type 4 Variation A ---
 *  Fires 3 waves of 3 3-bullet spreads.
-*  One shot originates from the center and one originating from each a tentacle.
+*  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 */
 Boss.prototype.fire4a = function() {
@@ -411,7 +414,7 @@ Boss.prototype.fire4a = function() {
 
 /* --- Firing Type 4 Variation B ---
 *  Fires 6 waves of 3 3-bullet spreads.
-*  One shot originates from the center and one originating from each a tentacle.
+*  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 */
 Boss.prototype.fire4b = function() {
