@@ -18,8 +18,9 @@ BossLevel.prototype = {
 	game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
 
-    game.load.image("player", "player ship.png");
-    game.load.image("player broken", "player ship broken.png");
+    // game.load.image("player", "player ship.png");
+    // game.load.image("player broken", "player ship broken.png");
+    // game.load.atlas("player_death", "player_death.png", "player_death.json");
     game.load.image("enemy", "enemy.png");
     game.load.image("bullet", "bullet.png");
     game.load.image("boss main", "vortex.png");
@@ -83,7 +84,7 @@ BossLevel.prototype = {
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
     game.add.existing(this.player);
 
     //group of pickups (for now, just a heal)
@@ -145,7 +146,7 @@ BossLevel.prototype = {
 
 	 // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
-	  if(this.player.hp <= 0 || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
+	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
         game.sound.stopAll();
         game.state.start('GameOver', true, false, this.victory, this.main, this.alt);

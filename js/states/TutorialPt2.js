@@ -14,9 +14,10 @@ TutorialPt2.prototype = {
 	game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
 
-    game.load.image("player", "player ship.png");
-    game.load.image("player broken", "player ship broken.png");
-    game.load.atlas("enemy", "enemy.png", "enemy.json");
+    // // game.load.image("player", "player ship.png");
+    // game.load.image("player broken", "player ship broken.png");
+    // game.load.atlas("player_death", "player_death.png", "player_death.json");
+    game.load.image("enemy", "enemy.png");
     game.load.image("bullet", "bullet.png");
     game.load.image("heal", "hpDrop.png");
     game.load.image("stars", "Stars.png");
@@ -71,7 +72,7 @@ TutorialPt2.prototype = {
 
     //PlayerShip(game, sounds, key, frame)  
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
     game.add.existing(this.player);
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
@@ -145,7 +146,7 @@ TutorialPt2.prototype = {
 
 
     //restart upon death
-    if(this.player.hp <= 0) game.state.start('TutorialPt2', true, false, this.main, this.alt);
+    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('TutorialPt2', true, false, this.main, this.alt);
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);

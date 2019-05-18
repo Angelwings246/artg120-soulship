@@ -15,9 +15,9 @@ TutorialPt1.prototype = {
     // load images
     game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
-    game.load.image("player", "player ship.png");
+    game.load.atlas("player", "player.png", "player.json");
     game.load.image("bullet", "bullet.png");
-    game.load.atlas("enemy", "enemy.png", "enemy.json");
+    game.load.image("enemy", "enemy.png");
     game.load.image("asteroid", "Asteroid.png");
     game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("stars", "Stars.png");
@@ -25,7 +25,7 @@ TutorialPt1.prototype = {
     game.load.image("heal", "hpDrop.png");
     game.load.image("hp bar", "hp bar pt 1.png");
     game.load.image("corrupt bar", "hp bar.png");
-        game.load.image("glow", "hp bar glow.png");
+    game.load.image("glow", "hp bar glow.png");
 
     game.load.image("red", "hp red.png");
     game.load.image("tentacle", "tentacle.png");
@@ -74,7 +74,7 @@ TutorialPt1.prototype = {
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
 
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", 0, this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt);
     game.add.existing(this.player);
     this.player.inTutorial = true;
 	this.asteroids = game.add.group();
@@ -159,7 +159,7 @@ TutorialPt1.prototype = {
 
 
 
-	if (this.player.hp <= 0){
+	if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
 		game.state.start("TutorialPt1", true, false, this.main, this.alt);
 	}
 	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
@@ -197,6 +197,7 @@ TutorialPt1.prototype = {
 
 	if(timer >= 23){
 		this.health_bar.outer.loadTexture("corrupt bar");
+        this.player.frameName = "player ship broken";
 
 		if (timer >= 30){
 

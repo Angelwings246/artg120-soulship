@@ -59,8 +59,8 @@ function PlayerShip(game, sounds, key, frame, main, alt){
     'right': alt.right,
     'fire': alt.fire});
 
-  console.log(this.main);
-  console.log(this.alt);
+  //implement animations
+  this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -193,6 +193,12 @@ PlayerShip.prototype.update = function(){
 
   //play the annoying low hp sound when health is low
   if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
+
+  //play death stuff when dead
+  if(this.hp <= 0) {
+    this.animations.play("death");
+    if(!this.death_sound.isPlaying) this.death_sound.play();
+  }
 
 }
 
