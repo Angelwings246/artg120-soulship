@@ -22,6 +22,9 @@ MainMenu.prototype = {
     //preload assets
 	  game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
+    // load Main Menu theme
+      game.load.path = "assets/audio/";
+    game.load.audio("MainMenu", "MainMenu.mp3");
 
 	},
 	create: function(){
@@ -30,10 +33,13 @@ MainMenu.prototype = {
 		var titleText = game.add.text(game.width/4, game.height/2, 'Soul Ship', {fontSize: "32px", fill:"#FFFFFF"});
 		var instructionText = game.add.text(game.width/4, game.height/2 + 50,'Press SPACEBAR to start', {fontSize: "32px", fill:"#FFFFFF"});
 		// var controlsText = game.add.text(game.width/2, game.height/2 + 150, 'Use WASD to move');
+		this.MainMenu = game.add.audio("MainMenu");
+		this.MainMenu.play();
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)){
 			game.state.start('Tutorial', true, false, this.main, this.alt);
+			this.MainMenu.pause();
 		}
 	}
 };

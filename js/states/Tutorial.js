@@ -11,6 +11,7 @@ Tutorial.prototype = {
   },
 	preload: function() {
     //preload assets
+    game.load.audio("transmission", ["Transmission.mp3"]);
 
   },
 	create: function(){
@@ -27,8 +28,10 @@ Tutorial.prototype = {
 	timer = (Math.floor(this.timer.seconds))+1;
 	// allow blackout background w/ text first
 	game.stage.backgroundColor = '#000000';
+	this.transmission = game.add.audio("transmission");
 
 	},
+
 
 	dialogue1: function(){
 		//Tutorial Dialogue/Instructions
@@ -37,6 +40,7 @@ Tutorial.prototype = {
 		intro1.alpha = 0;
 
 		var tween = game.add.tween(intro1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		this.transmission.play();
 	},
 
 	dialogue2: function(){
@@ -53,7 +57,10 @@ Tutorial.prototype = {
 		var intro3 = game.add.text(game.width/2 -400, game.height/2 -50, 'Remember how to pilot your ship? \nUse the WASD buttons on your terminal to steer and \nthe OUTER-SPACEBAR to fire your weapons', {fontSize: "28px", fill:"#FFFFFF"});
 		intro3.anchor.setTo = 0.5;
 		intro3.alpha = 0;
+
 		var tween = game.add.tween(intro3).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		this.transmission.play();
+
 	},
 
 	dialogue4: function(){
@@ -63,6 +70,8 @@ Tutorial.prototype = {
 		intro4.alpha = 0;
 		
 		var tween = game.add.tween(intro4).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+		this.transmission.play();
+
 	},
 
 
