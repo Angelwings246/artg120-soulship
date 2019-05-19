@@ -36,6 +36,7 @@ TutorialPt2.prototype = {
     game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
     game.load.audio("hit", ["EnemyGetsHit.mp3"]);
     game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
+    game.load.audio('alarm', ["Alarm.mp3"]);
 
     game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
     game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
@@ -63,7 +64,7 @@ TutorialPt2.prototype = {
 
     //set up sounds
     this.heal_sound = game.add.audio("heal");
-
+    this.alarm_sound = game.add.audio("alarm");
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
 
@@ -142,6 +143,7 @@ TutorialPt2.prototype = {
       warning2.alpha = 0;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
+      this.alarm_sound.play();
     }
 
 
