@@ -24,7 +24,7 @@ MainMenu.prototype = {
     game.load.image("background", "bg.png");
     // load Main Menu theme
       game.load.path = "assets/audio/";
-    game.load.audio("MainMenu", "MainMenu.mp3");
+    game.load.audio("MainMenu", ["MainMenu.mp3", "MainMenu.ogg"], 1, true);
 
 	},
 	create: function(){
