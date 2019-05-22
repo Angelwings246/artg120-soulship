@@ -47,7 +47,7 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
 
   //health properties - max health refers to the boss health total
   //it is automatically split evenly between the two weak points
-  this.MAX_HEALTH = 20;
+  this.MAX_HEALTH = 4;
   this.hp = this.MAX_HEALTH;
   this.top_pt.hp = this.bot_pt.hp = this.MAX_HEALTH/2;
 

@@ -31,7 +31,7 @@ function PlayerShip(game, sounds, key, frame, main, alt){
   this.bullets = game.add.group();
   this.dmg = 1;
 
-  this.PLAYER_MAX_HP = 20;
+  this.PLAYER_MAX_HP = 28;
   this.hp = this.PLAYER_MAX_HP; //tracks current player hp
 
   this.FIRE_RATE = 30;//once every x frames

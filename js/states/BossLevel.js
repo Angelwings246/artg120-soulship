@@ -20,33 +20,33 @@ BossLevel.prototype = {
 
     // game.load.image("player", "player ship.png");
     // game.load.image("player broken", "player ship broken.png");
-    // game.load.atlas("player_death", "player_death.png", "player_death.json");
-    game.load.image("enemy", "enemy.png");
-    game.load.image("bullet", "bullet.png");
-    game.load.image("boss main", "vortex.png");
-    game.load.image("tentacle", "tentacle.png");
-    game.load.image("heal", "hpDrop.png");
-    game.load.image("stars", "Stars.png");
-    game.load.image("stars2", "Stars2.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
-    game.load.image("hp bar", "hp bar.png");
-    game.load.image("red", "hp red.png");
-    game.load.image("glow", "hp bar glow.png");
-    game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
+    // // game.load.atlas("player_death", "player_death.png", "player_death.json");
+    // game.load.image("enemy", "enemy.png");
+    // game.load.image("bullet", "bullet.png");
+    // game.load.image("boss main", "vortex.png");
+    // game.load.image("tentacle", "tentacle.png");
+    // game.load.image("heal", "hpDrop.png");
+    // game.load.image("stars", "Stars.png");
+    // game.load.image("stars2", "Stars2.png");
+    // game.load.image("asteroid", "Asteroid.png");
+    // game.load.image("asteroid2", "Asteroid2.png");
+    // game.load.image("hp bar", "hp bar.png");
+    // game.load.image("red", "hp red.png");
+    // game.load.image("glow", "hp bar glow.png");
+    // game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
 
-    game.load.path = "assets/audio/";
-    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
-    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
+    // game.load.path = "assets/audio/";
+    // game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
+    // game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
 
 
-    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
-    game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
-    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
+    // game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
+    // game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
+    // game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
+    // game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
 
-    game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
-    game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
+    // game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
+    // game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
 	},
 	create: function(){
 	
@@ -65,9 +65,9 @@ BossLevel.prototype = {
     this.stars2.alpha = 0.4;
 
     //set up music
-    this.intro = game.add.audio("intro");
+    this.intro = game.add.audio("boss intro");
     this.intro.play();
-    this.music = game.add.audio("loop", 1, true);
+    this.music = game.add.audio("boss loop", 1, true);
 
     //set up sounds
 
@@ -105,7 +105,7 @@ BossLevel.prototype = {
     this.victory = false; //switch to true if the player wins
 
     //player health bar is from a prefab
-    this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 	},
 	update: function() {
       

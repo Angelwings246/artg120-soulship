@@ -9,40 +9,8 @@ TutorialPt1.prototype = {
     this.main = main;
     this.alt = alt;
   },
-	preload: function() {
-    //preload assets
-
-    // load images
-    game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
-    game.load.atlas("player", "player.png", "player.json");
-    game.load.image("bullet", "bullet.png");
-    game.load.image("enemy", "enemy.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
-    game.load.image("stars", "Stars.png");
-    game.load.image("stars2", "Stars2.png");
-    game.load.image("heal", "hpDrop.png");
-    game.load.image("hp bar", "hp bar pt 1.png");
-    game.load.image("corrupt bar", "hp bar.png");
-    game.load.image("glow", "hp bar glow.png");
-
-    game.load.image("red", "hp red.png");
-    game.load.image("tentacle", "tentacle.png");
-
-    // load audio
-    game.load.path = "assets/audio/";
-
-    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
-    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
-    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
-    game.load.audio("hit", ["EnemyGetsHit.mp3"]);
-    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
-
-    game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
-    game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
-
+  preload: function() {
+     //all preloading done in Load state
   },
 	create: function(){
 
@@ -160,6 +128,7 @@ TutorialPt1.prototype = {
 
 
 	if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
+        game.sound.stopAll()﻿;
 		game.state.start('GameOver', true, false, false, this.main, this.alt, 'TutorialPt1');;
 	}
 	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
@@ -200,12 +169,14 @@ TutorialPt1.prototype = {
         this.player.frameName = "player ship broken";
 
 		if (timer >= 30){
-
+            game.sound.stopAll()﻿;
 			game.state.start('TutorialPt2', true, false, this.main, this.alt);
 		}
 	}
 
-  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) game.state.start('TutorialPt2', true, false, this.main, this.alt);
-
+  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
+      game.sound.stopAll()﻿;
+      game.state.start('TutorialPt2', true, false, this.main, this.alt);
 	}
+  }
 };
