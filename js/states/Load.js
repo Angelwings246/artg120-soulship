@@ -9,6 +9,9 @@ Load.prototype = {
 	  game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
     game.load.bitmapFont("aldrich64", "aldrich64.png", "aldrich64.fnt");
+    game.load.image("start adventure", "start adventure.png");
+    game.load.image("options", "options.png");
+    game.load.image("credits", "credits.png");
     game.load.atlas("player", "player.png", "player.json");
     game.load.image("bullet", "bullet.png");
     game.load.image("enemy", "enemy.png");
