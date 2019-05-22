@@ -91,6 +91,7 @@ TutorialPt2.prototype = {
     this.pickups = game.add.group();
     this.HEALING = 5; //value of heal pickup
 
+
     //timer for boss firing pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
@@ -239,7 +240,7 @@ TutorialPt2.prototype = {
     game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
     game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
-    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt);
+    this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt);
   }
 
 };

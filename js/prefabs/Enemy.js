@@ -15,7 +15,7 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
 
   //attributes of the enemy, can be easily overridden
   this.hp = 1; // basic enemy dies in 1 hit
-  this.body.velocity.y = 100; //for now, have the basic enemy type scroll downwards at constant speed
+  // this.body.velocity.y = 100; //for now, have the basic enemy type scroll downwards at constant speed
 
   //stores the sounds for future playback
   this.death_sound = sounds[0];
@@ -32,6 +32,10 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.dmg = 1;
 
   this.animated = animated;
+
+  // checks and deletes offscreen enemies
+  this.checkWorldBounds = true;
+  this.outOfBoundsKill = true;
   //add animations
   if(this.animated) {
   this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
