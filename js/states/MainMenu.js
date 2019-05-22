@@ -36,9 +36,6 @@ MainMenu.prototype = {
           game.sound.stopAll()﻿;
           game.state.start('Settings', true, false, this.main, this.alt);});
 
-
-
-    // var controlsText = game.add.text(game.width/2, game.height/2 + 150, 'Use WASD to move');
 		this.MainMenu = game.add.audio("MainMenu");
 		this.MainMenu.play('', 0, 1, true);
 
