@@ -45,10 +45,6 @@ MainMenu.prototype = {
     game.add.text(10, 10, "Debug: ESC for settings, 1 to skip to Tut1, 2 to skip to Tut2, 3 to skip to Lvl1, 4 to skip to Boss. Credits don't work.", {fontSize: "12px", fill:"#FFFFFF"});
 	},
 	update: function(){
-		// if (game.input.keyboard.justPressed(Phaser.KeyCode.SPACEBAR)){
-  //     game.sound.stopAll()﻿;
-		// 	game.state.start('Tutorial', true, false, this.main, this.alt);
-		// }
 
     //-----DEBUG: REMOVE IN FINAL BUILD-----//
     if (game.input.keyboard.justPressed(Phaser.KeyCode.ONE)){
