@@ -10,9 +10,7 @@ Tutorial.prototype = {
     this.alt = alt;
   },
 	preload: function() {
-    //preload assets
-    game.load.audio("transmission", ["Transmission.mp3"]);
-
+		//all preloading done in Load state
   },
 	create: function(){
 

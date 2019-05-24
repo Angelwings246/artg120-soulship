@@ -9,38 +9,7 @@ TutorialPt2.prototype = {
     this.alt = alt;
   },
 	preload: function() {
-    
-    //preload assets
-	game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
-
-    // // game.load.image("player", "player ship.png");
-    // game.load.image("player broken", "player ship broken.png");
-    // game.load.atlas("player_death", "player_death.png", "player_death.json");
-    game.load.image("enemy", "enemy.png");
-    game.load.image("bullet", "bullet.png");
-    game.load.image("heal", "hpDrop.png");
-    game.load.image("stars", "Stars.png");
-    game.load.image("stars2", "Stars2.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
-    game.load.image("hp bar", "hp bar.png");
-    game.load.image("red", "hp red.png");
-
-    game.load.path = "assets/audio/";
-    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
-    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
-
-
-    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
-    game.load.audio("hit", ["EnemyGetsHit.mp3"]);
-    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
-    game.load.audio('alarm', ["Alarm.mp3"]);
-
-    game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
-    game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
-	
+   //all preloading done in Load state
   },
 	create: function(){
     //set up scrolling background with multiple layers of stars
@@ -103,7 +72,7 @@ TutorialPt2.prototype = {
     this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!",{fontSize: "32px", fill:"#FF0000"});
 
     //player's hp bar is from a prefab
-    this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
     this.movement = false; //flag to lock player movement
 
@@ -144,12 +113,12 @@ TutorialPt2.prototype = {
       warning2.alpha = 0;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
-      this.alarm_sound.play();
+      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , 0.5);
     }
 
 
     //restart upon death
-    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('TutorialPt2', true, false, this.main, this.alt);
+    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, 'TutorialPt2');
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
@@ -241,6 +210,7 @@ TutorialPt2.prototype = {
     game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt);
+
   }
 
 };

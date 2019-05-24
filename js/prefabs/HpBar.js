@@ -29,6 +29,7 @@ HpBar.prototype.update = function() {
 
   //update player hp bar
   this.health_bar.width = this.HP_WIDTH_MAX * this.player.hp/this.player.PLAYER_MAX_HP;
+  if(this.player.hp < 0) this.health_bar.width = 0;
 
   if(this.player.hp < this.player.PLAYER_MAX_HP/4) {
     if(this.glow.alpha >= 1 || this.glow.alpha <= 0) this.delta *= -1;
