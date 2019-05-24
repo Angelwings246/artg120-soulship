@@ -27,6 +27,8 @@ Load.prototype = {
     game.load.image("red", "hp red.png");
     game.load.image("tentacle", "tentacle.png");
     game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
+    game.load.image("button dark", "button dark.png");
+    game.load.image("button light", "button light.png");
 
 
     //load all audio files
