@@ -2,6 +2,24 @@
 
 var Load = function(game) {};
 Load.prototype = {
+	init: function() {
+		    this.main = {
+          'up': Phaser.KeyCode.UP,
+          'down': Phaser.KeyCode.DOWN,
+          'left': Phaser.KeyCode.LEFT,
+          'right': Phaser.KeyCode.RIGHT,
+          'fire': Phaser.KeyCode.SPACEBAR
+       };
+      this.alt = {
+          'up': Phaser.KeyCode.W, 
+          'down': Phaser.KeyCode.S,
+          'left': Phaser.KeyCode.A, 
+          'right': Phaser.KeyCode.D,
+          'fire': Phaser.KeyCode.SPACEBAR
+       };
+      this.music_vol = 1;
+      this.sfx_vol = 1;
+    },
 	preload: function(){
 
     //preload assets
@@ -58,7 +76,7 @@ Load.prototype = {
 
 	},
 	create: function(){
-		game.state.start('MainMenu');
+		game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 
 	}
 };
