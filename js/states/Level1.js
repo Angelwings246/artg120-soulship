@@ -45,14 +45,14 @@ Level1.prototype = {
     //scroll speed is set to all be coprime so the loops are less frequent/obvious  
     frames = 0;
     this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
-    this.background.autoScroll(-11, 0);
+    this.background.autoScroll(-200, 0);
     game.add.existing(this.background);
     this.stars = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars");
-    this.stars.autoScroll(-9, 0);
+    this.stars.autoScroll(-160, 0);
     this.stars.alpha = 0.9;
     game.add.existing(this.stars);
     this.stars2 = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars2");
-    this.stars2.autoScroll(-7, 0);
+    this.stars2.autoScroll(-120, 0);
     game.add.existing(this.stars2);
     this.stars2.alpha = 0.4;
 
@@ -79,13 +79,18 @@ Level1.prototype = {
 
     //add the group of enemies and a counter for enemies spawned
     this.enemies = game.add.group();
+    this.basic_enemies = game.add.group();
+    this.asteroid_enemies = game.add.group();
 
     //put as constant for adjustments
     this.NUM_ENEMIES = 7;
 
     this.enemies_spawned = 0; //track enemies already spawned
+    this.basic_enemies_spawned = 0;
+    this.asteroid_enemies_spawned = 0;
     this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 
+    this.enemies_killed = 0;
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();
     this.HEALING = 5; //value of heal pickup
@@ -97,36 +102,35 @@ Level1.prototype = {
     this.timer.start(); //don't forget to start timer
     this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
 
-    this.spawningSineAFirst = this.timer.loop(400, this.spawnSineA, this);
-      console.log('calling enemy loop 1');
-
-    this.spawningSineASecond = this.timer.loop(800, this.spawnSineA, this); 
-      console.log('calling enemy loop 2');
+    this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
+    this.spawningSineB = this.timer.add(8000, this.spawnSineB, this);
+    this.spawningZagA = this.timer.add(15000, this.spawnZagA, this);
+    this.spawningZagB = this.timer.add(20000, this.spawnZagB, this);
+    this.spawningZagC = this.timer.add(25000, this.spawnZagC, this);
+    this.spawningLshapeA = this.timer.add(30000, this.spawnLshapeA, this);
+    this.spawningLshapeB = this.timer.add(35000, this.spawnLshapeB, this);
+    //this.spawningStationary = this.timer.add(100, this.spawnStationary, this);
+    this.spawningAssault = this.timer.add(100, this.spawnAssault, this);
+    this.spawningAsteroidStorm = this.timer.add(100, this.spawnAsteroidStorm, this);
 
     this.timer.loop(2000, this.fire, this); 
 
-
-    //this.timer.add(10000, this.spawnSineB, this);
-    //this.timer.add(1300, this.spawnZagA, this);
-    //this.timer.add(17500, this.spawnZagA, this);
-    //this.timer.add(20000, this.spawnZagB, this);
-    //this.timer.add(25000, this.spawnLshapeA, this);
-    //this.timer.add(30000, this.spawnLshapeB, this);
-    //this.timer.loop(5000, this.spawnStationary, this);
-    //this.timer.loop(10000, this.spawnAssault, this);
-    //this.timer.add(game.rnd.integerInRange(10000,40000), this.spawnAsteroidRandom, this);
-    //this.timer.add(game.rnd.integerInRange(40000,80000), this.spawnAsteroidStorm, this);
-    //this.timer.add(game.rnd.integerInRange(80000,100000), this.spawnAsteroidLarge, this);
 	},
 	update: function(){
 	    //restart upon death
     frames++;
+
     if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('Level1', true, false, this.main, this.alt);
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
     game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.basic_enemies, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.asteroid_enemies, this.player.bullets, this.damage, null, this);
     game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
     game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
+    game.physics.arcade.overlap(this.player, this.basic_enemies, this.crashing, null, this);
+    game.physics.arcade.overlap(this.player, this.asteroid_enemies, this.crashing, null, this);
+
 
         // flash warning every time player shoots 
     if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
@@ -139,28 +143,53 @@ Level1.prototype = {
     // cheat to get to ending quickly
     if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
-
- 
-
-    if (this.timer <= 4){
-      if (this.spawningSineAFirst != null){
-        this.timer.remove(this.spawningSineAFirst);
-        console.log('ending enemy loop 1');
-      }
+    // Update Sine A&B waves
+    if(this.enemies_spawned <= 10) {
+      this.enemies.forEach(this.updateSineA, this);
     }
-    if (this.timer <= 10){
-      if (this.spawningSineASecond != null){
-        this.timer.remove(this.spawningSineASecond);
-        console.log('ending enemy loop 2');
-      }    
+    if(this.enemies_spawned > 10 && this.enemies_spawned <= 20) {
+      this.enemies.forEach(this.updateSineB, this);
+    }
+
+    // Update Zag A&B&C Waves
+    if (this.enemies_spawned > 20 && this.enemies_spawned <= 25){
+      this.enemies.forEach(this.updateZagA, this);
+    }
+    if (this.enemies_spawned > 25 && this.enemies_spawned <= 30){
+      this.enemies.forEach(this.updateZagB, this);
+    }
+    if (this.enemies_spawned > 30 && this.enemies_spawned <= 40){
+      this.enemies.forEach(this.updateZagC, this);
+    }
+     
+    // Update Lshape A&B Waves
+    if (this.enemies_spawned > 40 && this.enemies_spawned <= 48){
+      this.enemies.forEach(this.updateLshapeA, this);
+    }
+    if (this.enemies_spawned > 48 && this.enemies_spawned <= 60){
+      this.enemies.forEach(this.updateLshapeB, this);
+    }
+     
+    //  Update Stationary and Assault Enemies
+    if (this.basic_enemies_spawned > 0 && this.basic_enemies_spawned <= 10){
+      this.basic_enemies.forEach(this.updateStationary, this);
     } 
+    if (this.basic_enemies_spawned > 10 && this.basic_enemies_spawned <= 20){
+          this.basic_enemies.forEach(this.updateAssault, this);
+    } 
+
+    // Call upon the wrath of the gods to smite your ship with big space rocks
+    if (this.asteroid_enemies_spawned <= 30){
+      this.asteroid_enemies.forEach(this.updateAsteroidStorm, this);
+    }
 
     //console.log('Level Timer: '+ this.timer.seconds);
     // if the player survives the level, go to the ending
-   if (this.timer == 180){
+   if (this.timer == 100){
       this.ending;
     }
 
+    this.enemies.forEachDead(this.cleanup, this);
 
 
 	},
@@ -177,16 +206,25 @@ Level1.prototype = {
 
   //triggers all the enemies to fire
   fire: function() {
-    if(this.enemies.countLiving() > 0) this.enemies.callAll("fire");
-    this.enemies.forEach(this.transfer, this); //transfer all the bullets from the enemy to the state, see below
+    // if(this.enemies.countLiving() > 0) this.enemies.callAll("fire");
+    // this.enemies.forEach(this.transfer, this); //transfer all the bullets from the enemy to the state, see below
   },
 
     //the character, be it player or enemy, takes damage
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
-    if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
+    if(character instanceof Enemy && character.can_fire) {
       this.lastX = character.body.x;
       this.lastY = character.body.y;
+      if(bullet.dmg >= character.hp) {
+        this.enemies_killed++;
+        if (this.enemies_killed % 4 == 0){
+          var pickup = new Pickup(game, this.lastX, this.lastY, "heal", 0);
+          this.pickups.add(pickup);
+        }
+        this.timer.remove(character.firing);
+        this.timer.remove(character.bullet_transfer);
+      }
     }
     if(character.body != null) {
       character.damage(bullet.dmg);
@@ -207,6 +245,8 @@ Level1.prototype = {
   crashing: function(player, enemy) {
     if(enemy.body != null) {
       player.damage(3); //arbitrary number for now
+      this.timer.remove(enemy.firing);
+      this.timer.remove(enemy.bullet_transfer);
       enemy.destroy(); //destroy non-boss enemies upon crashing
     }
   },
@@ -216,183 +256,328 @@ Level1.prototype = {
   transfer: function(enemy) {
     this.all_enemy_bullets.addMultiple(enemy.bullets);
   },
+  
+  cleanup: function(enemy) {
+    this.timer.remove(enemy.firing);
+    this.timer.remove(enemy.bullet_transfer);
+    enemy.bullets.destroy();
+    enemy.destroy();
+  },
+
+
   //to save a slight amount of processing power, only checks overlap for those bullets within a certain band of x-values
   //of the player.  this means that some bullets are checked twice (in the band + overlap) but others will only be
   //partially checked (in the band - only checks x-value, not y-value).  at least i think this is better.
   bullet_collision: function(bullet){
     if(bullet.x > this.player.body.x-64 && bullet.x < this.player.body.x + 64) game.physics.arcade.overlap(this.player, bullet, this.damage);
   },
-
+  spawn: function(x, y, key, frame) {
     //spawns a series of enemies that goes in a sine wave towards the player
-	spawnSineA: function() {
-		//Enemy(game, x, y, sounds, key, frame)
-    if (this.timer.seconds < 4){
       console.log('spawning enemy');
-      var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
       this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
       enemy.body.velocity.x = -200;
+      var enemyfirerate = game.rnd.integerInRange(2000,4000);
+      enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
+      enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
+
         console.log('enemy.body.y: '+ enemy.body.y);
+  },
+  basicSpawn: function(x, y, key, frame) {
+    //spawns a series of enemies that goes in a sine wave towards the player
+      console.log('spawning enemy');
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
+      this.basic_enemies.add(enemy);
+      enemy.rotation = Math.PI;
+      enemy.can_fire = true;
+      enemy.body.velocity.x = -200;
+      var enemyfirerate = game.rnd.integerInRange(1000,3000);
+      enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
+      enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
+        console.log('enemy.body.y: '+ enemy.body.y);
+  },
+  asteroidSpawn: function(x, y, key, frame){
+    // spawns asteroid storms
+      console.log('spawning asteroid');
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
+      this.asteroid_enemies.add(enemy);
+      enemy.can_fire = false;
+      enemy.body.velocity.x = -200;
+      enemy.body.angularVelocity = 300;
 
-      if (enemy.body.y > game.height/4){
-          enemy.body.velocity.y = -200;
-          if (enemy.body.y > game.height*0.75){
-            enemy.body.velocity.y = 200;
-          }
-      }
-      this.enemies_spawned++;
-    }
+  },
+
+	spawnSineA: function() {
+		//Enemy(game, x, y, sounds, key, frame)
+    this.loop = this.timer.loop(400, function() {
+      if (this.enemies_spawned < 10){
+        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.enemies_spawned++;
+       } else this.timer.remove(this.loop); 
+      }, this);
+    console.log(this.loop);
 	},
-
+//updates the enemies going in a single sine pattern
+  updateSineA: function(enemy) {
+      //set the velocity going upwards on spawn
+      if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -200;
+      //if the enemy is above the 1/4 line, go down
+      if (enemy.body.y < game.height/4){
+          enemy.body.velocity.y = 200;
+      }
+      //if the enemy is below the 3/4 line, go up
+      if (enemy.body.y > game.height*0.75){
+          enemy.body.velocity.y = -200;
+      }
+      
+  },
 
 	    //spawns a series of enemies that goes in two alternating sine waves towards the player
 	spawnSineB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 20) {
+        this.spawn(game.width, game.height/4, "enemy", 0);
+        this.spawn(game.width, game.height*0.75, "enemy", 0);
+        this.enemies_spawned++;
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
 	},
+
+  updateSineB: function(enemy){    
+    if(this.enemies.getIndex(enemy) % 2 == 0) {
+      if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
+      //if the enemy is above the 1/8 line, go down
+      if (enemy.body.y < game.height*0.125 - 50){
+          enemy.body.velocity.y = 300;
+      }
+      //if the enemy is below the 3/8 line, go up
+      if (enemy.body.y > game.height*0.375 + 50){
+          enemy.body.velocity.y = -300;
+      }
+    } 
+    else {
+      if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = 300;
+      //if the enemy is above the 5/8 line, go down
+      if (enemy.body.y < game.height*0.625 - 50){
+          enemy.body.velocity.y = 300;
+      }
+      //if the enemy is below the 7/8 line, go up
+      if (enemy.body.y > game.height*0.875 + 50){
+          enemy.body.velocity.y = -300;
+      }
+    };
+
+  },
 
 	    //spawns a series of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
 	spawnZagA: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 25) {
+        this.spawn(game.width, game.height/4, "enemy", 0);
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
+
+  updateZagA: function(enemy){    
+      //set the velocity going upwards on spawn
+      //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
+      //if the enemy is above the 1/4 line, go down
+      if (enemy.body.x < game.width/5){
+          enemy.body.velocity.y = 200;
+          enemy.body.velocity.x = 200;
+      }
+  },
 
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
 	spawnZagB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 30) {
+        this.spawn(game.width, game.height*0.75, "enemy", 0);
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
+
+  updateZagB: function(enemy){    
+       //set the velocity going upwards on spawn
+      //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
+      //if the enemy is above the 1/4 line, go down
+      if (enemy.body.x < game.width/5){
+          enemy.body.velocity.y = -200;
+          enemy.body.velocity.x = 200;
+      }
+  },
+    spawnZagC: function() {
+    //Enemy(game, x, y, sounds, key, frame)
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 40) {
+        this.spawn(game.width, game.height*0.75, "enemy", 0);
+        this.spawn(game.width, game.height/4, "enemy", 0);
+        this.enemies_spawned++;
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
+  },
+
+    updateZagC: function(enemy){    
+       //set the velocity going upwards on spawn
+      //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
+      if(this.enemies.getIndex(enemy) % 2 == 0) {
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/5){
+            enemy.body.velocity.y = -200;
+            enemy.body.velocity.x = 200;
+        }
+      } else {
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/5){
+            enemy.body.velocity.y = 200;
+            enemy.body.velocity.x = 200;
+        }
+      }
+  },
 
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeA: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 48) {
+        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.enemies_spawned++;
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
+
+  updateLshapeA: function(enemy){
+      if(this.enemies.getIndex(enemy) % 2 == 0) {
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/2){
+            enemy.body.velocity.x = 0;
+            enemy.body.velocity.y = -200;
+            //enemy.body.velocity.x = 200;
+        }
+      } else {
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/2){
+            enemy.body.velocity.x = 0;
+            enemy.body.velocity.y = 200;
+            //enemy.body.velocity.x = 200;
+        }
+      }
+  },
 	    //spawns a series of three sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(400, function() {
+    if(this.enemies_spawned < 60) {
+        this.spawn(game.width, game.height/3, "enemy", 0);
+        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.spawn(game.width, 2*game.height/3, "enemy", 0);
+        this.enemies_spawned++;
+        this.enemies_spawned++;
+        this.enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
+
+  updateLshapeB: function(enemy){
+      if(this.enemies.getIndex(enemy) % 2 == 0 && this.enemies.getIndex(enemy) % 3 != 0) {
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/2){
+            enemy.body.velocity.x = 0;
+            enemy.body.velocity.y = -200;
+            //enemy.body.velocity.x = 200;
+        }
+      } else if (this.enemies.getIndex(enemy) % 3 == 0 && this.enemies.getIndex(enemy) % 2 != 0){
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+
+        if (enemy.body.x < game.width/2){
+            enemy.body.velocity.x = 0;
+            enemy.body.velocity.y = 200;
+            //enemy.body.velocity.x = 200;
+        }
+      } else {     
+        if (enemy.body.x < game.width/2){
+            enemy.body.velocity.x = -300;
+            enemy.body.velocity.y = 0;
+            //enemy.body.velocity.x = 200;
+        }
+      }
+  },
 	    //spawns a set of enemies that go towards the player and then stay and fire
 	spawnStationary: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(3000, function() {
+    if(this.basic_enemies_spawned < 10) {
+        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", 0);
+        this.basic_enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
+
+  updateStationary: function(enemy){
+      //set the velocity going upwards on spawn
+      if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -150;
+      //if the enemy is above the 1/4 line, go down
+      if (enemy.body.x < game.rnd.integerInRange(0,600)){
+          enemy.body.velocity.y = 0;
+          enemy.body.velocity.x = 0;
+      }
+
+  },
 
 	//spawns a set of enemies that go towards the player and fire then continue offscreen
 	spawnAssault: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(2000, function() {
+    if(this.basic_enemies_spawned < 20) {
+        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", 0);
+        this.basic_enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
 
-	    //spawns a set of random asteriods like the asteroid belt 
-	spawnAsteroidRandom: function() {
-		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
-	},
+  updateAssault: function(enemy){
+      //set the velocity going upwards on spawn
+      if(enemy.body.x >= 15/16 * game.width) {
+        enemy.body.velocity.y = 0;
+        enemy.body.velocity.x = -500;
+      }
+  },
 
 	    //spawns a set of random asteriods like that fall from top right to bottom left
 	spawnAsteroidStorm: function() {
 		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
-    }
+    this.loop = this.timer.loop(5000, function() {
+    if(this.asteroid_enemies_spawned < 30) {
+        this.asteroidSpawn(game.rnd.integerInRange(100,900), 0, "asteroid", 0);
+        this.asteroid_enemies_spawned++;
+    }else this.timer.remove(this.loop);
+  }, this);
 	},
 
-	    //spawns one lorg asteroid that comes straight at the player
-	spawnAsteroidLarge: function() {
-		//Enemy(game, x, y, sounds, key, frame)
-
-    if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
-  		this.enemies.add(enemy);
-      enemy.rotation = Math.PI;
-      enemy.can_fire = true;
-      enemy.body.velocity.y = 0;
-      enemy.body.velocity.x = -100;
-  		this.enemies_spawned++;
+  updateAsteroidStorm: function(enemy){
+    if(enemy.body.x <= 15/16 * game.width) {
+      enemy.body.velocity.y = game.rnd.integerInRange(100, 600);
+      enemy.body.velocity.x = game.rnd.integerInRange(-100, -600);
     }
-	},
+  },
+
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level
   ending: function() {
     game.add.text(game.width/8, 170,"LEVEL CLEARED",{fontSize: "32px", fill:"#FFFF00"});

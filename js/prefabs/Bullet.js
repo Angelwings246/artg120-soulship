@@ -24,8 +24,8 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   this.body.velocity.y = speed * Math.sin(angle);
   
   // checks and deletes stray bullets
-  this.checkWorldBounds = true;
-  this.outOfBoundsKill = true;
+  // this.checkWorldBounds = true;
+  // this.outOfBoundsKill = true;
 
   this.lifespan = 15000; //semi-arbitrary lifespan so that bullets do not last forever.  Value will be iterated upon as necessary.
   this.dmg = damage;
