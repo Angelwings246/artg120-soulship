@@ -22,10 +22,6 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   this.rotation = angle;
   this.body.velocity.x = speed * Math.cos(angle);
   this.body.velocity.y = speed * Math.sin(angle);
-  
-  // checks and deletes stray bullets
-  // this.checkWorldBounds = true;
-  // this.outOfBoundsKill = true;
 
   this.lifespan = 15000; //semi-arbitrary lifespan so that bullets do not last forever.  Value will be iterated upon as necessary.
   this.dmg = damage;
@@ -37,11 +33,8 @@ Bullet.prototype.constructor = Bullet;
 
 //update function
 Bullet.prototype.update = function() {
-  this.glow.x = this.body.x;
-  this.glow.y = this.body.y;
   this.lifespan--;
   if(this.lifespan <= 0) {
-    this.glow.destroy();
     this.destroy();
   }
 }

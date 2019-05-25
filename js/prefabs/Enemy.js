@@ -15,7 +15,6 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
 
   //attributes of the enemy, can be easily overridden
   this.hp = 1; // basic enemy dies in 1 hit
-  // this.body.velocity.y = 100; //for now, have the basic enemy type scroll downwards at constant speed
 
   //stores the sounds for future playback
   this.death_sound = sounds[0];
