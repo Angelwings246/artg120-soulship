@@ -45,7 +45,7 @@ function PlayerShip(game, sounds, key, frame, main, alt){
   /*set up keys based off the keybind setting objects passed in from constructor
   * game.input.keyboard.addKeys() creates an object with the properties 'string':KeyCode.  
   * in other words, this.main is an object with the properties 'up', 'down', 'left', 'right', 'fire'
-  * adn each of these properties contains a Phaser.Key Object
+  * and each of these properties contains a Phaser.Key Object
   */
   this.main = game.input.keyboard.addKeys({
     'up': main.up,
@@ -60,6 +60,8 @@ function PlayerShip(game, sounds, key, frame, main, alt){
     'right': alt.right,
     'fire': alt.fire});
 
+    console.log(this.main);
+    console.log(this.alt);
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
 }
@@ -90,6 +92,8 @@ PlayerShip.prototype.update = function(){
   * (two opposing buttons add up to 8, which is default case, which is intentional, so that pressing both simultaneously does nothing.)
   */
   
+  //NOTE: things start acting really funny if the same key is bound to more than one thing.....
+
   //only pressing up OR if both are down, pressed up more recently than pressed down 
   if((this.main.up.isDown && this.main.down.isUp) || (this.main.up.isDown && this.main.up.duration < this.main.down.duration) ||
         (this.alt.up.isDown && this.alt.down.isUp) || (this.alt.up.isDown && this.alt.up.duration < this.alt.down.duration)) {

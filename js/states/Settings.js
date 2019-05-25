@@ -39,22 +39,22 @@ Settings.prototype = {
 
 
     //set up the buttons for volume
-    this.music_down = game.add.button(game.width/5 + 100, game.height/4 - 20, "button dark", this.vol_change, this);
-    this.sfx_down = game.add.button(game.width/5 + 100, game.height/4 + 30, "button dark", this.vol_change, this);
-    this.music_up = game.add.button(game.width/5 + 300, game.height/4 - 20, "button dark", this.vol_change, this);
-    this.sfx_up = game.add.button(game.width/5 + 300, game.height/4 + 30, "button dark", this.vol_change, this);
+    this.music_down = game.add.button(game.width/5 + 100, game.height/4 - 20, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
+    this.sfx_down = game.add.button(game.width/5 + 100, game.height/4 + 30, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
+    this.music_up = game.add.button(game.width/5 + 300, game.height/4 - 20, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
+    this.sfx_up = game.add.button(game.width/5 + 300, game.height/4 + 30, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
 
     //set up the buttons for hotkeys
-    this.main_up = game.add.button(game.width/5 + 100, game.height/2, "button dark", this.begin_capture, this);
-    this.alt_up = game.add.button(game.width/5 + 230, game.height/2, "button dark", this.begin_capture, this);
-    this.main_down = game.add.button(game.width/5 + 100, game.height/2 + 50, "button dark", this.begin_capture, this);
-    this.alt_down = game.add.button(game.width/5 + 230, game.height/2 + 50, "button dark", this.begin_capture, this);
-    this.main_left = game.add.button(game.width/5 + 100, game.height/2 + 100, "button dark", this.begin_capture, this);
-    this.alt_left = game.add.button(game.width/5 + 230, game.height/2 + 100, "button dark", this.begin_capture, this);
-    this.main_right = game.add.button(game.width/5 + 100, game.height/2 + 150, "button dark", this.begin_capture, this);
-    this.alt_right = game.add.button(game.width/5 + 230, game.height/2 + 150, "button dark", this.begin_capture, this);
-    this.main_fire = game.add.button(game.width/5 + 100, game.height/2 + 200, "button dark", this.begin_capture, this);
-    this.alt_fire = game.add.button(game.width/5 + 230, game.height/2 + 200, "button dark", this.begin_capture, this);
+    this.main_up = game.add.button(game.width/5 + 100, game.height/2, "button", this.begin_capture, this, "button dark", "button dark");
+    this.alt_up = game.add.button(game.width/5 + 230, game.height/2, "button", this.begin_capture, this, "button dark", "button dark");
+    this.main_down = game.add.button(game.width/5 + 100, game.height/2 + 50, "button", this.begin_capture, this, "button dark", "button dark");
+    this.alt_down = game.add.button(game.width/5 + 230, game.height/2 + 50, "button", this.begin_capture, this, "button dark", "button dark");
+    this.main_left = game.add.button(game.width/5 + 100, game.height/2 + 100, "button", this.begin_capture, this, "button dark", "button dark");
+    this.alt_left = game.add.button(game.width/5 + 230, game.height/2 + 100, "button", this.begin_capture, this, "button dark", "button dark");
+    this.main_right = game.add.button(game.width/5 + 100, game.height/2 + 150, "button", this.begin_capture, this, "button dark", "button dark");
+    this.alt_right = game.add.button(game.width/5 + 230, game.height/2 + 150, "button", this.begin_capture, this, "button dark", "button dark");
+    this.main_fire = game.add.button(game.width/5 + 100, game.height/2 + 200, "button", this.begin_capture, this, "button dark", "button dark");
+    this.alt_fire = game.add.button(game.width/5 + 230, game.height/2 + 200, "button", this.begin_capture, this, "button dark", "button dark");
 
     //set up all the dynamic text
     // this.dynamic_text = game.add.group();
@@ -72,6 +72,9 @@ Settings.prototype = {
     this.alt_right_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 175, "aldrich64", "D", 30);
     this.main_fire_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
     this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
+
+    this.update_volume_text();
+    // this.update_hotkey_text();
 
     //find a way to fix this mess
     this.music_vol_text.anchor.set(0.5);
@@ -107,12 +110,13 @@ Settings.prototype = {
     game.input.keyboard.addCallbacks(this, null, null, this.capture);
     this.capturing = false;
     this.change_hotkey = null;
-    this.change_hotekey_text = "";
+    this.change_hotkey_direction = "";
+    this.change_hotkey_text = "";
 
   },
   update: function(){
 
-    this.capture_special(); //the keyboard callback doesn't capture the arrow keys, which might be important
+    this.capture_cursors(); //the keyboard callback doesn't capture the arrow keys, which might be important
 
     if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
       game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
@@ -156,47 +160,147 @@ Settings.prototype = {
     if(!this.capturing) {
       switch (button){
         case this.main_up:
-          this.change_hotkey = this.main.up;
-          this.change_hotekey_text = this.main_up_text;
-          this.update_hotkey_text(this.main_up_text, "");
+          this.change_hotkey = this.main;
+          this.change_hotkey_direction = "up";
+          this.change_hotkey_text = this.main_up_text;
           break;
         case this.main_down:
+          this.change_hotkey = this.main;
+          this.change_hotkey_direction = "down";
+          this.change_hotkey_text = this.main_down_text;
           break;
         case this.main_left:
+          this.change_hotkey = this.main;
+          this.change_hotkey_direction = "left";
+          this.change_hotkey_text = this.main_left_text;
           break;
         case this.main_right:
+          this.change_hotkey = this.main;
+          this.change_hotkey_direction = "right";
+          this.change_hotkey_text = this.main_right_text;
+          break;  
+        case this.main_fire:
+          this.change_hotkey = this.main;
+          this.change_hotkey_direction = "fire";
+          this.change_hotkey_text = this.main_fire_text;
           break;  
         case this.alt_up:
+          this.change_hotkey = this.alt;
+          this.change_hotkey_direction = "up";
+          this.change_hotkey_text = this.alt_up_text;
           break;
         case this.alt_down:
+          this.change_hotkey = this.alt;
+          this.change_hotkey_direction = "down";
+          this.change_hotkey_text = this.alt_down_text;
           break;
         case this.alt_left:
+          this.change_hotkey = this.alt;
+          this.change_hotkey_direction = "left";
+          this.change_hotkey_text = this.alt_left_text;
           break;
         case this.alt_right:
-          break;                  
+          this.change_hotkey = this.alt;
+          this.change_hotkey_direction = "right";
+          this.change_hotkey_text = this.alt_right_text;
+          break;  
+        case this.alt_fire:
+          this.change_hotkey = this.alt;
+          this.change_hotkey_direction = "fire";
+          this.change_hotkey_text = this.alt_fire_text;
+          break;            
         default:
           break;
-      }
-    this.capturing = true;
+      }  
+     this.capturing = true;
+     this.update_hotkey_text(this.change_hotkey_text, "");
 
     }
   },
-  capture: function(string, event) {
+  capture: function(keystring, event) {
+    console.log(this.capturing);
     if(this.capturing) {
-      console.log(string);
-      console.log(event);
-      this.end_capture(this.change_hotkey, this.change_hotekey_text, keycode, string);
+      var string = keystring.toUpperCase();
+      var code = string.charCodeAt(0);
+      console.log(event.code);
+      //edge cases: things that phaser has hardcoded numbers for (i checked the source code for all this)
+      if(event.code.substring(0, 6) == "Numpad") {
+        console.log("made it");
+        code = Phaser.KeyCode.NUMPAD_0;
+        switch(event.key) {
+          case "*":
+            code = Phaser.KeyCode.NUMPAD_MULTIPLY;
+            string = "NUMPAD *";
+            break;
+          case "+":
+            code = Phaser.KeyCode.NUMPAD_ADD;
+            string = "NUMPAD +";
+            break;          
+          case "Enter": return; //enter seems to break so just don't include it for now
+            // code = Phaser.KeyCode.NUMPAD_ENTER;
+            // string = "NUMPAD ENTER";
+            break;
+          case "-":
+            code = Phaser.KeyCode.NUMPAD_SUBTRACT;
+            string = "NUMPAD -";
+            break;
+          case "/":           
+            code = Phaser.KeyCode.NUMPAD_DIVIDE;
+            string = "NUMPAD /";
+            break;
+          default:
+            code += parseInt(event.key);
+            string = "NUMPAD " + event.key;
+            break;
+        }
+      }
+      else if(event.code == "Space") {
+        code = Phaser.KeyCode.SPACEBAR;
+        string = "SPACEBAR";
+      }
+      this.end_capture(this.change_hotkey, this.change_hotkey_text, code, string);
+    }
+  },
+  capture_cursors: function() {
+    if(this.capturing) {
+      if(this.cursors.up.justPressed()) {
+        this.end_capture(this.change_hotkey, this.change_hotkey_text, Phaser.KeyCode.UP, "UP");
+      }
+      else if(this.cursors.down.justPressed()) {
+        this.end_capture(this.change_hotkey, this.change_hotkey_text, Phaser.KeyCode.DOWN, "DOWN");
+      }
+      else if(this.cursors.left.justPressed()) {
+        this.end_capture(this.change_hotkey, this.change_hotkey_text, Phaser.KeyCode.LEFT, "LEFT");
+      }
+      else if(this.cursors.right.justPressed()) {
+        this.end_capture(this.change_hotkey, this.change_hotkey_text, Phaser.KeyCode.RIGHT, "RIGHT");
+      }
     }
   },
   capture_special: function() {
-    if(this.capturing) {
-      this.end_capture(this.change_hotkey, this.change_hotekey_text, keycode, string);
-    }
+
   },
-  end_capture: function(hotkey, text, keycode, string) {
+  end_capture: function(hotkey, textbox, keycode, string) {
     this.capturing = false;
-    hotkey = keycode;
-    this.update_hotkey_text(text, string);
+    switch(this.change_hotkey_direction) {
+      case "up":
+        hotkey.up = keycode;
+        break;
+      case "down":
+        hotkey.down = keycode;
+        break;
+      case "left":
+        hotkey.left = keycode;
+        break;
+      case "right":
+        hotkey.right = keycode;
+        break;
+      case "fire":
+        hotkey.fire = keycode;
+      default:
+        break;
+    }
+    this.update_hotkey_text(textbox, string);
   },
   reset_settings: function() {
       this.main = {

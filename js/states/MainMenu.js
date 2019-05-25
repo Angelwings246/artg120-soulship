@@ -24,7 +24,6 @@ MainMenu.prototype = {
 
 		this.MainMenu = game.add.audio("MainMenu");
 		this.MainMenu.play('', 0, 1, true);
-
     game.add.text(10, 10, "Debug: ESC for settings, 1 to skip to Tut1, 2 to skip to Tut2, 3 to skip to Lvl1, 4 to skip to Boss. Credits don't work.", {fontSize: "12px", fill:"#FFFFFF"});
 	},
 	update: function() {
