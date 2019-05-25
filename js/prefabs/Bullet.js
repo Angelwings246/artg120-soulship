@@ -37,6 +37,11 @@ Bullet.prototype.constructor = Bullet;
 
 //update function
 Bullet.prototype.update = function() {
+  this.glow.x = this.body.x;
+  this.glow.y = this.body.y;
   this.lifespan--;
-  if(this.lifespan <= 0) this.destroy();
+  if(this.lifespan <= 0) {
+    this.glow.destroy();
+    this.destroy();
+  }
 }

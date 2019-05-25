@@ -16,7 +16,8 @@ function PlayerShip(game, sounds, key, frame, main, alt){
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
   this.anchor.set(0.5);
-  this.body.setSize(40, 34, 2, 15);
+  this.body.setCircle(17, 5, 13);
+  // this.body.setSize(40, 34, 2, 15);
 
   this.rotation = Math.PI; //fix sprite direction
   this.body.collideWorldBounds = true; //don't let it go offscreen
