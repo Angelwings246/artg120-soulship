@@ -38,9 +38,9 @@ MainMenu.prototype = {
       game.sound.stopAll()﻿;
       game.state.start('TutorialPt2', true, false, this.main, this.alt);
     }
-    // if (game.input.keyboard.justPressed(Phaser.KeyCode.THREE)){
-    //   game.state.start('Level1', true, false, this.main, this.alt);
-    // } //uncomment when ready
+    if (game.input.keyboard.justPressed(Phaser.KeyCode.THREE)){
+      game.state.start('Level1', true, false, this.main, this.alt);
+    } 
     if (game.input.keyboard.justPressed(Phaser.KeyCode.FOUR)){
       game.sound.stopAll()﻿;
       game.state.start('BossLevel', true, false, this.main, this.alt);

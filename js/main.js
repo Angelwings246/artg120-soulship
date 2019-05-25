@@ -29,6 +29,7 @@ window.onload = function(){
 	game.state.add('Tutorial', Tutorial);
 	game.state.add('TutorialPt1', TutorialPt1);
 	game.state.add('TutorialPt2', TutorialPt2);
+	game.state.add('Level1', Level1);
 	game.state.add('BossLevel', BossLevel);
 	game.state.add('GameOver', GameOver);
 

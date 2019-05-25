@@ -15,7 +15,6 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
 
   //attributes of the enemy, can be easily overridden
   this.hp = 1; // basic enemy dies in 1 hit
-  this.body.velocity.y = 100; //for now, have the basic enemy type scroll downwards at constant speed
 
   //stores the sounds for future playback
   this.death_sound = sounds[0];
@@ -32,6 +31,10 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.dmg = 1;
 
   this.animated = animated;
+
+  // checks and deletes offscreen enemies
+  this.checkWorldBounds = true;
+  this.outOfBoundsKill = true;
   //add animations
   if(this.animated) {
   this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
@@ -75,12 +78,12 @@ Enemy.prototype.fire = function() {
     this.firing_sound.play();
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    //this.bullets.add(bullet);
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 200, Math.PI, 0xff0000, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    this.bullets.add(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    this.bullets.add(bullet);
+    //bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    //this.bullets.add(bullet);
   }
 }
 
