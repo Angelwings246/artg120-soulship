@@ -36,10 +36,7 @@ Settings.prototype = {
     game.add.bitmapText(2*game.width/3, game.height/2 + 150, "aldrich64", "Then press a key\nto bind that key", 24);
     this.go_back = game.add.button(game.width/3, 7*game.height/8 + 35, "return to menu", this.back, this);
     this.reset = game.add.button(2 * game.width/3, 7*game.height/8 + 35, "restore defaults", this.reset_settings, this);
-
-
     // game.add.bitmapText(game.width/3, 7*game.height/8 + 25, "aldrich64", 'Press ESC to return to menu', 30);
-
 
     //set up the buttons for volume
     this.music_down = game.add.button(game.width/5 + 100, game.height/4 - 20, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
@@ -60,8 +57,6 @@ Settings.prototype = {
     this.alt_fire = game.add.button(game.width/5 + 230, game.height/2 + 200, "button", this.begin_capture, this, "button dark", "button dark");
 
     //set up all the dynamic text
-    // this.dynamic_text = game.add.group();
-
     this.music_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 5, "aldrich64", "10", 30);
     this.sfx_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 55, "aldrich64", "10", 30);
 
@@ -90,10 +85,13 @@ Settings.prototype = {
     this.main_fire_text.anchor.set(0.5);
     this.alt_fire_text.anchor.set(0.5);
 
+    //set up the text in case it's not the default binding
     this.init_text();
 
-    this.cursors = game.input.keyboard.createCursorKeys();
-    game.input.keyboard.addCallbacks(this, null, null, this.capture);
+    this.cursors = game.input.keyboard.createCursorKeys(); //need to keep track of directional keys
+    game.input.keyboard.addCallbacks(this, null, null, this.capture); //tracks other key presses
+
+    //variables to keep track of stuff because JS doesn't have pointers
     this.capturing = false;
     this.change_hotkey = null;
     this.change_hotkey_direction = "";
@@ -384,17 +382,7 @@ Settings.prototype = {
     this.sfx_vol = 1;
 
     //and fix all the text
-    this.update_volume_text();
-    this.update_hotkey_text(this.main_up_text, "UP");
-    this.update_hotkey_text(this.main_down_text, "DOWN");
-    this.update_hotkey_text(this.main_left_text, "LEFT");
-    this.update_hotkey_text(this.main_right_text, "RIGHT");
-    this.update_hotkey_text(this.main_fire_text, "SPACEBAR");
-    this.update_hotkey_text(this.alt_up_text, "W");
-    this.update_hotkey_text(this.alt_down_text, "S");
-    this.update_hotkey_text(this.alt_left_text, "A");
-    this.update_hotkey_text(this.alt_right_text, "D");
-    this.update_hotkey_text(this.alt_fire_text, "SPACEBAR");
+    this.init_text();
   },
   //return to main menu
   back: function() {
