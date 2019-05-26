@@ -131,7 +131,7 @@ BossLevel.prototype = {
      
 
       //update text
-      this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
+      // this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
 
       //spawn a health pack when the first part of the boss dies
       if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {

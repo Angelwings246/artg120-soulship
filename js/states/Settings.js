@@ -32,10 +32,13 @@ Settings.prototype = {
     game.add.bitmapText(game.width/5 + 15, game.height/2 + 165, "aldrich64", "Right", 24);
     game.add.bitmapText(game.width/5 + 15, game.height/2 + 215, "aldrich64", "Fire", 24);
 
-    game.add.bitmapText(3*game.width/4 - 15, game.height/2 + 40, "aldrich64", "Click a button\nto change the hotkey", 24);
-    game.add.bitmapText(3*game.width/4 - 15, game.height/2 + 150, "aldrich64", "note to self\n insert a reset \nto default button", 24);
+    game.add.bitmapText(2*game.width/3, game.height/2 + 40, "aldrich64", "Click a button\nto change the hotkey", 24);
+    game.add.bitmapText(2*game.width/3, game.height/2 + 150, "aldrich64", "Then press a key\nto bind that key", 24);
+    this.go_back = game.add.button(game.width/3, 7*game.height/8 + 35, "return to menu", this.back, this);
+    this.reset = game.add.button(2 * game.width/3, 7*game.height/8 + 35, "restore defaults", this.reset_settings, this);
 
-    game.add.bitmapText(game.width/3, 7*game.height/8 + 25, "aldrich64", 'Press ESC to return to menu', 30);
+
+    // game.add.bitmapText(game.width/3, 7*game.height/8 + 25, "aldrich64", 'Press ESC to return to menu', 30);
 
 
     //set up the buttons for volume
@@ -57,7 +60,7 @@ Settings.prototype = {
     this.alt_fire = game.add.button(game.width/5 + 230, game.height/2 + 200, "button", this.begin_capture, this, "button dark", "button dark");
 
     //set up all the dynamic text
-    // this.dynamic_text = game.add.group();
+    this.dynamic_text = game.add.group();
 
     this.music_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 5, "aldrich64", "10", 30);
     this.sfx_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 55, "aldrich64", "10", 30);
@@ -70,41 +73,41 @@ Settings.prototype = {
     this.alt_left_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 125, "aldrich64", "A", 30);
     this.main_right_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 175, "aldrich64", "RIGHT", 30);
     this.alt_right_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 175, "aldrich64", "D", 30);
-    this.main_fire_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
-    this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
+    this.main_fire_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 225, "aldrich64", "SPACEBAR", 24);
+    this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 24);
 
     this.update_volume_text();
     // this.update_hotkey_text();
 
     //find a way to fix this mess
-    this.music_vol_text.anchor.set(0.5);
-    this.sfx_vol_text.anchor.set(0.5);
-    this.main_up_text.anchor.set(0.5);
-    this.alt_up_text.anchor.set(0.5);
-    this.main_down_text.anchor.set(0.5);
-    this.alt_down_text.anchor.set(0.5);
-    this.main_left_text.anchor.set(0.5);
-    this.alt_left_text.anchor.set(0.5);
-    this.main_right_text.anchor.set(0.5);
-    this.alt_right_text.anchor.set(0.5);
-    this.main_fire_text.anchor.set(0.5);
-    this.alt_fire_text.anchor.set(0.5);
+    // this.music_vol_text.anchor.set(0.5);
+    // this.sfx_vol_text.anchor.set(0.5);
+    // this.main_up_text.anchor.set(0.5);
+    // this.alt_up_text.anchor.set(0.5);
+    // this.main_down_text.anchor.set(0.5);
+    // this.alt_down_text.anchor.set(0.5);
+    // this.main_left_text.anchor.set(0.5);
+    // this.alt_left_text.anchor.set(0.5);
+    // this.main_right_text.anchor.set(0.5);
+    // this.alt_right_text.anchor.set(0.5);
+    // this.main_fire_text.anchor.set(0.5);
+    // this.alt_fire_text.anchor.set(0.5);
 
-    // this.dynamic_text.add(this.music_vol_text); 
-    // this.dynamic_text.add(this.sfx_vol_text);
-    // this.dynamic_text.add(this.main_up_text);
-    // this.dynamic_text.add(this.alt_up_text);
-    // this.dynamic_text.add(this.main_down_text);
-    // this.dynamic_text.add(this.alt_down_text);
-    // this.dynamic_text.add(this.main_left_text);
-    // this.dynamic_text.add(this.alt_left_text);
-    // this.dynamic_text.add(this.main_right_text);
-    // this.dynamic_text.add(this.alt_right_text);
-    // this.dynamic_text.add(this.main_fire_text);
-    // this.dynamic_text.add(this.alt_fire_text);
+    this.dynamic_text.add(this.music_vol_text); 
+    this.dynamic_text.add(this.sfx_vol_text);
+    this.dynamic_text.add(this.main_up_text);
+    this.dynamic_text.add(this.alt_up_text);
+    this.dynamic_text.add(this.main_down_text);
+    this.dynamic_text.add(this.alt_down_text);
+    this.dynamic_text.add(this.main_left_text);
+    this.dynamic_text.add(this.alt_left_text);
+    this.dynamic_text.add(this.main_right_text);
+    this.dynamic_text.add(this.alt_right_text);
+    this.dynamic_text.add(this.main_fire_text);
+    this.dynamic_text.add(this.alt_fire_text);
 
-    // this.dynamic_text.setAll("anchor.x", 0.5);
-    // this.dynamic_text.setAll("anchor.y", 0.5);
+    this.dynamic_text.setAll("anchor.x", 0.5);
+    this.dynamic_text.setAll("anchor.y", 0.5);
 
     this.cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, this.capture);
@@ -117,10 +120,8 @@ Settings.prototype = {
   update: function(){
 
     this.capture_cursors(); //the keyboard callback doesn't capture the arrow keys, which might be important
-
     if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
-      game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
-      game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+      this.back();
     }
   },
   update_volume_text: function() {
@@ -129,6 +130,12 @@ Settings.prototype = {
   },
   update_hotkey_text: function(hotkey_text, keybind) {
     hotkey_text.text = keybind;
+    this.fix_text(hotkey_text);
+  },
+  fix_text: function(hotkey_text) {
+    if(hotkey_text.textWidth >= 120) hotkey_text.fontSize = 24;
+    else hotkey_text.fontSize = 30;
+
   },
   vol_change: function(button, pointer, isOver) {
     switch (button){
@@ -212,20 +219,25 @@ Settings.prototype = {
         default:
           break;
       }  
+     this.change_button = button;
+     this.change_button.setFrames("button light", "button light", "button light", "button light");
      this.capturing = true;
      this.update_hotkey_text(this.change_hotkey_text, "");
 
     }
   },
   capture: function(keystring, event) {
-    console.log(this.capturing);
+    //only bother keeping track of a code if currenly capturing (i.e. a button has been pressed)
     if(this.capturing) {
-      var string = keystring.toUpperCase();
-      var code = string.charCodeAt(0);
-      console.log(event.code);
-      //edge cases: things that phaser has hardcoded numbers for (i checked the source code for all this)
+      //default case: get the code of the character that was typed
+      var string = keystring.toUpperCase(); //make it upper case
+      var code = string.charCodeAt(0); //get the code
+
+      /*edge cases: things that phaser has hardcoded numbers for (i checked the source code for all this)
+      * the reason these have to be separately hardcoded is because the keycode from the browser/JS is DIFFERENT
+      * than the Phaser keycode for these keys.  which makes things work very strangely.*/
+      //if the button was from the numpad
       if(event.code.substring(0, 6) == "Numpad") {
-        console.log("made it");
         code = Phaser.KeyCode.NUMPAD_0;
         switch(event.key) {
           case "*":
@@ -244,6 +256,10 @@ Settings.prototype = {
             code = Phaser.KeyCode.NUMPAD_SUBTRACT;
             string = "NUMPAD -";
             break;
+          case "Decimal": return; //doesn't even seem to record actually
+            // code = Phaser.KeyCode.NUMPAD_DECIMAL;
+            // string = "NUMPAD .";
+            break;            
           case "/":           
             code = Phaser.KeyCode.NUMPAD_DIVIDE;
             string = "NUMPAD /";
@@ -254,9 +270,61 @@ Settings.prototype = {
             break;
         }
       }
-      else if(event.code == "Space") {
-        code = Phaser.KeyCode.SPACEBAR;
-        string = "SPACEBAR";
+      else{
+        //check any key that ISN'T on the numpad. both upper and lower case versions of the same key have the same code
+        //(ex. both ";" and ":" refer to "Semicolon", both will show on screen as ";")
+        switch(event.code){
+          case "Space":
+            code = Phaser.KeyCode.SPACEBAR;
+            string = "SPACEBAR";
+            break;
+          case "Minus": 
+            code = Phaser.KeyCode.UNDERSCORE;
+            string = "-";
+            break;
+          case "Equal":
+            code = Phaser.KeyCode.EQUALS;
+            string = "+";
+            break;
+          case "BracketLeft":
+            code = Phaser.KeyCode.OPEN_BRACKET;
+            string = "[";
+            break;
+          case "BracketRight":
+            code = Phaser.KeyCode.CLOSED_BRACKET;
+            string = "]";
+            break;
+          case "Backslash":
+            code = Phaser.KeyCode.BACKWARD_SLASH;
+            string = "\\"; //have to escape the first slash
+            break;
+          case "Semicolon": 
+            code = Phaser.KeyCode.COLON;
+            string = ";";
+            break;
+          case "Quote": 
+            code = Phaser.KeyCode.QUOTES;
+            string = "'";
+            break;
+          case "Slash":
+            code = Phaser.KeyCode.QUESTION_MARK;
+            string = "/";
+            break;
+          case "Period":
+            code = Phaser.KeyCode.PERIOD;
+            string = ".";
+            break;
+          case "Comma":
+            code = Phaser.KeyCode.COMMA;
+            string = ",";
+            break;
+          case "Backquote":
+            code = Phaser.KeyCode.TILDE;
+            string = "`";
+            break;
+          default: //don't do anything, retains the default case from waaay above
+            break;
+        }
       }
       this.end_capture(this.change_hotkey, this.change_hotkey_text, code, string);
     }
@@ -277,47 +345,64 @@ Settings.prototype = {
       }
     }
   },
-  capture_special: function() {
-
-  },
   end_capture: function(hotkey, textbox, keycode, string) {
-    this.capturing = false;
-    switch(this.change_hotkey_direction) {
-      case "up":
-        hotkey.up = keycode;
-        break;
-      case "down":
-        hotkey.down = keycode;
-        break;
-      case "left":
-        hotkey.left = keycode;
-        break;
-      case "right":
-        hotkey.right = keycode;
-        break;
-      case "fire":
-        hotkey.fire = keycode;
-      default:
-        break;
+    if(this.capturing){
+      switch(this.change_hotkey_direction) {
+        case "up":
+          hotkey.up = keycode;
+          break;
+        case "down":
+          hotkey.down = keycode;
+          break;
+        case "left":
+          hotkey.left = keycode;
+          break;
+        case "right":
+          hotkey.right = keycode;
+          break;
+        case "fire":
+          hotkey.fire = keycode;
+        default:
+          break;
+      }
+      this.change_button.setFrames("button dark", "button dark", "button dark", "button dark");
+      this.update_hotkey_text(textbox, string);
+      this.capturing = false;
     }
-    this.update_hotkey_text(textbox, string);
   },
   reset_settings: function() {
-      this.main = {
-          'up': Phaser.KeyCode.UP,
-          'down': Phaser.KeyCode.DOWN,
-          'left': Phaser.KeyCode.LEFT,
-          'right': Phaser.KeyCode.RIGHT,
-          'fire': Phaser.KeyCode.SPACEBAR
-       };
-      this.alt = {
-          'up': Phaser.KeyCode.W, 
-          'down': Phaser.KeyCode.S,
-          'left': Phaser.KeyCode.A, 
-          'right': Phaser.KeyCode.D,
-          'fire': Phaser.KeyCode.SPACEBAR
-       };
-      this.music_vol = 1;
-      this.sfx_vol = 1;
+    this.main = {
+        'up': Phaser.KeyCode.UP,
+        'down': Phaser.KeyCode.DOWN,
+        'left': Phaser.KeyCode.LEFT,
+        'right': Phaser.KeyCode.RIGHT,
+        'fire': Phaser.KeyCode.SPACEBAR
+     };
+    this.alt = {
+        'up': Phaser.KeyCode.W, 
+        'down': Phaser.KeyCode.S,
+        'left': Phaser.KeyCode.A, 
+        'right': Phaser.KeyCode.D,
+        'fire': Phaser.KeyCode.SPACEBAR
+     };
+    this.music_vol = 1;
+    this.sfx_vol = 1;
+
+    //and fix all the text
+    this.update_volume_text();
+    this.main_up_text.text = "UP";
+    this.alt_up_text.text = "W";
+    this.main_down_text.text = "DOWN";
+    this.alt_down_text.text = "S";
+    this.main_left_text.text =  "LEFT";
+    this.alt_left_text.text =  "A";
+    this.main_right_text.text = "RIGHT";
+    this.alt_right_text.text = "D";
+    this.main_fire_text.text = "SPACEBAR";
+    this.alt_fire_text.text = "SPACEBAR";
+  },
+  back: function() {
+    game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
+    game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   }
 };

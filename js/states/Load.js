@@ -30,6 +30,8 @@ Load.prototype = {
     game.load.image("start adventure", "start adventure.png");
     game.load.image("options", "options.png");
     game.load.image("credits", "credits.png");
+    game.load.image("restore defaults", "restore defaults.png");
+    game.load.image("return to menu", "return to menu.png");
     game.load.atlas("player", "player.png", "player.json");
     game.load.image("bullet", "bullet.png");
     game.load.image("enemy", "enemy.png");
