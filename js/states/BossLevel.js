@@ -13,40 +13,7 @@ BossLevel.prototype = {
     this.alt = alt;
   },
 	preload: function(){
-    
-    //preload assets
-	game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
-
-    // game.load.image("player", "player ship.png");
-    // game.load.image("player broken", "player ship broken.png");
-    // // game.load.atlas("player_death", "player_death.png", "player_death.json");
-    // game.load.image("enemy", "enemy.png");
-    // game.load.image("bullet", "bullet.png");
-    // game.load.image("boss main", "vortex.png");
-    // game.load.image("tentacle", "tentacle.png");
-    // game.load.image("heal", "hpDrop.png");
-    // game.load.image("stars", "Stars.png");
-    // game.load.image("stars2", "Stars2.png");
-    // game.load.image("asteroid", "Asteroid.png");
-    // game.load.image("asteroid2", "Asteroid2.png");
-    // game.load.image("hp bar", "hp bar.png");
-    // game.load.image("red", "hp red.png");
-    // game.load.image("glow", "hp bar glow.png");
-    // game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
-
-    // game.load.path = "assets/audio/";
-    // game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
-    // game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
-
-
-    // game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    // game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
-    // game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
-    // game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
-
-    // game.load.audio("intro", ["music intro.mp3", "music intro.ogg"]);
-    // game.load.audio("loop", ["music loop.mp3", "music loop.ogg"]);
+   //all preloading done in Load state
 	},
 	create: function(){
 	

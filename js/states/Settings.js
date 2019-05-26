@@ -73,11 +73,9 @@ Settings.prototype = {
     this.alt_left_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 125, "aldrich64", "A", 30);
     this.main_right_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 175, "aldrich64", "RIGHT", 30);
     this.alt_right_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 175, "aldrich64", "D", 30);
-    this.main_fire_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 225, "aldrich64", "SPACEBAR", 24);
-    this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 24);
-
-    this.update_volume_text();
-
+    this.main_fire_text = game.add.bitmapText(game.width/5 + 165, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
+    this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 30);
+    
     //center all text
     this.music_vol_text.anchor.set(0.5);
     this.sfx_vol_text.anchor.set(0.5);
@@ -91,6 +89,8 @@ Settings.prototype = {
     this.alt_right_text.anchor.set(0.5);
     this.main_fire_text.anchor.set(0.5);
     this.alt_fire_text.anchor.set(0.5);
+
+    this.init_text();
 
     this.cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, this.capture);
@@ -119,7 +119,7 @@ Settings.prototype = {
   },
   //adjust the text size to not go out of the box but also not be tiny
   fix_text: function(hotkey_text) {
-    if(hotkey_text.textWidth >= 120) hotkey_text.fontSize = 24;
+    if(hotkey_text.textWidth >= 90) hotkey_text.fontSize = 24;
     else hotkey_text.fontSize = 30;
 
   },
@@ -385,20 +385,96 @@ Settings.prototype = {
 
     //and fix all the text
     this.update_volume_text();
-    this.update_hotkey_text(main_up_text, "UP");
-    this.update_hotkey_text(main_down_text, "DOWN");
-    this.update_hotkey_text(main_left_text, "LEFT");
-    this.update_hotkey_text(main_right_text, "RIGHT");
-    this.update_hotkey_text(main_fire_text, "SPACEBAR");
-    this.update_hotkey_text(alt_up_text, "W");
-    this.update_hotkey_text(alt_down_text, "S");
-    this.update_hotkey_text(alt_left_text, "A");
-    this.update_hotkey_text(alt_right_text, "D");
-    this.update_hotkey_text(alt_fire_text, "SPACEBAR");
+    this.update_hotkey_text(this.main_up_text, "UP");
+    this.update_hotkey_text(this.main_down_text, "DOWN");
+    this.update_hotkey_text(this.main_left_text, "LEFT");
+    this.update_hotkey_text(this.main_right_text, "RIGHT");
+    this.update_hotkey_text(this.main_fire_text, "SPACEBAR");
+    this.update_hotkey_text(this.alt_up_text, "W");
+    this.update_hotkey_text(this.alt_down_text, "S");
+    this.update_hotkey_text(this.alt_left_text, "A");
+    this.update_hotkey_text(this.alt_right_text, "D");
+    this.update_hotkey_text(this.alt_fire_text, "SPACEBAR");
   },
   //return to main menu
   back: function() {
     game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
     game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+  },
+  /*when you go to the menu and come back, the custom rebinds save but the text does not. 
+  * so when the settings menu loads up, somehow the numbers have to be reconverted to strings and
+  * display the correct text on the buttons.  there is unfortunately no "keyCodeToString" function that
+  * i could find. (JS has some version of this, but not with the Phaser numbers)  so we get this mess. */
+  init_text: function() {
+    //make a long MAP containing all the freaking keycodes and the strings they go to. 
+    
+    /* i thought about making a function to simply invert the Phaser.KeyCode dictionary but that has some
+    * issues since there are several extra values and i would have to fix some things (e.x. QUOTES -> ') anyways
+    * so then i wanted to make a dictionary, but it turns out JS turns all keys into strings, and i need them
+    * as numbers....so here i am making a map using arrays.  i hope it works.
+    */
+    //first, all the keycodes
+    var keycodes = [
+      Phaser.KeyCode.A, Phaser.KeyCode.B, Phaser.KeyCode.C, Phaser.KeyCode.D,
+      Phaser.KeyCode.E, Phaser.KeyCode.F, Phaser.KeyCode.G, Phaser.KeyCode.H,
+      Phaser.KeyCode.I, Phaser.KeyCode.J, Phaser.KeyCode.K, Phaser.KeyCode.L,
+      Phaser.KeyCode.M, Phaser.KeyCode.N, Phaser.KeyCode.O, Phaser.KeyCode.P,
+      Phaser.KeyCode.Q, Phaser.KeyCode.R, Phaser.KeyCode.S, Phaser.KeyCode.T,
+      Phaser.KeyCode.U, Phaser.KeyCode.V, Phaser.KeyCode.W, Phaser.KeyCode.X,
+      Phaser.KeyCode.Y, Phaser.KeyCode.Z, Phaser.KeyCode.ZERO, Phaser.KeyCode.ONE,
+      Phaser.KeyCode.TWO, Phaser.KeyCode.THREE, Phaser.KeyCode.FOUR, Phaser.KeyCode.FIVE,
+      Phaser.KeyCode.SIX, Phaser.KeyCode.SEVEN, Phaser.KeyCode.EIGHT, Phaser.KeyCode.NINE,
+      Phaser.KeyCode.NUMPAD_0, Phaser.KeyCode.NUMPAD_1, Phaser.KeyCode.NUMPAD_2, Phaser.KeyCode.NUMPAD_3,
+      Phaser.KeyCode.NUMPAD_4, Phaser.KeyCode.NUMPAD_5, Phaser.KeyCode.NUMPAD_6, Phaser.KeyCode.NUMPAD_7,
+      Phaser.KeyCode.NUMPAD_8, Phaser.KeyCode.NUMPAD_9, Phaser.KeyCode.NUMPAD_MULTIPLY, Phaser.KeyCode.NUMPAD_ADD,
+      Phaser.KeyCode.NUMPAD_SUBTRACT, Phaser.KeyCode.NUMPAD_DIVIDE, Phaser.KeyCode.UNDERSCORE, Phaser.KeyCode.EQUALS,
+      Phaser.KeyCode.OPEN_BRACKET, Phaser.KeyCode.CLOSED_BRACKET, Phaser.KeyCode.BACKWARD_SLASH, Phaser.KeyCode.COLON,
+      Phaser.KeyCode.QUOTES, Phaser.KeyCode.COMMA, Phaser.KeyCode.PERIOD, Phaser.KeyCode.QUESTION_MARK,
+      Phaser.KeyCode.TILDE, Phaser.KeyCode.UP, Phaser.KeyCode.DOWN, Phaser.KeyCode.LEFT,
+      Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR
+    ]
+    //then all the strings. note that everything must be in the same order
+    var strings = [
+     "A", "B", "C", "D", 
+     "E", "F", "G", "H", 
+     "I", "J", "K", "L", 
+     "M", "N", "O", "P", 
+     "Q", "R", "S", "T", 
+     "U", "V", "W", "X", 
+     "Y", "Z", "0", "1", 
+     "2", "3", "4", "5", 
+     "6", "7", "8", "9", 
+     "NUMPAD 0", "NUMPAD 1", "NUMPAD 2", "NUMPAD 3", 
+     "NUMPAD 4", "NUMPAD 5", "NUMPAD 6", "NUMPAD 7", 
+     "NUMPAD 8", "NUMPAD 9", "NUMPAD *", "NUMPAD +", 
+     "NUMPAD -", "NUMPAD /", "-", "=", 
+     "[", "]", "\\", ";", 
+     "'", ",", ".", "/", 
+     "`", "UP", "DOWN", "LEFT", 
+     "RIGHT", "SPACEBAR"
+    ]
+
+    //pair everything up and put them into an array.  the array is an array of arrays
+    //[code, string] (number, string)
+    var array = [];
+    for(let i = 0; i < keycodes.length; i++) array.push([keycodes[i], strings[i]]);
+
+    //turn that array into a map
+    var keycode_to_string = new Map(array);
+    
+    //FINALLY, use the map to set all the strings
+    this.update_hotkey_text(this.main_up_text, keycode_to_string.get(this.main.up));
+    this.update_hotkey_text(this.main_down_text, keycode_to_string.get(this.main.down));
+    this.update_hotkey_text(this.main_left_text, keycode_to_string.get(this.main.left));
+    this.update_hotkey_text(this.main_right_text, keycode_to_string.get(this.main.right));
+    this.update_hotkey_text(this.main_fire_text, keycode_to_string.get(this.main.fire));
+    this.update_hotkey_text(this.alt_up_text, keycode_to_string.get(this.alt.up));
+    this.update_hotkey_text(this.alt_down_text, keycode_to_string.get(this.alt.down));
+    this.update_hotkey_text(this.alt_left_text, keycode_to_string.get(this.alt.left));
+    this.update_hotkey_text(this.alt_right_text, keycode_to_string.get(this.alt.right));
+    this.update_hotkey_text(this.alt_fire_text, keycode_to_string.get(this.alt.fire));
+
+    this.update_volume_text(); //and do volume while we're at it
+
   }
 };
