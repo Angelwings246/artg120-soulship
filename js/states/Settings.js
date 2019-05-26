@@ -60,7 +60,7 @@ Settings.prototype = {
     this.alt_fire = game.add.button(game.width/5 + 230, game.height/2 + 200, "button", this.begin_capture, this, "button dark", "button dark");
 
     //set up all the dynamic text
-    this.dynamic_text = game.add.group();
+    // this.dynamic_text = game.add.group();
 
     this.music_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 5, "aldrich64", "10", 30);
     this.sfx_vol_text = game.add.bitmapText(game.width/5 + 265, game.height/4 + 55, "aldrich64", "10", 30);
@@ -77,37 +77,20 @@ Settings.prototype = {
     this.alt_fire_text = game.add.bitmapText(game.width/5 + 295, game.height/2 + 225, "aldrich64", "SPACEBAR", 24);
 
     this.update_volume_text();
-    // this.update_hotkey_text();
 
-    //find a way to fix this mess
-    // this.music_vol_text.anchor.set(0.5);
-    // this.sfx_vol_text.anchor.set(0.5);
-    // this.main_up_text.anchor.set(0.5);
-    // this.alt_up_text.anchor.set(0.5);
-    // this.main_down_text.anchor.set(0.5);
-    // this.alt_down_text.anchor.set(0.5);
-    // this.main_left_text.anchor.set(0.5);
-    // this.alt_left_text.anchor.set(0.5);
-    // this.main_right_text.anchor.set(0.5);
-    // this.alt_right_text.anchor.set(0.5);
-    // this.main_fire_text.anchor.set(0.5);
-    // this.alt_fire_text.anchor.set(0.5);
-
-    this.dynamic_text.add(this.music_vol_text); 
-    this.dynamic_text.add(this.sfx_vol_text);
-    this.dynamic_text.add(this.main_up_text);
-    this.dynamic_text.add(this.alt_up_text);
-    this.dynamic_text.add(this.main_down_text);
-    this.dynamic_text.add(this.alt_down_text);
-    this.dynamic_text.add(this.main_left_text);
-    this.dynamic_text.add(this.alt_left_text);
-    this.dynamic_text.add(this.main_right_text);
-    this.dynamic_text.add(this.alt_right_text);
-    this.dynamic_text.add(this.main_fire_text);
-    this.dynamic_text.add(this.alt_fire_text);
-
-    this.dynamic_text.setAll("anchor.x", 0.5);
-    this.dynamic_text.setAll("anchor.y", 0.5);
+    //center all text
+    this.music_vol_text.anchor.set(0.5);
+    this.sfx_vol_text.anchor.set(0.5);
+    this.main_up_text.anchor.set(0.5);
+    this.alt_up_text.anchor.set(0.5);
+    this.main_down_text.anchor.set(0.5);
+    this.alt_down_text.anchor.set(0.5);
+    this.main_left_text.anchor.set(0.5);
+    this.alt_left_text.anchor.set(0.5);
+    this.main_right_text.anchor.set(0.5);
+    this.alt_right_text.anchor.set(0.5);
+    this.main_fire_text.anchor.set(0.5);
+    this.alt_fire_text.anchor.set(0.5);
 
     this.cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, this.capture);
@@ -124,24 +107,28 @@ Settings.prototype = {
       this.back();
     }
   },
+  //update the text counting the volume
   update_volume_text: function() {
     this.music_vol_text.text = "" + (10 * this.music_vol);
     this.sfx_vol_text.text = "" + (10 * this.sfx_vol);
   },
+  //update the text for the hotkey
   update_hotkey_text: function(hotkey_text, keybind) {
     hotkey_text.text = keybind;
-    this.fix_text(hotkey_text);
+    this.fix_text(hotkey_text); //fix text size
   },
+  //adjust the text size to not go out of the box but also not be tiny
   fix_text: function(hotkey_text) {
     if(hotkey_text.textWidth >= 120) hotkey_text.fontSize = 24;
     else hotkey_text.fontSize = 30;
 
   },
+  //detects which volume button was pressed and change volume setting accordingly
   vol_change: function(button, pointer, isOver) {
     switch (button){
       case this.music_down:
           if(this.music_vol >= 0.1) this.music_vol -= 0.1;
-          this.music_vol = Math.round(10*this.music_vol)/10;
+          this.music_vol = Math.round(10*this.music_vol)/10; //have to round because floats are weird
           break;
       case this.music_up:
           if(this.music_vol <= 0.9) this.music_vol += 0.1;
@@ -162,6 +149,8 @@ Settings.prototype = {
     this.update_volume_text();
 
   },
+  //detects which button was pressed and, because JS doesn't use pointers, keep track of some really weird stuff
+  //so that the hotkey can correctly be changed later on
   begin_capture: function(button, pointer, isOver) {
     var hotkey;
     if(!this.capturing) {
@@ -219,13 +208,16 @@ Settings.prototype = {
         default:
           break;
       }  
+     //make the button light to have some visual cue.  keep track of the button for later
      this.change_button = button;
      this.change_button.setFrames("button light", "button light", "button light", "button light");
+     
      this.capturing = true;
-     this.update_hotkey_text(this.change_hotkey_text, "");
+     this.update_hotkey_text(this.change_hotkey_text, ""); //clear the button's text for clarity
 
     }
   },
+  //called by the keyboard's event, and records the key that was pressed if a button has been pressed to rebind a key
   capture: function(keystring, event) {
     //only bother keeping track of a code if currenly capturing (i.e. a button has been pressed)
     if(this.capturing) {
@@ -329,6 +321,7 @@ Settings.prototype = {
       this.end_capture(this.change_hotkey, this.change_hotkey_text, code, string);
     }
   },
+  //The phaser keyboard event doesn't detect cursor keys, so do them separately
   capture_cursors: function() {
     if(this.capturing) {
       if(this.cursors.up.justPressed()) {
@@ -345,6 +338,8 @@ Settings.prototype = {
       }
     }
   },
+  //using the information from the previous capture methods, change the selected property of the selected
+  //hotkey binding to the new value, and update the text 
   end_capture: function(hotkey, textbox, keycode, string) {
     if(this.capturing){
       switch(this.change_hotkey_direction) {
@@ -365,7 +360,7 @@ Settings.prototype = {
         default:
           break;
       }
-      this.change_button.setFrames("button dark", "button dark", "button dark", "button dark");
+      this.change_button.setFrames("button dark", "button dark", "button dark", "button dark"); //make the button dark again
       this.update_hotkey_text(textbox, string);
       this.capturing = false;
     }
@@ -390,17 +385,18 @@ Settings.prototype = {
 
     //and fix all the text
     this.update_volume_text();
-    this.main_up_text.text = "UP";
-    this.alt_up_text.text = "W";
-    this.main_down_text.text = "DOWN";
-    this.alt_down_text.text = "S";
-    this.main_left_text.text =  "LEFT";
-    this.alt_left_text.text =  "A";
-    this.main_right_text.text = "RIGHT";
-    this.alt_right_text.text = "D";
-    this.main_fire_text.text = "SPACEBAR";
-    this.alt_fire_text.text = "SPACEBAR";
+    this.update_hotkey_text(main_up_text, "UP");
+    this.update_hotkey_text(main_down_text, "DOWN");
+    this.update_hotkey_text(main_left_text, "LEFT");
+    this.update_hotkey_text(main_right_text, "RIGHT");
+    this.update_hotkey_text(main_fire_text, "SPACEBAR");
+    this.update_hotkey_text(alt_up_text, "W");
+    this.update_hotkey_text(alt_down_text, "S");
+    this.update_hotkey_text(alt_left_text, "A");
+    this.update_hotkey_text(alt_right_text, "D");
+    this.update_hotkey_text(alt_fire_text, "SPACEBAR");
   },
+  //return to main menu
   back: function() {
     game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
     game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
