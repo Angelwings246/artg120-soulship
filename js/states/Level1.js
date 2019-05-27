@@ -103,16 +103,18 @@ Level1.prototype = {
     this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
 
     this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
-    this.spawningSineB = this.timer.add(8000, this.spawnSineB, this);
-    this.spawningZagA = this.timer.add(15000, this.spawnZagA, this);
-    this.spawningZagB = this.timer.add(20000, this.spawnZagB, this);
-    this.spawningZagC = this.timer.add(25000, this.spawnZagC, this);
-    this.spawningLshapeA = this.timer.add(30000, this.spawnLshapeA, this);
-    this.spawningLshapeB = this.timer.add(35000, this.spawnLshapeB, this);
+    this.spawningSineB = this.timer.add(10000, this.spawnSineB, this);
+    this.spawningZagA = this.timer.add(18000, this.spawnZagA, this);
+    this.spawningZagB = this.timer.add(25000, this.spawnZagB, this);
+    this.spawningZagC = this.timer.add(32000, this.spawnZagC, this);
+    this.spawningLshapeA = this.timer.add(38000, this.spawnLshapeA, this);
+    this.spawningLshapeB = this.timer.add(45000, this.spawnLshapeB, this);
     //this.spawningStationary = this.timer.add(100, this.spawnStationary, this);
     this.spawningAssault = this.timer.add(100, this.spawnAssault, this);
     this.spawningAsteroidStorm = this.timer.add(100, this.spawnAsteroidStorm, this);
 
+
+    this.timer.add(55000, this.ending, this);
     this.timer.loop(2000, this.fire, this); 
 
 	},
@@ -185,9 +187,9 @@ Level1.prototype = {
 
     //console.log('Level Timer: '+ this.timer.seconds);
     // if the player survives the level, go to the ending
-   if (this.timer == 100){
-      this.ending;
-    }
+   // if (this.timer == 50){
+   //    this.ending;
+   //  }
 
     this.enemies.forEachDead(this.cleanup, this);
 
@@ -278,7 +280,7 @@ Level1.prototype = {
       this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
-      enemy.body.velocity.x = -200;
+      enemy.body.velocity.x = -150;
       var enemyfirerate = game.rnd.integerInRange(2000,4000);
       enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
       enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
@@ -292,7 +294,7 @@ Level1.prototype = {
       this.basic_enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
-      enemy.body.velocity.x = -200;
+      enemy.body.velocity.x = -150;
       var enemyfirerate = game.rnd.integerInRange(1000,3000);
       enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
       enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
@@ -391,7 +393,7 @@ Level1.prototype = {
       //if the enemy is above the 1/4 line, go down
       if (enemy.body.x < game.width/5){
           enemy.body.velocity.y = 200;
-          enemy.body.velocity.x = 200;
+          enemy.body.velocity.x = 150;
       }
   },
 
@@ -412,7 +414,7 @@ Level1.prototype = {
       //if the enemy is above the 1/4 line, go down
       if (enemy.body.x < game.width/5){
           enemy.body.velocity.y = -200;
-          enemy.body.velocity.x = 200;
+          enemy.body.velocity.x = 150;
       }
   },
     spawnZagC: function() {
@@ -431,18 +433,18 @@ Level1.prototype = {
        //set the velocity going upwards on spawn
       //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
       if(this.enemies.getIndex(enemy) % 2 == 0) {
-            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
 
         if (enemy.body.x < game.width/5){
             enemy.body.velocity.y = -200;
-            enemy.body.velocity.x = 200;
+            enemy.body.velocity.x = 150;
         }
       } else {
-            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
 
         if (enemy.body.x < game.width/5){
             enemy.body.velocity.y = 200;
-            enemy.body.velocity.x = 200;
+            enemy.body.velocity.x = 150;
         }
       }
   },
@@ -462,7 +464,7 @@ Level1.prototype = {
 
   updateLshapeA: function(enemy){
       if(this.enemies.getIndex(enemy) % 2 == 0) {
-            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
 
         if (enemy.body.x < game.width/2){
             enemy.body.velocity.x = 0;
@@ -470,7 +472,7 @@ Level1.prototype = {
             //enemy.body.velocity.x = 200;
         }
       } else {
-            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
+            if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
 
         if (enemy.body.x < game.width/2){
             enemy.body.velocity.x = 0;
@@ -513,7 +515,7 @@ Level1.prototype = {
         }
       } else {     
         if (enemy.body.x < game.width/2){
-            enemy.body.velocity.x = -300;
+            enemy.body.velocity.x = -250;
             enemy.body.velocity.y = 0;
             //enemy.body.velocity.x = 200;
         }

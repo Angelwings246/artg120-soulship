@@ -158,6 +158,7 @@ TutorialPt1.prototype = {
 		this.player.body.x = this.playerposx;
 		this.player.body.y = this.playerposy;
 		this.player.body.velocity.x = this.player.body.velocity.y = 0;
+        this.player.flame.alpha = 0;
     //move the tentacle through the player's location
 		this.tentacle.body.velocity.x = (this.playerposx - game.width/2);
 		this.tentacle.body.velocity.y = this.playerposy + 100;
@@ -168,7 +169,7 @@ TutorialPt1.prototype = {
 		this.health_bar.outer.loadTexture("corrupt bar");
         this.player.frameName = "player ship broken";
 
-		if (timer >= 30){
+		if (timer >= 33){
             game.sound.stopAll()﻿;
 			game.state.start('TutorialPt2', true, false, this.main, this.alt);
 		}

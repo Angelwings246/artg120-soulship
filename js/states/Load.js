@@ -33,6 +33,7 @@ Load.prototype = {
     game.load.image("restore defaults", "restore defaults.png");
     game.load.image("return to menu", "return to menu.png");
     game.load.atlas("player", "player.png", "player.json");
+    game.load.atlas("flame", "flame.png", "flame.json");
     game.load.image("bullet", "bullet.png");
     game.load.image("enemy", "enemy.png");
     game.load.image("boss main", "vortex.png");

@@ -47,6 +47,8 @@ TutorialPt2.prototype = {
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
 
+    this.player.flame.alpha = 0; //make flame invisible because of broken movement
+
     //add the group of enemies and a counter for enemies spawned
     this.enemies = game.add.group();
 
@@ -207,8 +209,9 @@ TutorialPt2.prototype = {
     this.warning_text.fill = "#00FFFF";
 
     game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
-    game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
+    // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
+    this.player.flame.alpha = 1; //bring flame back
     this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt);
 
   }
