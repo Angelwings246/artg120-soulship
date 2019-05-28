@@ -30,12 +30,15 @@ Load.prototype = {
     game.load.image("start adventure", "start adventure.png");
     game.load.image("options", "options.png");
     game.load.image("credits", "credits.png");
+    game.load.image("restore defaults", "restore defaults.png");
+    game.load.image("return to menu", "return to menu.png");
     game.load.atlas("player", "player.png", "player.json");
+    game.load.atlas("flame", "flame.png", "flame.json");
     game.load.image("bullet", "bullet.png");
-    game.load.image("enemy", "enemy.png");
+    game.load.atlas("enemy", "enemy.png", "enemy.json");
     game.load.image("boss main", "vortex.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
+    // game.load.image("asteroid", "Asteroid.png");
+    // game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
     game.load.image("heal", "hpDrop.png");
@@ -45,8 +48,9 @@ Load.prototype = {
     game.load.image("red", "hp red.png");
     game.load.image("tentacle", "tentacle.png");
     game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
-    game.load.image("button dark", "button dark.png");
-    game.load.image("button light", "button light.png");
+    game.load.atlas("button", "button.png", "button.json");
+    // game.load.image("button dark", "button dark.png");
+    // game.load.image("button light", "button light.png");
 
 
     //load all audio files

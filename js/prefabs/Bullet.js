@@ -14,7 +14,7 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   Phaser.Sprite.call(this, game, x, y, key, frame);
   game.physics.arcade.enable(this);
   this.tint = color;
-  this.body.setSize(5, 6); //make the trail part of the bullet not have collision
+  this.body.setSize(9, 9); //make the trail part of the bullet not have collision
  
   //set up the direction and velocity
   this.anchor.set(0.5);
@@ -22,10 +22,6 @@ function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
   this.rotation = angle;
   this.body.velocity.x = speed * Math.cos(angle);
   this.body.velocity.y = speed * Math.sin(angle);
-  
-  // checks and deletes stray bullets
-  // this.checkWorldBounds = true;
-  // this.outOfBoundsKill = true;
 
   this.lifespan = 15000; //semi-arbitrary lifespan so that bullets do not last forever.  Value will be iterated upon as necessary.
   this.dmg = damage;
@@ -38,5 +34,7 @@ Bullet.prototype.constructor = Bullet;
 //update function
 Bullet.prototype.update = function() {
   this.lifespan--;
-  if(this.lifespan <= 0) this.destroy();
+  if(this.lifespan <= 0) {
+    this.destroy();
+  }
 }

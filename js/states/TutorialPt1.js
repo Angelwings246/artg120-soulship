@@ -74,7 +74,7 @@ TutorialPt1.prototype = {
      else asteroid_key = "asteroid";
      
      //Enemy(game, x, y, sounds, key, frame)
-     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, asteroid_key, 0, false);
+     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, "enemy", asteroid_key, false);
      asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
      asteroid.body.velocity.x = game.rnd.integerInRange(-200, -100); 
      asteroid.body.velocity.y = game.rnd.integerInRange(-20, 20); //remove velocity from the base Enemy type
@@ -158,6 +158,7 @@ TutorialPt1.prototype = {
 		this.player.body.x = this.playerposx;
 		this.player.body.y = this.playerposy;
 		this.player.body.velocity.x = this.player.body.velocity.y = 0;
+        this.player.flame.alpha = 0;
     //move the tentacle through the player's location
 		this.tentacle.body.velocity.x = (this.playerposx - game.width/2);
 		this.tentacle.body.velocity.y = this.playerposy + 100;
@@ -168,7 +169,7 @@ TutorialPt1.prototype = {
 		this.health_bar.outer.loadTexture("corrupt bar");
         this.player.frameName = "player ship broken";
 
-		if (timer >= 30){
+		if (timer >= 33){
             game.sound.stopAll()﻿;
 			game.state.start('TutorialPt2', true, false, this.main, this.alt);
 		}

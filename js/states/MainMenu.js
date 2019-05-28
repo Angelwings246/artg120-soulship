@@ -24,7 +24,6 @@ MainMenu.prototype = {
 
 		this.MainMenu = game.add.audio("MainMenu");
 		this.MainMenu.play('', 0, 1, true);
-
     game.add.text(10, 10, "Debug: ESC for settings, 1 to skip to Tut1, 2 to skip to Tut2, 3 to skip to Lvl1, 4 to skip to Boss. Credits don't work.", {fontSize: "12px", fill:"#FFFFFF"});
 	},
 	update: function() {
@@ -38,9 +37,9 @@ MainMenu.prototype = {
       game.sound.stopAll()﻿;
       game.state.start('TutorialPt2', true, false, this.main, this.alt);
     }
-    // if (game.input.keyboard.justPressed(Phaser.KeyCode.THREE)){
-    //   game.state.start('Level1', true, false, this.main, this.alt);
-    // } //uncomment when ready
+    if (game.input.keyboard.justPressed(Phaser.KeyCode.THREE)){
+      game.state.start('Level1', true, false, this.main, this.alt);
+    } 
     if (game.input.keyboard.justPressed(Phaser.KeyCode.FOUR)){
       game.sound.stopAll()﻿;
       game.state.start('BossLevel', true, false, this.main, this.alt);

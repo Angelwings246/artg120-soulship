@@ -47,6 +47,8 @@ TutorialPt2.prototype = {
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
 
+    this.player.flame.alpha = 0; //make flame invisible because of broken movement
+
     //add the group of enemies and a counter for enemies spawned
     this.enemies = game.add.group();
 
@@ -149,7 +151,7 @@ TutorialPt2.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
 
     if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
+  		var enemy = new Enemy(game, game.width, game.height/2 + 16, this.enemy_sounds, "enemy", "assault", false);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
@@ -167,8 +169,8 @@ TutorialPt2.prototype = {
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
     if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
-      this.lastX = character.body.x;
-      this.lastY = character.body.y;
+      this.lastX = character.body.center.x;
+      this.lastY = character.body.center.y;
     }
     if(character.body != null) {
       character.damage(bullet.dmg);
@@ -207,8 +209,9 @@ TutorialPt2.prototype = {
     this.warning_text.fill = "#00FFFF";
 
     game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
-    game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
+    // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
+    this.player.flame.alpha = 1; //bring flame back
     this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt);
 
   }

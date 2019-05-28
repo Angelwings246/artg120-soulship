@@ -16,7 +16,8 @@ function PlayerShip(game, sounds, key, frame, main, alt){
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
   this.anchor.set(0.5);
-  this.body.setSize(40, 34, 2, 15);
+  this.body.setCircle(17, 5, 13);
+  // this.body.setSize(40, 34, 2, 15);
 
   this.rotation = Math.PI; //fix sprite direction
   this.body.collideWorldBounds = true; //don't let it go offscreen
@@ -44,7 +45,7 @@ function PlayerShip(game, sounds, key, frame, main, alt){
   /*set up keys based off the keybind setting objects passed in from constructor
   * game.input.keyboard.addKeys() creates an object with the properties 'string':KeyCode.  
   * in other words, this.main is an object with the properties 'up', 'down', 'left', 'right', 'fire'
-  * adn each of these properties contains a Phaser.Key Object
+  * and each of these properties contains a Phaser.Key Object
   */
   this.main = game.input.keyboard.addKeys({
     'up': main.up,
@@ -59,8 +60,14 @@ function PlayerShip(game, sounds, key, frame, main, alt){
     'right': alt.right,
     'fire': alt.fire});
 
+    console.log(this.main);
+    console.log(this.alt);
+
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
+  this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "flame small");
+  this.flame.anchor.x = 1;
+  this.flame.anchor.y = 0.5;
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -89,6 +96,8 @@ PlayerShip.prototype.update = function(){
   * (two opposing buttons add up to 8, which is default case, which is intentional, so that pressing both simultaneously does nothing.)
   */
   
+  //NOTE: things start acting really funny if the same key is bound to more than one thing.....
+
   //only pressing up OR if both are down, pressed up more recently than pressed down 
   if((this.main.up.isDown && this.main.down.isUp) || (this.main.up.isDown && this.main.up.duration < this.main.down.duration) ||
         (this.alt.up.isDown && this.alt.down.isUp) || (this.alt.up.isDown && this.alt.up.duration < this.alt.down.duration)) {
@@ -198,8 +207,16 @@ PlayerShip.prototype.update = function(){
   if(this.hp <= 0) {
     this.animations.play("death");
     if(!this.death_sound.isPlaying) this.death_sound.play();
+    if(this.death_anim.isFinished) this.alpha = 0;
   }
 
+  //keep the flame with the player
+  this.flame.x = this.body.x - 5;
+  this.flame.y = this.body.y + 16;
+  
+  //make flame big when going forward
+  if(this.body.velocity.x > 10) this.flame.frameName = "flame big";
+  else this.flame.frameName = "flame small";
 }
 
 //player shoots a bullet and loses 1 hp

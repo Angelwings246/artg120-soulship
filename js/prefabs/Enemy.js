@@ -15,7 +15,6 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
 
   //attributes of the enemy, can be easily overridden
   this.hp = 1; // basic enemy dies in 1 hit
-  // this.body.velocity.y = 100; //for now, have the basic enemy type scroll downwards at constant speed
 
   //stores the sounds for future playback
   this.death_sound = sounds[0];
@@ -35,10 +34,14 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
 
   // checks and deletes offscreen enemies
   this.checkWorldBounds = true;
-  this.outOfBoundsKill = true;
+  this.outOfBoundsKill = false;
+  // this.outOfBoundsKill = true;
   //add animations
   if(this.animated) {
   this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
+  }
+  else if (key == "enemy") {
+      this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 5, "", 1), 8, false);
   }
 }
 
@@ -48,8 +51,14 @@ Enemy.prototype.constructor = Enemy;
 
 //update function
 Enemy.prototype.update = function() {
+  //buffer the outofboundskill so that objects that spawn offscreen don't instantly die
+  if(this.body != null && (this.body.x < game.width/2 || this.body.y < 0 || this.body.y > game.height)) this.outOfBoundsKill = true;
+
+
   if(this.animated) this.animations.play("idle");
-  if(this.hp <= 0) this.death();
+  if(this.hp <= 0) {
+    this.death();
+  }
 
   //feedback for taking damage: flash red, then blink during invulnerability
   if(this.time_since_dmg < this.INVULN_FRAMES) {
@@ -79,11 +88,9 @@ Enemy.prototype.fire = function() {
     this.firing_sound.play();
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    this.bullets.add(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    this.bullets.add(bullet);
-    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    //this.bullets.add(bullet);
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 220, Math.PI, 0xff0000, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
   }
 }
@@ -99,6 +106,17 @@ Enemy.prototype.damage = function(dmg) {
 }
 //overriding .kill() would just be confusing
 Enemy.prototype.death = function() {
-  this.death_sound.play();
+  if(!this.death_sound.isPlaying) this.death_sound.play();
+  this.can_fire = false;
+  this.body = null;
+  if(this.death_anim != null) {
+    if(this.death_anim.isFinished) {
+      this.destroy();
+    }
+    this.animations.play("death");
+
+  }
+  else {
   this.destroy(); //use .destroy instead of .kill() to actually remove the object from memory and save resources.
   }
+}
