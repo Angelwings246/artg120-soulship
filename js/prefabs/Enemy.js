@@ -79,12 +79,12 @@ Enemy.prototype.fire = function() {
     this.firing_sound.play();
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
-    //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    //this.bullets.add(bullet);
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
-    //bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
-    //this.bullets.add(bullet);
+    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
+    bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    this.bullets.add(bullet);
   }
 }
 
