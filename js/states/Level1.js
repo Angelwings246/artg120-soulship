@@ -102,25 +102,146 @@ Level1.prototype = {
     this.timer.start(); //don't forget to start timer
     this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
-    this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
-    this.spawningSineB = this.timer.add(10000, this.spawnSineB, this);
-    this.spawningZagA = this.timer.add(18000, this.spawnZagA, this);
-    this.spawningZagB = this.timer.add(25000, this.spawnZagB, this);
-    this.spawningZagC = this.timer.add(32000, this.spawnZagC, this);
-    this.spawningLshapeA = this.timer.add(38000, this.spawnLshapeA, this);
-    this.spawningLshapeB = this.timer.add(45000, this.spawnLshapeB, this);
-    //this.spawningStationary = this.timer.add(100, this.spawnStationary, this);
-    this.spawningAssault = this.timer.add(100, this.spawnAssault, this);
-    this.spawningAsteroidStorm = this.timer.add(100, this.spawnAsteroidStorm, this);
+    // this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
+    // this.spawningSineB = this.timer.add(10000, this.spawnSineB, this);
+    // this.spawningZagA = this.timer.add(18000, this.spawnZagA, this);
+    // this.spawningZagB = this.timer.add(25000, this.spawnZagB, this);
+    // this.spawningZagC = this.timer.add(32000, this.spawnZagC, this);
+    // this.spawningLshapeA = this.timer.add(38000, this.spawnLshapeA, this);
+    // this.spawningLshapeB = this.timer.add(45000, this.spawnLshapeB, this);
+    // //this.spawningStationary = this.timer.add(100, this.spawnStationary, this);
+    // this.spawningAssault = this.timer.add(100, this.spawnAssault, this);
+    // this.spawningAsteroidStorm = this.timer.add(100, this.spawnAsteroidStorm, this);
 
 
-    this.timer.add(55000, this.ending, this);
-    this.timer.loop(2000, this.fire, this); 
+    // this.timer.add(55000, this.ending, this);
+    // this.timer.loop(2000, this.fire, this); 
+
+
+
+    /*---TESTING PATH FUNCTIONALITY---*/
+    /* TESTING: Sine wave pattern
+    * Each "point" refers to essentially every PI/2, so vertices and intercepts:
+    * With num_points = 6, it looks like:
+
+               *
+      \      /   \
+       *    *     *
+        \  /
+         *
+
+    */
+    var num_points = 6;
+    var vy_max = 150;
+    var vy = -vy_max;
+
+    //calculate the x velocity using the number of desired points and the set y velocity.
+    var vx = -(vy_max * game.width/num_points)/ (3/8 * game.height);
+
+    //setting up the empty object that will be used to hold the path information
+    this.sineApattern = {
+      points: {
+        x: [],
+        y: []
+      },
+      vels: {
+        x: [],
+        y: []
+      }
+    }
+    //filling up the pattern:
+    for(let i = 0; i < num_points; i++) {
+      var px = game.width - i* game.width/num_points; //x: divide equally, since vx is constant
+      var py;
+      if(i%2 == 1) vy*= -1; //every OTHER point, flip vy, this allows for the straight section
+
+      if(i%2 == 0) py = game.height/2; //every OTHER point is on the center line
+      else if(i%4 == 1) py = 1*game.height/8; //if it's not on the center, it alternates above and below
+      else py = 7*game.height/8;
+
+      //push the corresponding value onto each array
+      this.sineApattern.points.x.push(px);
+      this.sineApattern.points.y.push(py);
+      this.sineApattern.vels.x.push(vx);
+      this.sineApattern.vels.y.push(vy);
+    }
+
+    // console.log(this.sineApattern);
+    this.tester = new Enemy(game, game.width + 50, game.height/2, this.enemy_sounds, "enemy", "sine", false);
+    this.tester.body.velocity.x = vx;
+    this.tester.path = this.sineApattern;
+    // this.enemies.add(this.tester);
+
+    //setting up the empty object that will be used to hold the path information
+    this.sineBpattern1 = {
+      points: {
+        x: [],
+        y: []
+      },
+      vels: {
+        x: [],
+        y: []
+      }
+    }
+    vy = -vy_max;
+    vx = -(vy_max * game.width/num_points)/ (3/16 * game.height);
+    for(let i = 0; i < num_points; i++) {
+      var px = game.width - i* game.width/num_points; //x: divide equally, since vx is constant
+      var py;
+      if(i%2 == 1) vy*= -1; //every OTHER point, flip vy, this allows for the straight section
+
+      if(i%2 == 0) py = game.height/4; //every OTHER point is on the center line
+      else if(i%4 == 1) py = 1*game.height/16; //if it's not on the center, it alternates above and below
+      else py = 7*game.height/16;
+
+      //push the corresponding value onto each array
+      this.sineBpattern1.points.x.push(px);
+      this.sineBpattern1.points.y.push(py);
+      this.sineBpattern1.vels.x.push(vx);
+      this.sineBpattern1.vels.y.push(vy);
+    }
+    this.testerB = new Enemy(game, game.width + 50, game.height/4, this.enemy_sounds, "enemy", "sine", false);
+    this.testerB.body.velocity.x = vx;
+    this.testerB.path = this.sineBpattern1;
+    this.enemies.add(this.testerB);
+
+    //setting up the empty object that will be used to hold the path information
+    this.sineBpattern2 = {
+      points: {
+        x: [],
+        y: []
+      },
+      vels: {
+        x: [],
+        y: []
+      }
+    }
+    vy = vy_max;
+    vx = -(vy_max * game.width/num_points)/ (3/16 * game.height);
+    for(let i = 0; i < num_points; i++) {
+      var px = game.width - i* game.width/num_points; //x: divide equally, since vx is constant
+      var py;
+      if(i%2 == 1) vy*= -1; //every OTHER point, flip vy, this allows for the straight section
+
+      if(i%2 == 0) py = 3*game.height/4; //every OTHER point is on the center line
+      else if(i%4 == 3) py = 9*game.height/16; //if it's not on the center, it alternates above and below
+      else py = 15*game.height/16;
+
+      //push the corresponding value onto each array
+      this.sineBpattern2.points.x.push(px);
+      this.sineBpattern2.points.y.push(py);
+      this.sineBpattern2.vels.x.push(vx);
+      this.sineBpattern2.vels.y.push(vy);
+    }
+    console.log(this.sineBpattern2);
+    this.testerB2 = new Enemy(game, game.width + 50, 3*game.height/4, this.enemy_sounds, "enemy", "sine", false);
+    this.testerB2.body.velocity.x = vx;
+    this.testerB2.path = this.sineBpattern2;
+    this.enemies.add(this.testerB2);
+
 
 	},
 	update: function(){
-	    //restart upon death
-    frames++;
 
   if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
         game.sound.stopAll()﻿;
@@ -135,11 +256,6 @@ Level1.prototype = {
     game.physics.arcade.overlap(this.player, this.basic_enemies, this.crashing, null, this);
     game.physics.arcade.overlap(this.player, this.asteroid_enemies, this.crashing, null, this);
 
-
-        // flash warning every time player shoots 
-    if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
-      this.shots_fired++;
-    }
             //debug cred: Nathan Altice inputs08.js
     if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
       this.debug = !this.debug;
@@ -147,51 +263,6 @@ Level1.prototype = {
     // cheat to get to ending quickly
     if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
-    // Update Sine A&B waves
-    if(this.enemies_spawned <= 10) {
-      this.enemies.forEach(this.updateSineA, this);
-    }
-    if(this.enemies_spawned > 10 && this.enemies_spawned <= 20) {
-      this.enemies.forEach(this.updateSineB, this);
-    }
-
-    // Update Zag A&B&C Waves
-    if (this.enemies_spawned > 20 && this.enemies_spawned <= 25){
-      this.enemies.forEach(this.updateZagA, this);
-    }
-    if (this.enemies_spawned > 25 && this.enemies_spawned <= 30){
-      this.enemies.forEach(this.updateZagB, this);
-    }
-    if (this.enemies_spawned > 30 && this.enemies_spawned <= 40){
-      this.enemies.forEach(this.updateZagC, this);
-    }
-     
-    // Update Lshape A&B Waves
-    if (this.enemies_spawned > 40 && this.enemies_spawned <= 48){
-      this.enemies.forEach(this.updateLshapeA, this);
-    }
-    if (this.enemies_spawned > 48 && this.enemies_spawned <= 60){
-      this.enemies.forEach(this.updateLshapeB, this);
-    }
-     
-    //  Update Stationary and Assault Enemies
-    if (this.basic_enemies_spawned > 0 && this.basic_enemies_spawned <= 10){
-      this.basic_enemies.forEach(this.updateStationary, this);
-    } 
-    if (this.basic_enemies_spawned > 10 && this.basic_enemies_spawned <= 20){
-          this.basic_enemies.forEach(this.updateAssault, this);
-    } 
-
-    // Call upon the wrath of the gods to smite your ship with big space rocks
-    if (this.asteroid_enemies_spawned <= 30){
-      this.asteroid_enemies.forEach(this.updateAsteroidStorm, this);
-    }
-
-    //console.log('Level Timer: '+ this.timer.seconds);
-    // if the player survives the level, go to the ending
-   // if (this.timer == 50){
-   //    this.ending;
-   //  }
 
     this.enemies.forEachDead(this.cleanup, this);
 
@@ -206,12 +277,6 @@ Level1.prototype = {
       this.player.bullets.forEach(game.debug.body, game.debug);
       game.debug.text(this.timer.seconds, 50, 50);
     }
-  },
-
-  //triggers all the enemies to fire
-  fire: function() {
-    // if(this.enemies.countLiving() > 0) this.enemies.callAll("fire");
-    // this.enemies.forEach(this.transfer, this); //transfer all the bullets from the enemy to the state, see below
   },
 
     //the character, be it player or enemy, takes damage

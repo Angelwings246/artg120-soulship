@@ -36,6 +36,11 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.checkWorldBounds = true;
   this.outOfBoundsKill = false;
   // this.outOfBoundsKill = true;
+
+  //used to have the enemies move on a set path, see follow_path below
+  this.path = null;
+  this.path_index = 0;
+
   //add animations
   if(this.animated) {
   this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
@@ -54,6 +59,7 @@ Enemy.prototype.update = function() {
   //buffer the outofboundskill so that objects that spawn offscreen don't instantly die
   if(this.body != null && (this.body.x < game.width/2 || this.body.y < 0 || this.body.y > game.height)) this.outOfBoundsKill = true;
 
+  if(this.path != null) this.follow_path();
 
   if(this.animated) this.animations.play("idle");
   if(this.hp <= 0) {
@@ -121,4 +127,21 @@ Enemy.prototype.death = function() {
   else {
   this.destroy(); //use .destroy instead of .kill() to actually remove the object from memory and save resources.
   }
+}
+/*if the enemy has a path, given to it by setting path an object (containing 2 objects, points and vels, each having
+* an x and  property of equal length arrays), then use those paths to determine movement.
+* the rounding is all in there because counting is weird
+* this.path_index determines which point we are hitting.
+*/
+Enemy.prototype.follow_path = function() {
+  if (this.path_index < this.path.points.x.length) {
+    if(Math.round(this.body.center.x) - Math.round(this.path.points.x[this.path_index]) <= 2 && 
+      Math.round(this.body.center.y) - Math.round(this.path.points.y[this.path_index]) <= 2) { //giving it a bit of flexibility 
+      this.body.velocity.x = this.path.vels.x[this.path_index]; //set velocities
+      this.body.velocity.y = this.path.vels.y[this.path_index];
+      this.path_index++;
+    }
+    console.log(this.body.center.x + ", " + this.body.center.y);
+  }
+
 }
