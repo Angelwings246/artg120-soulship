@@ -251,7 +251,7 @@ Level1.prototype = {
       player.damage(3); //arbitrary number for now
       this.timer.remove(enemy.firing);
       this.timer.remove(enemy.bullet_transfer);
-      enemy.destroy(); //destroy non-boss enemies upon crashing
+      enemy.hp = 0; //destroy non-boss enemies upon crashing
     }
   },
 

@@ -189,7 +189,7 @@ TutorialPt2.prototype = {
   crashing: function(player, enemy) {
     if(enemy.body != null) {
       player.damage(3); //arbitrary number for now
-      enemy.destroy(); //destroy non-boss enemies upon crashing
+      enemy.hp = 0; //destroy non-boss enemies upon crashing
     }
   },
   //because once an enemy is killed, its bullets property becomes unreachable, transfer all bullets

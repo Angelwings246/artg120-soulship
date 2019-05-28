@@ -206,6 +206,7 @@ PlayerShip.prototype.update = function(){
   //play death stuff when dead
   if(this.hp <= 0) {
     this.animations.play("death");
+    this.flame.alpha = 0;
     if(!this.death_sound.isPlaying) this.death_sound.play();
     if(this.death_anim.isFinished) this.alpha = 0;
   }

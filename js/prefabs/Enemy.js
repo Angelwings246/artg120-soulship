@@ -116,7 +116,7 @@ Enemy.prototype.death = function() {
       this.destroy();
     }
     this.animations.play("death");
-
+    this.alpha = 0.7;
   }
   else {
   this.destroy(); //use .destroy instead of .kill() to actually remove the object from memory and save resources.

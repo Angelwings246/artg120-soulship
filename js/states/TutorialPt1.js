@@ -95,7 +95,7 @@ TutorialPt1.prototype = {
     crashing: function(player, enemy) {
         if(enemy.body != null) {
             player.damage(3); //arbitrary number for now
-            enemy.destroy(); 
+            enemy.hp = 0; 
         }
 
 
