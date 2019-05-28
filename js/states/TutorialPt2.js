@@ -151,7 +151,7 @@ TutorialPt2.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
 
     if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2, this.enemy_sounds, "enemy", 0, false);
+  		var enemy = new Enemy(game, game.width, game.height/2 + 16, this.enemy_sounds, "enemy", "assault", false);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
@@ -169,8 +169,8 @@ TutorialPt2.prototype = {
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
     if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
-      this.lastX = character.body.x;
-      this.lastY = character.body.y;
+      this.lastX = character.body.center.x;
+      this.lastY = character.body.center.y;
     }
     if(character.body != null) {
       character.damage(bullet.dmg);

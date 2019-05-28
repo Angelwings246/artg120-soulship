@@ -12,33 +12,33 @@ Level1.prototype = {
 
 	},
 	preload: function(){
-    //preload assets
-	game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
+ //    //preload assets
+	// game.load.path = "assets/img/";
+ //    game.load.image("background", "bg.png");
 
-    // // game.load.image("player", "player ship.png");
-    // game.load.image("player broken", "player ship broken.png");
-    // game.load.atlas("player_death", "player_death.png", "player_death.json");
-    game.load.image("enemy", "enemy.png");
-    game.load.image("bullet", "bullet.png");
-    game.load.image("heal", "hpDrop.png");
-    game.load.image("stars", "Stars.png");
-    game.load.image("stars2", "Stars2.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
-    game.load.image("hp bar", "hp bar.png");
-    game.load.image("red", "hp red.png");
+ //    // // game.load.image("player", "player ship.png");
+ //    // game.load.image("player broken", "player ship broken.png");
+ //    // game.load.atlas("player_death", "player_death.png", "player_death.json");
+ //    game.load.image("enemy", "enemy.png");
+ //    game.load.image("bullet", "bullet.png");
+ //    game.load.image("heal", "hpDrop.png");
+ //    game.load.image("stars", "Stars.png");
+ //    game.load.image("stars2", "Stars2.png");
+ //    game.load.image("asteroid", "Asteroid.png");
+ //    game.load.image("asteroid2", "Asteroid2.png");
+ //    game.load.image("hp bar", "hp bar.png");
+ //    game.load.image("red", "hp red.png");
 
-    game.load.path = "assets/audio/";
-    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
-    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
+ //    game.load.path = "assets/audio/";
+ //    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
+ //    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
 
 
-    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
-    game.load.audio("hit", ["EnemyGetsHit.mp3"]);
-    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
-    game.load.audio('alarm', ["Alarm.mp3"]);
+ //    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
+ //    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
+ //    game.load.audio("hit", ["EnemyGetsHit.mp3"]);
+ //    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
+ //    game.load.audio('alarm', ["Alarm.mp3"]);
 	},
 	create: function(){
     //set up scrolling background with multiple layers of stars
@@ -100,7 +100,7 @@ Level1.prototype = {
 
     this.timer = game.time.create(false);
     this.timer.start(); //don't forget to start timer
-    this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
     this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
     this.spawningSineB = this.timer.add(10000, this.spawnSineB, this);
@@ -122,8 +122,10 @@ Level1.prototype = {
 	    //restart upon death
     frames++;
 
-    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('Level1', true, false, this.main, this.alt);
-    //collision checks
+  if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
+        game.sound.stopAll()﻿;
+        game.state.start('GameOver', true, false, false, this.main, this.alt, 'Level1');;
+  }    //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
     game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
     game.physics.arcade.overlap(this.basic_enemies, this.player.bullets, this.damage, null, this);
@@ -281,7 +283,7 @@ Level1.prototype = {
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
       enemy.body.velocity.x = -150;
-      var enemyfirerate = game.rnd.integerInRange(2000,4000);
+      var enemyfirerate = game.rnd.integerInRange(500,1500);
       enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
       enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
 
@@ -295,7 +297,7 @@ Level1.prototype = {
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
       enemy.body.velocity.x = -150;
-      var enemyfirerate = game.rnd.integerInRange(1000,3000);
+      var enemyfirerate = game.rnd.integerInRange(1000,1500);
       enemy.firing = this.timer.loop(enemyfirerate, enemy.fire, enemy);
       enemy.bullet_transfer = this.timer.loop(enemyfirerate, this.transfer, this, enemy);
         console.log('enemy.body.y: '+ enemy.body.y);
@@ -315,7 +317,7 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
       if (this.enemies_spawned < 10){
-        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.spawn(game.width, game.height/2, "enemy", "sine");
         this.enemies_spawned++;
        } else this.timer.remove(this.loop); 
       }, this);
@@ -323,17 +325,18 @@ Level1.prototype = {
 	},
 //updates the enemies going in a single sine pattern
   updateSineA: function(enemy) {
+    if(enemy.body != null) {
       //set the velocity going upwards on spawn
       if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -200;
       //if the enemy is above the 1/4 line, go down
-      if (enemy.body.y < game.height/4){
+      if (enemy.body.y < game.height/8){
           enemy.body.velocity.y = 200;
       }
       //if the enemy is below the 3/4 line, go up
-      if (enemy.body.y > game.height*0.75){
+      if (enemy.body.y > game.height*0.875){
           enemy.body.velocity.y = -200;
       }
-      
+      }
   },
 
 	    //spawns a series of enemies that goes in two alternating sine waves towards the player
@@ -341,8 +344,8 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 20) {
-        this.spawn(game.width, game.height/4, "enemy", 0);
-        this.spawn(game.width, game.height*0.75, "enemy", 0);
+        this.spawn(game.width, game.height/4, "enemy", "sine");
+        this.spawn(game.width, game.height*0.75, "enemy", "sine");
         this.enemies_spawned++;
         this.enemies_spawned++;
     }else this.timer.remove(this.loop);
@@ -351,6 +354,7 @@ Level1.prototype = {
 	},
 
   updateSineB: function(enemy){    
+        if(enemy.body != null) {
     if(this.enemies.getIndex(enemy) % 2 == 0) {
       if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
       //if the enemy is above the 1/8 line, go down
@@ -372,7 +376,8 @@ Level1.prototype = {
       if (enemy.body.y > game.height*0.875 + 50){
           enemy.body.velocity.y = -300;
       }
-    };
+    }
+  }
 
   },
 
@@ -381,13 +386,15 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 25) {
-        this.spawn(game.width, game.height/4, "enemy", 0);
+        this.spawn(game.width, game.height/4, "enemy", "diagonal");
         this.enemies_spawned++;
     }else this.timer.remove(this.loop);
   }, this);
 	},
 
   updateZagA: function(enemy){    
+        if(enemy.body != null) {
+
       //set the velocity going upwards on spawn
       //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
       //if the enemy is above the 1/4 line, go down
@@ -395,6 +402,7 @@ Level1.prototype = {
           enemy.body.velocity.y = 200;
           enemy.body.velocity.x = 150;
       }
+    }
   },
 
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
@@ -402,13 +410,15 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 30) {
-        this.spawn(game.width, game.height*0.75, "enemy", 0);
+        this.spawn(game.width, game.height*0.75, "enemy", "diagonal");
         this.enemies_spawned++;
     }else this.timer.remove(this.loop);
   }, this);
 	},
 
   updateZagB: function(enemy){    
+        if(enemy.body != null) {
+
        //set the velocity going upwards on spawn
       //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
       //if the enemy is above the 1/4 line, go down
@@ -416,13 +426,14 @@ Level1.prototype = {
           enemy.body.velocity.y = -200;
           enemy.body.velocity.x = 150;
       }
+    }
   },
     spawnZagC: function() {
     //Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 40) {
-        this.spawn(game.width, game.height*0.75, "enemy", 0);
-        this.spawn(game.width, game.height/4, "enemy", 0);
+        this.spawn(game.width, game.height*0.75, "enemy", "diagonal");
+        this.spawn(game.width, game.height/4, "enemy", "diagonal");
         this.enemies_spawned++;
         this.enemies_spawned++;
     }else this.timer.remove(this.loop);
@@ -430,6 +441,8 @@ Level1.prototype = {
   },
 
     updateZagC: function(enemy){    
+          if(enemy.body != null) {
+
        //set the velocity going upwards on spawn
       //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
       if(this.enemies.getIndex(enemy) % 2 == 0) {
@@ -447,6 +460,7 @@ Level1.prototype = {
             enemy.body.velocity.x = 150;
         }
       }
+    }
   },
 
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
@@ -454,8 +468,8 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 48) {
-        this.spawn(game.width, game.height/2, "enemy", 0);
-        this.spawn(game.width, game.height/2, "enemy", 0);
+        this.spawn(game.width, game.height/2, "enemy", "diagonal");
+        this.spawn(game.width, game.height/2, "enemy", "diagonal");
         this.enemies_spawned++;
         this.enemies_spawned++;
     }else this.timer.remove(this.loop);
@@ -463,6 +477,8 @@ Level1.prototype = {
 	},
 
   updateLshapeA: function(enemy){
+        if(enemy.body != null) {
+
       if(this.enemies.getIndex(enemy) % 2 == 0) {
             if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
 
@@ -480,15 +496,16 @@ Level1.prototype = {
             //enemy.body.velocity.x = 200;
         }
       }
+    }
   },
 	    //spawns a series of three sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
     if(this.enemies_spawned < 60) {
-        this.spawn(game.width, game.height/3, "enemy", 0);
-        this.spawn(game.width, game.height/2, "enemy", 0);
-        this.spawn(game.width, 2*game.height/3, "enemy", 0);
+        this.spawn(game.width, game.height/3, "enemy", "diagonal");
+        this.spawn(game.width, game.height/2, "enemy", "diagonal");
+        this.spawn(game.width, 2*game.height/3, "enemy", "diagonal");
         this.enemies_spawned++;
         this.enemies_spawned++;
         this.enemies_spawned++;
@@ -497,6 +514,8 @@ Level1.prototype = {
 	},
 
   updateLshapeB: function(enemy){
+        if(enemy.body != null) {
+
       if(this.enemies.getIndex(enemy) % 2 == 0 && this.enemies.getIndex(enemy) % 3 != 0) {
             if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
 
@@ -520,19 +539,22 @@ Level1.prototype = {
             //enemy.body.velocity.x = 200;
         }
       }
+    }
   },
 	    //spawns a set of enemies that go towards the player and then stay and fire
 	spawnStationary: function() {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(3000, function() {
     if(this.basic_enemies_spawned < 10) {
-        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", 0);
+        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", "stationary");
         this.basic_enemies_spawned++;
     }else this.timer.remove(this.loop);
   }, this);
 	},
 
   updateStationary: function(enemy){
+        if(enemy.body != null) {
+
       //set the velocity going upwards on spawn
       if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -150;
       //if the enemy is above the 1/4 line, go down
@@ -540,6 +562,7 @@ Level1.prototype = {
           enemy.body.velocity.y = 0;
           enemy.body.velocity.x = 0;
       }
+    }
 
   },
 
@@ -548,18 +571,21 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(2000, function() {
     if(this.basic_enemies_spawned < 20) {
-        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", 0);
+        this.basicSpawn(game.width, game.rnd.integerInRange(0,600), "enemy", "assault");
         this.basic_enemies_spawned++;
     }else this.timer.remove(this.loop);
   }, this);
 	},
 
   updateAssault: function(enemy){
-      //set the velocity going upwards on spawn
+        if(enemy.body != null) {
+
+      //set the velocity going left on spawn
       if(enemy.body.x >= 15/16 * game.width) {
         enemy.body.velocity.y = 0;
         enemy.body.velocity.x = -500;
       }
+    }
   },
 
 	    //spawns a set of random asteriods like that fall from top right to bottom left
@@ -567,17 +593,20 @@ Level1.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(5000, function() {
     if(this.asteroid_enemies_spawned < 30) {
-        this.asteroidSpawn(game.rnd.integerInRange(100,900), 0, "asteroid", 0);
+        this.asteroidSpawn(game.rnd.integerInRange(100,900), 0, "enemy", "asteroid");
         this.asteroid_enemies_spawned++;
     }else this.timer.remove(this.loop);
   }, this);
 	},
 
   updateAsteroidStorm: function(enemy){
+        if(enemy.body != null) {
+
     if(enemy.body.x <= 15/16 * game.width) {
       enemy.body.velocity.y = game.rnd.integerInRange(100, 600);
       enemy.body.velocity.x = game.rnd.integerInRange(-100, -600);
     }
+  }
   },
 
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level

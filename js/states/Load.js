@@ -35,10 +35,10 @@ Load.prototype = {
     game.load.atlas("player", "player.png", "player.json");
     game.load.atlas("flame", "flame.png", "flame.json");
     game.load.image("bullet", "bullet.png");
-    game.load.image("enemy", "enemy.png");
+    game.load.atlas("enemy", "enemy.png", "enemy.json");
     game.load.image("boss main", "vortex.png");
-    game.load.image("asteroid", "Asteroid.png");
-    game.load.image("asteroid2", "Asteroid2.png");
+    // game.load.image("asteroid", "Asteroid.png");
+    // game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
     game.load.image("heal", "hpDrop.png");
