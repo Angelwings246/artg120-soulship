@@ -5,9 +5,12 @@ var frames;
 
 var TutorialPt1 = function(game) {};
 TutorialPt1.prototype = {
-  init: function(main, alt) {
+  init: function(main, alt, music_vol, sfx_vol) {
     this.main = main;
     this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
+
   },
   preload: function() {
      //all preloading done in Load state
@@ -16,6 +19,7 @@ TutorialPt1.prototype = {
 
     //set up scrolling background with multiple layers of stars
     //scroll speed is set to all be coprime so the loops are less frequent/obvious
+    game.sound.stopAll();
     var timer = 0;
     frames = 0;  
 	this.timer = game.time.create(false);
@@ -42,7 +46,7 @@ TutorialPt1.prototype = {
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
 
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
     this.player.inTutorial = true;
 	this.asteroids = game.add.group();
@@ -129,7 +133,7 @@ TutorialPt1.prototype = {
 
 	if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
         game.sound.stopAll()﻿;
-		game.state.start('GameOver', true, false, false, this.main, this.alt, 'TutorialPt1');;
+		game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt1');;
 	}
 	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
 	game.physics.arcade.overlap(this.player, this.asteroids, this.crashing, null, this);
@@ -171,13 +175,13 @@ TutorialPt1.prototype = {
 
 		if (timer >= 33){
             game.sound.stopAll()﻿;
-			game.state.start('TutorialPt2', true, false, this.main, this.alt);
+			game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 		}
 	}
 
   if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
       game.sound.stopAll()﻿;
-      game.state.start('TutorialPt2', true, false, this.main, this.alt);
+      game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
   }
 };

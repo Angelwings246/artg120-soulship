@@ -6,7 +6,7 @@
  * sounds - array of sounds that the enemy will play upon certain events. 
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit
  */
-function Enemy(game, x, y, sounds, key, frame, animated) {
+function Enemy(game, x, y, sounds, key, frame, volume, animated) {
   console.log("enemy spawning at x: %s y: %s", x, y);
   //call Phaser.Sprite constructor (game, x, y, key, frame)
   Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -20,6 +20,7 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.death_sound = sounds[0];
   this.firing_sound = sounds[1];
   this.hit_sound = sounds[2];
+  this.volume = volume;
   
   //adds a flag so that some enemies cannot shoot even if fire() is called
   this.can_fire = true;
@@ -85,7 +86,7 @@ Enemy.prototype.update = function() {
 Enemy.prototype.fire = function() {
   if(this.can_fire) {
     console.log("pew");
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
     //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
@@ -103,12 +104,12 @@ Enemy.prototype.damage = function(dmg) {
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
-    if(this.hp > 0) this.hit_sound.play();
+    if(this.hp > 0) this.hit_sound.play("", 0, this.volume);
   }
 }
 //overriding .kill() would just be confusing
 Enemy.prototype.death = function() {
-  if(!this.death_sound.isPlaying) this.death_sound.play();
+  if(!this.death_sound.isPlaying) this.death_sound.play("", 0, this.volume);
   this.can_fire = false;
   this.body = null;
   if(this.death_anim != null) {

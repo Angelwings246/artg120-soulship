@@ -8,9 +8,12 @@
 
 var BossLevel = function(game){};
 BossLevel.prototype = {
-  init: function(main, alt) {
+  init: function(main, alt, music_vol, sfx_vol) {
     this.main = main;
     this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
+
   },
 	preload: function(){
    //all preloading done in Load state
@@ -33,7 +36,7 @@ BossLevel.prototype = {
 
     //set up music
     this.intro = game.add.audio("boss intro");
-    this.intro.play();
+    this.intro.play("", 0, this.music_vol);
     this.music = game.add.audio("boss loop", 1, true);
 
     //set up sounds
@@ -46,12 +49,12 @@ BossLevel.prototype = {
 
     this.heal_sound = game.add.audio("heal");
 
-    //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
-    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3");
+    //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
+    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
 
     //group of pickups (for now, just a heal)
@@ -77,7 +80,7 @@ BossLevel.prototype = {
 	update: function() {
       
       //transition from the intro music to the loop
-      this.intro.onStop.add(function() {this.music.play()}, this);
+      this.intro.onStop.add(function() {this.music.play("", 0, this.music_vol)}, this);
 
       //collision checks
       //NOTE: Boss is an extension of Phaser.Group, so this should work.  Hopefully. 
@@ -116,7 +119,7 @@ BossLevel.prototype = {
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
         game.sound.stopAll();
-        game.state.start('GameOver', true, false, this.victory, this.main, this.alt, 'BossLevel');
+        game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
 	  }
       //debug cred: Nathan Altice inputs08.js
       if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
@@ -149,7 +152,7 @@ BossLevel.prototype = {
     heal: function(player, pickup) {
         player.hp += this.HEALING;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
-        this.heal_sound.play();
+        this.heal_sound.play("", 0, this.sfx_vol);
         pickup.destroy();
     },
     //called when the player crashes into an enemy_sounds

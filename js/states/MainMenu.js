@@ -23,7 +23,7 @@ MainMenu.prototype = {
     this.credits = game.add.button(game.width/3, 5*game.height/6, "credits",this.changeState, this);
 
 		this.MainMenu = game.add.audio("MainMenu");
-		this.MainMenu.play('', 0, 1, true);
+		this.MainMenu.play("", 0, this.music_vol, true);
     game.add.text(10, 10, "Debug: ESC for settings, 1 to skip to Tut1, 2 to skip to Tut2, 3 to skip to Lvl1, 4 to skip to Boss. Credits don't work.", {fontSize: "12px", fill:"#FFFFFF"});
 	},
 	update: function() {
@@ -31,18 +31,19 @@ MainMenu.prototype = {
     //-----DEBUG: REMOVE IN FINAL BUILD-----//
     if (game.input.keyboard.justPressed(Phaser.KeyCode.ONE)){
       game.sound.stopAll()﻿;
-      game.state.start('TutorialPt1', true, false, this.main, this.alt);
+      game.state.start('TutorialPt1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
     }
     if (game.input.keyboard.justPressed(Phaser.KeyCode.TWO)){
       game.sound.stopAll()﻿;
-      game.state.start('TutorialPt2', true, false, this.main, this.alt);
+      game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
     }
     if (game.input.keyboard.justPressed(Phaser.KeyCode.THREE)){
-      game.state.start('Level1', true, false, this.main, this.alt);
+      game.sound.stopAll()﻿;
+      game.state.start('Level1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
     } 
     if (game.input.keyboard.justPressed(Phaser.KeyCode.FOUR)){
       game.sound.stopAll()﻿;
-      game.state.start('BossLevel', true, false, this.main, this.alt);
+      game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
     }
 
     if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){

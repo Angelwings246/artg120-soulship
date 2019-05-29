@@ -10,7 +10,7 @@
  * main and alt are objects containing keybind settings, each with properies "up", "down", "left", "right", and "fire".
  * The properties are KeyCodes (NUMBERS that correspond to keys, NOT the keys themselves) and these objects will have to be passed from state to state.
  */
-function PlayerShip(game, sounds, key, frame, main, alt){
+function PlayerShip(game, sounds, key, frame, main, alt, volume){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
@@ -27,6 +27,7 @@ function PlayerShip(game, sounds, key, frame, main, alt){
   this.firing_sound = sounds[1];
   this.hit_sound = sounds[2];
   this.low_hp_sound = sounds[3];
+  this.volume = volume;
 
   //bullets are all grouped together for collision checks
   this.bullets = game.add.group();
@@ -203,13 +204,13 @@ PlayerShip.prototype.update = function(){
   }
 
   //play the annoying low hp sound when health is low
-  if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
+  if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play("", 0, this.volume);
 
   //play death stuff when dead
   if(this.hp <= 0) {
     this.animations.play("death");
     this.flame.alpha = 0;
-    if(!this.death_sound.isPlaying) this.death_sound.play();
+    if(!this.death_sound.isPlaying) this.death_sound.play("", 0, this.volume);
     if(this.death_anim.isFinished) this.alpha = 0;
   }
 
@@ -225,7 +226,7 @@ PlayerShip.prototype.update = function(){
 //player shoots a bullet and loses 1 hp
 PlayerShip.prototype.fire = function() {
   console.log("pew");
-  this.firing_sound.play();
+  this.firing_sound.play("", 0, this.volume);
 
   //Bullet(game, x, y, speed, angle, color, ally, key, frame)
   var bullet = new Bullet(game, this.body.center.x + this.width/2, this.body.center.y, 300, 0, 0x43DFF8, true, "bullet", 0);
@@ -246,6 +247,6 @@ PlayerShip.prototype.damage = function(dmg) {
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
-    if(this.hp > 0) this.hit_sound.play();
+    if(this.hp > 0) this.hit_sound.play("", 0, this.volume);
   }
 }

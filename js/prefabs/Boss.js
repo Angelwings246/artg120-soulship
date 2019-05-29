@@ -18,7 +18,7 @@
  * key_main and frame_main are for the center part of the boss.
  * key_side and frame_side are for the side/weak parts of the boss.
 */
-function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
+function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) {
   //call Phaser.Group constructor
   Phaser.Group.call(this, game);
   
@@ -27,13 +27,14 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side) {
   this.firing_sound = sounds[1];
   this.hit_sound = sounds[2];
   this.asteroid_sounds = sounds; //because the asteroids are enemy types, they will need a sound argument 
+  this.volume = volume;
   
   //due to protected keywords, the sprites in this group are named "_pt", like "part"
   
   //Enemy types for the weak spots.  Note that .create() cannot be used because of constructor difference
   //Enemy(game, x, y, sounds, key, frame)
-  var top_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, true);
-  var bot_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, true);
+  var top_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, this.volume, true);
+  var bot_pt = new Enemy(game, 3/4 * game.width, game.height/2, sounds, key_side, frame_side, this.volume, true);
   //add them to group
   this.top_pt = this.add(top_pt);
   this.bot_pt = this.add(bot_pt);
@@ -156,7 +157,7 @@ Boss.prototype.fire = function(x, y) {
 */
 Boss.prototype.fire1a = function() {
   if(this.waves_fired < 4) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     var i;
     if(this.waves_fired % 2 == 0) i = 1;
     else i = 0;
@@ -184,7 +185,7 @@ Boss.prototype.fire1a = function() {
 */
 Boss.prototype.fire1b = function() {
   if(this.waves_fired < 8) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     var i;
     if(this.waves_fired % 2 == 0) i = 1;
     else i = 0;
@@ -216,7 +217,7 @@ Boss.prototype.fire1b = function() {
 */
 Boss.prototype.fire2a = function() {
   if(this.waves_fired < 4) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
@@ -248,7 +249,7 @@ Boss.prototype.fire2a = function() {
 */
 Boss.prototype.fire2b = function() {
   if(this.waves_fired < 4) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
@@ -289,7 +290,7 @@ Boss.prototype.fire2b = function() {
 */
 Boss.prototype.fire3a = function(x, y) {
 if(this.waves_fired < 4) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     
     var bullet;
@@ -347,7 +348,7 @@ Boss.prototype.fire3b = function(x, y) {
    console.log(this.asteroids);
   }
   if(this.waves_fired < 4) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     
     var bullet;
@@ -381,7 +382,7 @@ Boss.prototype.fire3b = function(x, y) {
 */
 Boss.prototype.fire4a = function() {
   if(this.waves_fired < 3) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xFF62F0, this.dmg, "bullet", 0);
@@ -419,7 +420,7 @@ Boss.prototype.fire4a = function() {
 */
 Boss.prototype.fire4b = function() {
   if(this.waves_fired < 6) {
-    this.firing_sound.play();
+    this.firing_sound.play("", 0, this.volume);
     console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xE41AD0, this.dmg, "bullet", 0);

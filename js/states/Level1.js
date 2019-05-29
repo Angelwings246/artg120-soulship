@@ -6,39 +6,15 @@ var frames;
 var Level1 = function(game) {};
 
 Level1.prototype = {
-	init: function(main, alt) {
+	init: function(main, alt, music_vol, sfx_vol) {
 		this.main = main;
 		this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
 
 	},
 	preload: function(){
- //    //preload assets
-	// game.load.path = "assets/img/";
- //    game.load.image("background", "bg.png");
-
- //    // // game.load.image("player", "player ship.png");
- //    // game.load.image("player broken", "player ship broken.png");
- //    // game.load.atlas("player_death", "player_death.png", "player_death.json");
- //    game.load.image("enemy", "enemy.png");
- //    game.load.image("bullet", "bullet.png");
- //    game.load.image("heal", "hpDrop.png");
- //    game.load.image("stars", "Stars.png");
- //    game.load.image("stars2", "Stars2.png");
- //    game.load.image("asteroid", "Asteroid.png");
- //    game.load.image("asteroid2", "Asteroid2.png");
- //    game.load.image("hp bar", "hp bar.png");
- //    game.load.image("red", "hp red.png");
-
- //    game.load.path = "assets/audio/";
- //    game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
- //    game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
-
-
- //    game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
- //    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
- //    game.load.audio("hit", ["EnemyGetsHit.mp3"]);
- //    game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
- //    game.load.audio('alarm', ["Alarm.mp3"]);
+ //all preloading done in Load state
 	},
 	create: function(){
     //set up scrolling background with multiple layers of stars
@@ -72,7 +48,7 @@ Level1.prototype = {
 
     //PlayerShip(game, sounds, key, frame)  
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
@@ -240,7 +216,7 @@ Level1.prototype = {
   heal: function(player, pickup) {
     player.hp += this.HEALING;
     if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
-    this.heal_sound.play();
+    this.heal_sound.play("", 0, this.sfx_vol);
     pickup.destroy();
     if(this.ready) this.ending();
   },
@@ -278,7 +254,7 @@ Level1.prototype = {
   spawn: function(x, y, key, frame) {
     //spawns a series of enemies that goes in a sine wave towards the player
       console.log('spawning enemy');
-      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, this.sfx_vol, false);
       this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
@@ -292,7 +268,7 @@ Level1.prototype = {
   basicSpawn: function(x, y, key, frame) {
     //spawns a series of enemies that goes in a sine wave towards the player
       console.log('spawning enemy');
-      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, this.sfx_vol, false);
       this.basic_enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
