@@ -177,7 +177,7 @@ TutorialPt1.prototype = {
 
   if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
       game.sound.stopAll()﻿;
-      game.state.start('TutorialPt2', true, false, this.main, this.alt);
+      game.state.start('Cutscene2', true, false, this.main, this.alt);
 	}
   }
 };
