@@ -65,9 +65,11 @@ function PlayerShip(game, sounds, key, frame, main, alt){
 
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
-  this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "flame small");
+  this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "s1");
   this.flame.anchor.x = 1;
   this.flame.anchor.y = 0.5;
+  this.flame.animations.add("small", Phaser.Animation.generateFrameNames("s", 1, 3, "", 1), 8, true);
+  this.flame.animations.add("big", Phaser.Animation.generateFrameNames("b", 1, 3, "", 1), 8, true);
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -216,8 +218,8 @@ PlayerShip.prototype.update = function(){
   this.flame.y = this.body.y + 16;
   
   //make flame big when going forward
-  if(this.body.velocity.x > 10) this.flame.frameName = "flame big";
-  else this.flame.frameName = "flame small";
+  if(this.body.velocity.x > 10) this.flame.animations.play("big");
+  else this.flame.animations.play("small");
 }
 
 //player shoots a bullet and loses 1 hp

@@ -11,15 +11,20 @@ GameOver.prototype = {
   },
   preload: function() {
     //preload assets
-    game.load.path = "assets/img/";
-    game.load.image("background", "bg.png");
+    // game.load.path = "assets/img/";
+    // game.load.image("background", "bg.png");
   },
 	create: function(){
     game.add.image(0, 0, "background");
     //Victory message
-    if(this.victory) game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});
-
-		var resetText = game.add.text(game.width/2, game.height/2, 'Game Over, Press R to reset', {fontSize: "32px", fill:"#FFFFFF"});
+    if(this.victory) {
+      game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});
+    }
+    else {
+      game.add.image(0, 0, "gameover loss");
+      game.add.bitmapText(game.width/2, game.height/8 + 40, "aldrich64", 'Game Over', 100).anchor.set(0.5);
+      game.add.bitmapText(game.width/2, 7*game.height/8, "aldrich64", 'Press R to Retry', 84).anchor.set(0.5);
+    }
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
