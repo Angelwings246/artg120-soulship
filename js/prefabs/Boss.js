@@ -127,7 +127,7 @@ Boss.prototype.fire = function(x, y) {
 
   //randomly calls a subfunction, variations depending on HP
   //calling a subfunction creates a timer that repeatedly calls the respective firing type
-  var pattern = 2;//game.rnd.integerInRange(0, 3);
+  var pattern = game.rnd.integerInRange(0, 3);
   switch(pattern) {
     case 0:
       if(this.hp > this.MAX_HEALTH/2)  this.firing = this.timer.loop(500, this.fire1a, this);

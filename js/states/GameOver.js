@@ -18,10 +18,11 @@ GameOver.prototype = {
   },
 	create: function(){
     game.add.image(0, 0, "background");
-    //Victory message
+    //Victory screen
     if(this.victory) {
       game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});
     }
+    //Loss screen
     else {
       game.add.image(0, 0, "gameover loss");
       game.add.bitmapText(game.width/2, game.height/8 + 40, "aldrich64", 'Game Over', 100).anchor.set(0.5);

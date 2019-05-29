@@ -2,9 +2,6 @@
 
 // be strict
 'use strict';
-//
-//	var frames;
-//	var timer;
 
 var BossLevel = function(game){};
 BossLevel.prototype = {
@@ -68,10 +65,6 @@ BossLevel.prototype = {
     this.phase1 = this.timer.loop(5000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
     this.timer.start(); //don't forget to start timer
 
-    //text to show HP before we get bars working
-    // this.player_hp_text = game.add.text(game.width/8, game.height - 100,"Player HP: " + this.player.hp, {fontSize: "32px", fill:"#FFFFFF"});
-    // this.boss_hp_text = game.add.text(3* game.width/4, game.height - 100,"Boss HP: " + this.boss.hp, {fontSize: "32px", fill:"#FFFFFF"});
-
     this.victory = false; //switch to true if the player wins
 
     //player health bar is from a prefab
@@ -98,12 +91,8 @@ BossLevel.prototype = {
           this.phase2 = this.timer.loop(15000, this.fire, this);
           this.timer.remove(this.phase1);
       }
-     
 
-      //update text
-      // this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
-
-      //spawn a health pack when the first part of the boss dies
+    //spawn a health pack when the first part of the boss dies
       if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {
         //Pickup(game, x, y, key, frame)
         var pickup = new Pickup(game, this.boss.top_pt.x, this.boss.top_pt.y, "heal", 0);
@@ -114,7 +103,7 @@ BossLevel.prototype = {
         this.pickups.add(pickup);
       }
 
-	 // game ends when player or boss hits 0 hp
+	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
@@ -137,7 +126,7 @@ BossLevel.prototype = {
       }
     },
     //called in the loop for the boss to attack
-	fire: function() {
+	  fire: function() {
 	  this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
     },
     //the character, be it player or enemy, takes damage
