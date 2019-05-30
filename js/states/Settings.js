@@ -7,7 +7,6 @@ Settings.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
-        console.log(this.music_vol + " " + this.sfx_vol);
 
   },
   preload: function() {
@@ -15,8 +14,9 @@ Settings.prototype = {
   },
   create: function(){
 
-    game.sound.stopAll();
+    // game.sound.stopAll();
     game.add.image(0, 0, "background");
+    this.test_sound = game.add.audio("pew");
 
     //set up all the labels
     game.add.bitmapText(game.width/5 - 15, game.height/8 - 50, "aldrich64", "Settings", 48);
@@ -127,18 +127,24 @@ Settings.prototype = {
       case this.music_down:
           if(this.music_vol >= 0.1) this.music_vol -= 0.1;
           this.music_vol = Math.round(10*this.music_vol)/10; //have to round because floats are weird
+          this.test_sound.play("", 0, this.music_vol);
           break;
       case this.music_up:
           if(this.music_vol <= 0.9) this.music_vol += 0.1;
           this.music_vol = Math.round(10*this.music_vol)/10;
+          this.test_sound.play("", 0, this.music_vol);
+
           break;
       case this.sfx_down:
           if(this.sfx_vol >= 0.1) this.sfx_vol -= 0.1;
-          this.sfx_vol = Math.round(10*this.sfx_vol)/10;          
+          this.sfx_vol = Math.round(10*this.sfx_vol)/10;    
+          this.test_sound.play("", 0, this.sfx_vol);
+      
           break;
       case this.sfx_up:
           if(this.sfx_vol <= 0.9) this.sfx_vol += 0.1;
           this.sfx_vol = Math.round(10*this.sfx_vol)/10;
+          this.test_sound.play("", 0, this.sfx_vol);
           break;                  
       default:
         break;

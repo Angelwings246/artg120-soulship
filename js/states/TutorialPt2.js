@@ -4,9 +4,12 @@ var timer;
 var TutorialPt2 = function(game) {};
 
 TutorialPt2.prototype = {  
-  init: function(main, alt) {
+  init: function(main, alt, music_vol, sfx_vol) {
     this.main = main;
     this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
+
   },
 	preload: function() {
    //all preloading done in Load state
@@ -42,7 +45,7 @@ TutorialPt2.prototype = {
 
     //PlayerShip(game, sounds, key, frame)  
 
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
     this.player.body.x = this.startX = game.width/4;
     this.player.body.y = this.startY = game.height/2;
@@ -63,7 +66,7 @@ TutorialPt2.prototype = {
     this.HEALING = 5; //value of heal pickup
 
 
-    //timer for boss firing pattern
+    //timer for spawning pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
     this.timer.loop(2000, this.spawn, this); 
@@ -120,7 +123,7 @@ TutorialPt2.prototype = {
 
 
     //restart upon death
-    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, 'TutorialPt2');
+    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
@@ -151,7 +154,7 @@ TutorialPt2.prototype = {
 		//Enemy(game, x, y, sounds, key, frame)
 
     if(this.enemies_spawned < this.NUM_ENEMIES) {
-  		var enemy = new Enemy(game, game.width, game.height/2 + 16, this.enemy_sounds, "enemy", "assault", false);
+  		var enemy = new Enemy(game, game.width, game.height/2 + 16, this.enemy_sounds, "enemy", "assault", this.sfx_vol, false);
   		this.enemies.add(enemy);
       enemy.rotation = Math.PI;
       enemy.can_fire = true;
@@ -181,7 +184,7 @@ TutorialPt2.prototype = {
   heal: function(player, pickup) {
     player.hp += this.HEALING;
     if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
-    this.heal_sound.play();
+    this.heal_sound.play("", 0, this.sfx_vol);
     pickup.destroy();
     if(this.ready) this.ending();
   },
@@ -189,7 +192,7 @@ TutorialPt2.prototype = {
   crashing: function(player, enemy) {
     if(enemy.body != null) {
       player.damage(3); //arbitrary number for now
-      enemy.destroy(); //destroy non-boss enemies upon crashing
+      enemy.hp = 0; //destroy non-boss enemies upon crashing
     }
   },
   //because once an enemy is killed, its bullets property becomes unreachable, transfer all bullets
@@ -212,7 +215,7 @@ TutorialPt2.prototype = {
     // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.player.flame.alpha = 1; //bring flame back
-    this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt);
+    this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 
   }
 

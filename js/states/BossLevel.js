@@ -2,15 +2,15 @@
 
 // be strict
 'use strict';
-//
-//	var frames;
-//	var timer;
 
 var BossLevel = function(game){};
 BossLevel.prototype = {
-  init: function(main, alt) {
+  init: function(main, alt, music_vol, sfx_vol) {
     this.main = main;
     this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
+
   },
 	preload: function(){
    //all preloading done in Load state
@@ -33,7 +33,7 @@ BossLevel.prototype = {
 
     //set up music
     this.intro = game.add.audio("boss intro");
-    this.intro.play();
+    this.intro.play("", 0, this.music_vol);
     this.music = game.add.audio("boss loop", 1, true);
 
     //set up sounds
@@ -46,12 +46,12 @@ BossLevel.prototype = {
 
     this.heal_sound = game.add.audio("heal");
 
-    //Boss(game, sounds, key_main, frame_main, key_side, frame_side)
-    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3");
+    //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
+    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt);
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
 
     //group of pickups (for now, just a heal)
@@ -65,10 +65,6 @@ BossLevel.prototype = {
     this.phase1 = this.timer.loop(5000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
     this.timer.start(); //don't forget to start timer
 
-    //text to show HP before we get bars working
-    // this.player_hp_text = game.add.text(game.width/8, game.height - 100,"Player HP: " + this.player.hp, {fontSize: "32px", fill:"#FFFFFF"});
-    // this.boss_hp_text = game.add.text(3* game.width/4, game.height - 100,"Boss HP: " + this.boss.hp, {fontSize: "32px", fill:"#FFFFFF"});
-
     this.victory = false; //switch to true if the player wins
 
     //player health bar is from a prefab
@@ -77,7 +73,7 @@ BossLevel.prototype = {
 	update: function() {
       
       //transition from the intro music to the loop
-      this.intro.onStop.add(function() {this.music.play()}, this);
+      this.intro.onStop.add(function() {this.music.play("", 0, this.music_vol)}, this);
 
       //collision checks
       //NOTE: Boss is an extension of Phaser.Group, so this should work.  Hopefully. 
@@ -95,12 +91,8 @@ BossLevel.prototype = {
           this.phase2 = this.timer.loop(15000, this.fire, this);
           this.timer.remove(this.phase1);
       }
-     
 
-      //update text
-      // this.boss_hp_text.text = "Boss HP: " + this.boss.hp; 
-
-      //spawn a health pack when the first part of the boss dies
+    //spawn a health pack when the first part of the boss dies
       if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {
         //Pickup(game, x, y, key, frame)
         var pickup = new Pickup(game, this.boss.top_pt.x, this.boss.top_pt.y, "heal", 0);
@@ -111,12 +103,12 @@ BossLevel.prototype = {
         this.pickups.add(pickup);
       }
 
-	 // game ends when player or boss hits 0 hp
+	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
         game.sound.stopAll();
-        game.state.start('GameOver', true, false, this.victory, this.main, this.alt, 'BossLevel');
+        game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
 	  }
       //debug cred: Nathan Altice inputs08.js
       if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
@@ -134,7 +126,7 @@ BossLevel.prototype = {
       }
     },
     //called in the loop for the boss to attack
-	fire: function() {
+	  fire: function() {
 	  this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
     },
     //the character, be it player or enemy, takes damage
@@ -149,7 +141,7 @@ BossLevel.prototype = {
     heal: function(player, pickup) {
         player.hp += this.HEALING;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
-        this.heal_sound.play();
+        this.heal_sound.play("", 0, this.sfx_vol);
         pickup.destroy();
     },
     //called when the player crashes into an enemy_sounds

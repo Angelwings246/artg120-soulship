@@ -26,6 +26,7 @@ Load.prototype = {
     //load all image files, atlases, fonts
 	  game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
+    game.load.image("gameover loss", "gameover loss.png");
     game.load.bitmapFont("aldrich64", "aldrich64.png", "aldrich64.fnt");
     game.load.image("start adventure", "start adventure.png");
     game.load.image("options", "options.png");
@@ -37,8 +38,6 @@ Load.prototype = {
     game.load.image("bullet", "bullet.png");
     game.load.atlas("enemy", "enemy.png", "enemy.json");
     game.load.image("boss main", "vortex.png");
-    // game.load.image("asteroid", "Asteroid.png");
-    // game.load.image("asteroid2", "Asteroid2.png");
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
     game.load.image("heal", "hpDrop.png");
@@ -49,8 +48,6 @@ Load.prototype = {
     game.load.image("tentacle", "tentacle.png");
     game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
     game.load.atlas("button", "button.png", "button.json");
-    // game.load.image("button dark", "button dark.png");
-    // game.load.image("button light", "button light.png");
 
 
     //load all audio files
@@ -65,18 +62,13 @@ Load.prototype = {
     game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
     game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
     game.load.audio('alarm', ["Alarm.mp3", "Alarm.ogg"]);
-
-
     game.load.audio("boss intro", ["music intro.mp3", "music intro.ogg"]);
     game.load.audio("boss loop", ["music loop.mp3", "music loop.ogg"]);
 
 		//create Loading bar image
 		var loadingBar = this.add.sprite(game.width/2, game.height/2, 'loading');
 		loadingBar.anchor.set(0.5);
-		game.load.setPreloadSprite(loadingBar);
-
-		//load graphics assets
-		//game.load.image('tempship', 'assets/img/tempship.png');		
+		game.load.setPreloadSprite(loadingBar);	
 
 	},
 	create: function(){
