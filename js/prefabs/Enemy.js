@@ -91,13 +91,13 @@ Enemy.prototype.update = function() {
 //fire function: currently plays the shooting noise and fires a 3-bullet spread
 Enemy.prototype.fire = function() {
   if(this.can_fire) {
-    console.log("pew");
+    // console.log("pew");
     this.firing_sound.play("", 0, this.volume);
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
     //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
     //this.bullets.add(bullet);
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 220, Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 250, Math.PI, 0xff0000, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
     //bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 5/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
     //this.bullets.add(bullet);
@@ -142,7 +142,6 @@ Enemy.prototype.follow_path = function() {
       this.body.velocity.y = this.path.vels.y[this.path_index];
       this.path_index++;
     }
-    console.log(this.body.center.x + ", " + this.body.center.y);
   }
 
 }
