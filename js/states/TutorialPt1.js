@@ -54,7 +54,7 @@ TutorialPt1.prototype = {
 	this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
 
 	//add tentacle 
-	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle');
+	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle', "idle1");
 	game.physics.enable(this.tentacle, Phaser.Physics.ARCADE);
 		this.tentacle.anchor.set(0.5);
 		this.tentacle.scale.setTo(2);
@@ -78,10 +78,10 @@ TutorialPt1.prototype = {
      else asteroid_key = "asteroid";
      
      //Enemy(game, x, y, sounds, key, frame)
-     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, "enemy", asteroid_key, false);
+     asteroid = new Enemy(this.game, this.game.width + Math.random() * 100, Math.random() * this.game.height, this.enemy_sounds, "enemy", asteroid_key, this.sfx_vol, false);
      asteroid.can_fire = false; //turn off the ability for asteroids to shoot bullets
      asteroid.body.velocity.x = game.rnd.integerInRange(-200, -100); 
-     asteroid.body.velocity.y = game.rnd.integerInRange(-20, 20); //remove velocity from the base Enemy type
+     asteroid.body.velocity.y = game.rnd.integerInRange(-20, 20); //random velocity
      asteroid.body.angularVelocity = game.rnd.integerInRange(-180,180);
      this.asteroids.add(asteroid);
  	}

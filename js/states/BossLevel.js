@@ -47,7 +47,7 @@ BossLevel.prototype = {
     this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
-    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle_idle", "tentacle_idle3", this.sfx_vol);
+    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle", "idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
@@ -93,19 +93,21 @@ BossLevel.prototype = {
       }
 
     //spawn a health pack when the first part of the boss dies
-      if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1) {
+      if(this.boss.top_pt.exists && this.boss.top_pt.hp <= 0 && this.boss.hp > 1 && this.pickups.countLiving() == 0) {
         //Pickup(game, x, y, key, frame)
         var pickup = new Pickup(game, this.boss.top_pt.x, this.boss.top_pt.y, "heal", 0);
         this.pickups.add(pickup);
       }
-      if(this.boss.bot_pt.exists && this.boss.bot_pt.hp <= 0 && this.boss.hp > 1) {
+      if(this.boss.bot_pt.exists && this.boss.bot_pt.hp <= 0 && this.boss.hp > 1 && this.pickups.countLiving() == 0) {
         var pickup = new Pickup(game, this.boss.bot_pt.x, this.boss.bot_pt.y, "heal", 0);
         this.pickups.add(pickup);
       }
 
 	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
-	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || this.boss.hp <= 0 || game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
+	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || 
+      (this.boss.hp <= 0 && (this.boss.top_pt.death_anim.isFinished && this.boss.bot_pt.death_anim.isFinished)) || 
+      game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		if(this.boss.hp <= 0) this.victory = true;
         game.sound.stopAll();
         game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');

@@ -45,8 +45,8 @@ Load.prototype = {
     game.load.image("corrupt bar", "hp bar.png");
     game.load.image("glow", "hp bar glow.png");
     game.load.image("red", "hp red.png");
-    game.load.image("tentacle", "tentacle.png");
-    game.load.atlas("tentacle_idle", "tentacle_idle.png", "tentacle_idle.json");
+    // game.load.image("tentacle", "tentacle.png");
+    game.load.atlas("tentacle", "tentacle.png", "tentacle.json");
     game.load.atlas("button", "button.png", "button.json");
 
 

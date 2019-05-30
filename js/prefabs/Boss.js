@@ -76,6 +76,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) 
   this.timer = game.time.create(false); //timer for firing stuff
   this.timer.start(); //remember to start it!
 
+  // this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
+
 
 }
 
@@ -453,5 +455,6 @@ Boss.prototype.fire4b = function() {
 
 //when the boss dies
 Boss.prototype.death = function() {
+  this.rotation = false;
   console.log("ded");
 }

@@ -217,7 +217,8 @@ PlayerShip.prototype.update = function(){
   //keep the flame with the player
   this.flame.x = this.body.x - 5;
   this.flame.y = this.body.y + 16;
-  
+
+
   //make flame big when going forward
   if(this.body.velocity.x > 10) this.flame.animations.play("big");
   else this.flame.animations.play("small");

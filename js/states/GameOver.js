@@ -12,9 +12,7 @@ GameOver.prototype = {
     this.previous = previous; //track the previous state the player was in
   },
   preload: function() {
-    //preload assets
-    // game.load.path = "assets/img/";
-    // game.load.image("background", "bg.png");
+    //all preloading done in Load state
   },
 	create: function(){
     game.add.image(0, 0, "background");
