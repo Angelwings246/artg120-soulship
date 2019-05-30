@@ -59,7 +59,7 @@ Enemy.prototype.update = function() {
   //buffer the outofboundskill so that objects that spawn offscreen don't instantly die
   if(this.body != null && (this.body.x < game.width/2 || this.body.y < 0 || this.body.y > game.height)) this.outOfBoundsKill = true;
 
-  if(this.path != null) this.follow_path();
+  if(this.path != null && this.body != null) this.follow_path();
 
   if(this.animated) this.animations.play("idle");
   if(this.hp <= 0) {
