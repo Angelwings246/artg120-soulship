@@ -43,8 +43,9 @@ function Enemy(game, x, y, sounds, key, frame, volume, animated) {
   this.path_index = 0;
 
   //add animations
-  if(this.animated) {
-  this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
+  if(key == "tentacle") {
+    this.animations.add("idle", Phaser.Animation.generateFrameNames("idle", 1, 8, "", 1), 10, true);
+    this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
   }
   else if (key == "enemy") {
       this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 5, "", 1), 8, false);

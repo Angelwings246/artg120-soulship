@@ -54,7 +54,7 @@ TutorialPt1.prototype = {
 	this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
 
 	//add tentacle 
-	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle');
+	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle', "idle1");
 	game.physics.enable(this.tentacle, Phaser.Physics.ARCADE);
 		this.tentacle.anchor.set(0.5);
 		this.tentacle.scale.setTo(2);
