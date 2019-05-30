@@ -78,6 +78,8 @@ Level1.prototype = {
     this.timer.start(); //don't forget to start timer
     this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
 
+    this.init_patterns();
+
     // this.spawningSineA = this.timer.add(500, this.spawnSineA, this);
     // this.spawningSineB = this.timer.add(10000, this.spawnSineB, this);
     // this.spawningZagA = this.timer.add(18000, this.spawnZagA, this);
@@ -93,10 +95,48 @@ Level1.prototype = {
     // this.timer.add(55000, this.ending, this);
     // this.timer.loop(2000, this.fire, this); 
 
+	},
+	update: function(){
+
+  if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
+        game.sound.stopAll()﻿;
+        game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'Level1');;
+  }    //collision checks
+    this.all_enemy_bullets.forEach(this.bullet_collision, this);
+    game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.basic_enemies, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.asteroid_enemies, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
+    game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
+    game.physics.arcade.overlap(this.player, this.basic_enemies, this.crashing, null, this);
+    game.physics.arcade.overlap(this.player, this.asteroid_enemies, this.crashing, null, this);
+
+            //debug cred: Nathan Altice inputs08.js
+    if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
+      this.debug = !this.debug;
+    }
+    // cheat to get to ending quickly
+    if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
+
+    //cleanup enemies that die from going offscreen
+    this.enemies.forEachDead(this.cleanup, this);
 
 
-    /*---TESTING PATH FUNCTIONALITY---*/
-    /* TESTING: Sine wave pattern
+	},
+   render: function() {
+    if(this.debug) {
+      //turn on all debug bodies
+      game.debug.body(this.player);
+      this.enemies.forEach(game.debug.body, game.debug);
+      // this.boss.bullets.forEach(game.debug.body, game.debug);
+      this.player.bullets.forEach(game.debug.body, game.debug);
+      game.debug.text(this.timer.seconds, 50, 50);
+    }
+  },
+  //set up all the movement patterns, kept outside create for organization 
+  init_patterns: function(){
+
+    /* Sine wave pattern 
     * Each "point" refers to essentially every PI/2, so vertices and intercepts:
     * With num_points = 6, it looks like:
 
@@ -105,16 +145,19 @@ Level1.prototype = {
        *    *     *
         \  /
          *
-
+    SINE A: one large pattern in the center
+    SINE B: two small patterns, one on top and on on bottom
     */
-    var num_points = 6;
+
+    //temp vars to calculate everything
+    var num_points = 8;
     var vy_max = 150;
     var vy = -vy_max;
 
     //calculate the x velocity using the number of desired points and the set y velocity.
     var vx = -(vy_max * game.width/num_points)/ (3/8 * game.height);
 
-    //setting up the empty object that will be used to hold the path information
+    //one large pattern as diagrammed above
     this.sineApattern = {
       points: {
         x: [],
@@ -124,7 +167,8 @@ Level1.prototype = {
         x: [],
         y: []
       }
-    }
+    };
+
     //filling up the pattern:
     for(let i = 0; i < num_points; i++) {
       var px = game.width - i* game.width/num_points; //x: divide equally, since vx is constant
@@ -158,7 +202,8 @@ Level1.prototype = {
         x: [],
         y: []
       }
-    }
+    };
+
     vy = -vy_max;
     vx = -(vy_max * game.width/num_points)/ (3/16 * game.height);
     for(let i = 0; i < num_points; i++) {
@@ -176,7 +221,7 @@ Level1.prototype = {
       this.sineBpattern1.vels.x.push(vx);
       this.sineBpattern1.vels.y.push(vy);
     }
-    this.testerB = new Enemy(game, game.width + 50, game.height/4, this.enemy_sounds, "enemy", "sine", false);
+    this.testerB = new Enemy(game, game.width + 50, game.height/4, this.enemy_sounds, "enemy", "sine", this.sfx_vol, false);
     this.testerB.body.velocity.x = vx;
     this.testerB.path = this.sineBpattern1;
     this.enemies.add(this.testerB);
@@ -210,63 +255,32 @@ Level1.prototype = {
       this.sineBpattern2.vels.y.push(vy);
     }
     console.log(this.sineBpattern2);
-    this.testerB2 = new Enemy(game, game.width + 50, 3*game.height/4, this.enemy_sounds, "enemy", "sine", false);
+    this.testerB2 = new Enemy(game, game.width + 50, 3*game.height/4, this.enemy_sounds, "enemy", "sine", this.sfx_vol, false);
     this.testerB2.body.velocity.x = vx;
     this.testerB2.path = this.sineBpattern2;
     this.enemies.add(this.testerB2);
 
 
-	},
-	update: function(){
-
-  if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
-        game.sound.stopAll()﻿;
-        game.state.start('GameOver', true, false, false, this.main, this.alt, 'Level1');;
-  }    //collision checks
-    this.all_enemy_bullets.forEach(this.bullet_collision, this);
-    game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
-    game.physics.arcade.overlap(this.basic_enemies, this.player.bullets, this.damage, null, this);
-    game.physics.arcade.overlap(this.asteroid_enemies, this.player.bullets, this.damage, null, this);
-    game.physics.arcade.overlap(this.player, this.pickups, this.heal, null, this);
-    game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
-    game.physics.arcade.overlap(this.player, this.basic_enemies, this.crashing, null, this);
-    game.physics.arcade.overlap(this.player, this.asteroid_enemies, this.crashing, null, this);
-
-            //debug cred: Nathan Altice inputs08.js
-    if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
-      this.debug = !this.debug;
-    }
-    // cheat to get to ending quickly
-    if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
 
-    this.enemies.forEachDead(this.cleanup, this);
 
-
-	},
-   render: function() {
-    if(this.debug) {
-      //turn on all debug bodies
-      game.debug.body(this.player);
-      this.enemies.forEach(game.debug.body, game.debug);
-      // this.boss.bullets.forEach(game.debug.body, game.debug);
-      this.player.bullets.forEach(game.debug.body, game.debug);
-      game.debug.text(this.timer.seconds, 50, 50);
-    }
-  },
-
+  }, 
     //the character, be it player or enemy, takes damage
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
     if(character instanceof Enemy && character.can_fire) {
+      //track the position of an enemy when it gets shot
       this.lastX = character.body.x;
       this.lastY = character.body.y;
+      //if that enemy dies, increment number of kills
       if(bullet.dmg >= character.hp) {
         this.enemies_killed++;
-        if (this.enemies_killed % 4 == 0){
+        //spawn a health pack every 5th kill
+        if (this.enemies_killed % 5 == 0){
           var pickup = new Pickup(game, this.lastX, this.lastY, "heal", 0);
           this.pickups.add(pickup);
         }
+        //remove the timers that determine the enemy's firing 
         this.timer.remove(character.firing);
         this.timer.remove(character.bullet_transfer);
       }
