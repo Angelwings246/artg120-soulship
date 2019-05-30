@@ -100,7 +100,7 @@ Level1.prototype = {
 
   if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
         game.sound.stopAll()﻿;
-        game.state.start('GameOver', true, false, false, this.main, this.alt, 'Level1');;
+        game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'Level1');;
   }    //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
     game.physics.arcade.overlap(this.enemies, this.player.bullets, this.damage, null, this);
@@ -214,11 +214,12 @@ Level1.prototype = {
 
   //called when the player picks up a health pack
   heal: function(player, pickup) {
-    player.hp += this.HEALING;
-    if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
-    this.heal_sound.play("", 0, this.sfx_vol);
-    pickup.destroy();
-    if(this.ready) this.ending();
+    if(player.hp > 0) {
+      player.hp += this.HEALING;
+      if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
+      this.heal_sound.play("", 0, this.sfx_vol);
+      pickup.destroy();
+    }
   },
 
   //called when the player crashes into an enemy_sounds

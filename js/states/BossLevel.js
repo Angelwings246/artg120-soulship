@@ -139,10 +139,12 @@ BossLevel.prototype = {
     },
     //called when the player picks up a health pack
     heal: function(player, pickup) {
+      if(player.hp > 0) {
         player.hp += this.HEALING;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
         this.heal_sound.play("", 0, this.sfx_vol);
         pickup.destroy();
+      }
     },
     //called when the player crashes into an enemy_sounds
     crashing: function(player, enemy) {
