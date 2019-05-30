@@ -118,6 +118,19 @@ Level1.prototype = {
     // cheat to get to ending quickly
     if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
+    //Update Stationary and Assault Enemies
+    if (this.basic_enemies_spawned > 0 && this.basic_enemies_spawned <= 15){
+      this.basic_enemies.forEach(this.updateStationary, this);
+    } 
+    if (this.basic_enemies_spawned > 15 && this.basic_enemies_spawned <= 30){
+          this.basic_enemies.forEach(this.updateAssault, this);
+    } 
+
+    // Call upon the wrath of the gods to smite your ship with big space rocks
+    if (this.asteroid_enemies_spawned <= 30){
+      this.asteroid_enemies.forEach(this.updateAsteroidStorm, this);
+    }
+
     //cleanup enemies that die from going offscreen
     this.enemies.forEachDead(this.cleanup, this);
 
@@ -183,7 +196,7 @@ Level1.prototype = {
   transfer: function(enemy) {
     this.all_enemy_bullets.addMultiple(enemy.bullets);
   },
-  
+  //destroy the enemies that have gone offscreen
   cleanup: function(enemy) {
     this.timer.remove(enemy.firing);
     this.timer.remove(enemy.bullet_transfer);
@@ -247,21 +260,6 @@ Level1.prototype = {
       }, this);
     console.log(this.loop);
 	},
-// //updates the enemies going in a single sine pattern
-//   updateSineA: function(enemy) {
-//     if(enemy.body != null) {
-//       //set the velocity going upwards on spawn
-//       if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -200;
-//       //if the enemy is above the 1/4 line, go down
-//       if (enemy.body.y < game.height/8){
-//           enemy.body.velocity.y = 200;
-//       }
-//       //if the enemy is below the 3/4 line, go up
-//       if (enemy.body.y > game.height*0.875){
-//           enemy.body.velocity.y = -200;
-//       }
-//       }
-//   },
 
 	    //spawns a series of enemies that goes in two alternating sine waves towards the player
 	spawnSineB: function() {
@@ -276,34 +274,6 @@ Level1.prototype = {
   }, this);
 
 	},
-
-  // updateSineB: function(enemy){    
-  //       if(enemy.body != null) {
-  //   if(this.enemies.getIndex(enemy) % 2 == 0) {
-  //     if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
-  //     //if the enemy is above the 1/8 line, go down
-  //     if (enemy.body.y < game.height*0.125 - 50){
-  //         enemy.body.velocity.y = 300;
-  //     }
-  //     //if the enemy is below the 3/8 line, go up
-  //     if (enemy.body.y > game.height*0.375 + 50){
-  //         enemy.body.velocity.y = -300;
-  //     }
-  //   } 
-  //   else {
-  //     if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = 300;
-  //     //if the enemy is above the 5/8 line, go down
-  //     if (enemy.body.y < game.height*0.625 - 50){
-  //         enemy.body.velocity.y = 300;
-  //     }
-  //     //if the enemy is below the 7/8 line, go up
-  //     if (enemy.body.y > game.height*0.875 + 50){
-  //         enemy.body.velocity.y = -300;
-  //     }
-  //   }
-  // }
-
-  // },
 
 	    //spawns a series of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
 	spawnZagA: function() {
@@ -340,18 +310,6 @@ Level1.prototype = {
   }, this);
 	},
 
-  // updateZagB: function(enemy){    
-  //       if(enemy.body != null) {
-
-  //      //set the velocity going upwards on spawn
-  //     //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-  //     //if the enemy is above the 1/4 line, go down
-  //     if (enemy.body.x < game.width/5){
-  //         enemy.body.velocity.y = -200;
-  //         enemy.body.velocity.x = 150;
-  //     }
-  //   }
-  // },
     spawnZagC: function() {
     //Enemy(game, x, y, sounds, key, frame)
     this.loop = this.timer.loop(400, function() {
@@ -364,28 +322,6 @@ Level1.prototype = {
   }, this);
   },
 
-  //   updateZagC: function(enemy){    
-  //         if(enemy.body != null) {
-
-  //      //set the velocity going upwards on spawn
-  //     //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-  //     if(this.enemies.getIndex(enemy) % 2 == 0) {
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-
-  //       if (enemy.body.x < game.width/5){
-  //           enemy.body.velocity.y = -200;
-  //           enemy.body.velocity.x = 150;
-  //       }
-  //     } else {
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-
-  //       if (enemy.body.x < game.width/5){
-  //           enemy.body.velocity.y = 200;
-  //           enemy.body.velocity.x = 150;
-  //       }
-  //     }
-  //   }
-  // },
 
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeA: function() {
@@ -399,28 +335,7 @@ Level1.prototype = {
   }, this);
 	},
 
-  // updateLshapeA: function(enemy){
-  //       if(enemy.body != null) {
 
-  //     if(this.enemies.getIndex(enemy) % 2 == 0) {
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-
-  //       if (enemy.body.x < game.width/2){
-  //           enemy.body.velocity.x = 0;
-  //           enemy.body.velocity.y = -200;
-  //           //enemy.body.velocity.x = 200;
-  //       }
-  //     } else {
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -300;
-
-  //       if (enemy.body.x < game.width/2){
-  //           enemy.body.velocity.x = 0;
-  //           enemy.body.velocity.y = 200;
-  //           //enemy.body.velocity.x = 200;
-  //       }
-  //     }
-  //   }
-  // },
 	    //spawns a series of three sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -434,34 +349,6 @@ Level1.prototype = {
   }, this);
 	},
 
-  // updateLshapeB: function(enemy){
-  //       if(enemy.body != null) {
-
-  //     if(this.enemies.getIndex(enemy) % 2 == 0 && this.enemies.getIndex(enemy) % 3 != 0) {
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
-
-  //       if (enemy.body.x < game.width/2){
-  //           enemy.body.velocity.x = 0;
-  //           enemy.body.velocity.y = -200;
-  //           //enemy.body.velocity.x = 200;
-  //       }
-  //     } else if (this.enemies.getIndex(enemy) % 3 == 0 && this.enemies.getIndex(enemy) % 2 != 0){
-  //           if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -400;
-
-  //       if (enemy.body.x < game.width/2){
-  //           enemy.body.velocity.x = 0;
-  //           enemy.body.velocity.y = 200;
-  //           //enemy.body.velocity.x = 200;
-  //       }
-  //     } else {     
-  //       if (enemy.body.x < game.width/2){
-  //           enemy.body.velocity.x = -250;
-  //           enemy.body.velocity.y = 0;
-  //           //enemy.body.velocity.x = 200;
-  //       }
-  //     }
-  //   }
-  // },
 	    //spawns a set of enemies that go towards the player and then stay and fire
 	spawnStationary: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -624,10 +511,6 @@ Level1.prototype = {
       this.sineBpattern1.vels.x.push(vx);
       this.sineBpattern1.vels.y.push(vy);
     }
-    // this.testerB = new Enemy(game, game.width + 50, game.height/4, this.enemy_sounds, "enemy", "sine", this.sfx_vol, false);
-    // this.testerB.body.velocity.x = vx;
-    // this.testerB.path = this.sineBpattern1;
-    // this.enemies.add(this.testerB);
 
     //small pattern as diagrammed above, bottom half
     this.sineBpattern2 = {
@@ -657,12 +540,6 @@ Level1.prototype = {
       this.sineBpattern2.vels.x.push(vx);
       this.sineBpattern2.vels.y.push(vy);
     }
-    // console.log(this.sineBpattern2);
-    // this.testerB2 = new Enemy(game, game.width + 50, 3*game.height/4, this.enemy_sounds, "enemy", "sine", this.sfx_vol, false);
-    // this.testerB2.body.velocity.x = vx;
-    // this.testerB2.path = this.sineBpattern2;
-    // this.enemies.add(this.testerB2);
-
 
     /*Zag pattern.  Not zigzag, just the zag part. (Also, math gets easier from here)
     * The "point" after start refers to the vertex at which the direction of travel changes:
@@ -818,8 +695,5 @@ Level1.prototype = {
     this.LshapeDpattern.points.y.push(2*game.height/3);
     this.LshapeDpattern.vels.x.push(0);
     this.LshapeDpattern.vels.y.push(200);
-
-
-
   }, 
 };
