@@ -137,7 +137,7 @@ Level1.prototype = {
   init_patterns: function(){
 
     /* Sine wave pattern 
-    * Each "point" refers to essentially every PI/2, so vertices and intercepts:
+    * Each "point" after start refers to essentially every PI/2, so vertices and intercepts:
     * With num_points = 6, it looks like:
 
                *
@@ -192,7 +192,7 @@ Level1.prototype = {
     this.tester.path = this.sineApattern;
     // this.enemies.add(this.tester);
 
-    //setting up the empty object that will be used to hold the path information
+    //small pattern as diagrammed above, top half
     this.sineBpattern1 = {
       points: {
         x: [],
@@ -226,7 +226,7 @@ Level1.prototype = {
     this.testerB.path = this.sineBpattern1;
     this.enemies.add(this.testerB);
 
-    //setting up the empty object that will be used to hold the path information
+    //small pattern as diagrammed above, bottom half
     this.sineBpattern2 = {
       points: {
         x: [],
@@ -236,7 +236,7 @@ Level1.prototype = {
         x: [],
         y: []
       }
-    }
+    };
     vy = vy_max;
     vx = -(vy_max * game.width/num_points)/ (3/16 * game.height);
     for(let i = 0; i < num_points; i++) {
@@ -261,6 +261,58 @@ Level1.prototype = {
     this.enemies.add(this.testerB2);
 
 
+    /*Zag pattern.  Not zigzag, just the zag part. (Also, math gets easier from here)
+    * The "point" after start refers to the vertex at which the direction of travel changes:
+    * 
+    *  *-----------
+    *   \
+    *    \
+    *     
+    * ZAG A: spawns on the top, then travels down
+    * ZAG B: spawns on the bottom, then travels up 
+    */
+
+    //pattern diagrammed above, starts at top
+    this.zagApattern = {
+      points: {
+        x: [],
+        y: []
+      },
+      vels: {
+        x: [],
+        y: []
+      }
+    };
+    this.zagApattern.points.x.push(0);
+    this.zagApattern.points.y.push(game.height/4);
+    this.zagApattern.vels.x.push(-150);
+    this.zagApattern.vels.y.push(0);
+
+    this.zagApattern.points.x.push(game.width/5);
+    this.zagApattern.points.y.push(game.height/4);
+    this.zagApattern.vels.x.push(150);
+    this.zagApattern.vels.y.push(200);
+
+    //pattern diagrammed above, starts at bottom
+    this.zagBpattern = {
+      points: {
+        x: [],
+        y: []
+      },
+      vels: {
+        x: [],
+        y: []
+      }
+    };
+    this.zagBpattern.points.x.push(0);
+    this.zagBpattern.points.y.push(3*game.height/4);
+    this.zagBpattern.vels.x.push(-150);
+    this.zagBpattern.vels.y.push(0);
+
+    this.zagBpattern.points.x.push(game.width/5);
+    this.zagBpattern.points.y.push(3*game.height/4);
+    this.zagBpattern.vels.x.push(150);
+    this.zagBpattern.vels.y.push(-200);
 
 
 
