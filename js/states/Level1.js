@@ -11,6 +11,7 @@ Level1.prototype = {
 		this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+    console.log(this.music_vol, this.sfx_vol);
 
 	},
 	preload: function(){
@@ -422,7 +423,7 @@ Level1.prototype = {
   ending: function() {
     game.add.text(game.width/8, 170,"LEVEL CLEARED",{fontSize: "32px", fill:"#FFFF00"});
     game.add.text(game.width/8, 250,"ENTERING VOID. PLEASE PREPARE",{fontSize: "32px", fill:"#00FFFF"});
-    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt);
+    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   },
     //set up all the movement patterns, kept outside create for organization 
   init_patterns: function(){

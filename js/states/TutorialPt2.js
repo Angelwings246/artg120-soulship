@@ -9,6 +9,7 @@ TutorialPt2.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+    console.log(this.music_vol, this.sfx_vol);
 
   },
 	preload: function() {
@@ -118,7 +119,7 @@ TutorialPt2.prototype = {
       warning2.alpha = 0;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
-      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , 0.5);
+      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_vol/2);
     }
 
 

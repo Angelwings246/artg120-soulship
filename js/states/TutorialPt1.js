@@ -10,6 +10,8 @@ TutorialPt1.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+        console.log(this.music_vol, this.sfx_vol);
+
 
   },
   preload: function() {

@@ -32,6 +32,7 @@ Load.prototype = {
     game.load.image("options", "options.png");
     game.load.image("credits", "credits.png");
     game.load.image("restore defaults", "restore defaults.png");
+    game.load.image("retry", "retry.png");
     game.load.image("return to menu", "return to menu.png");
     game.load.atlas("player", "player.png", "player.json");
     game.load.atlas("flame", "flame.png", "flame.json");

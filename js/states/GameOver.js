@@ -10,21 +10,28 @@ GameOver.prototype = {
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
     this.previous = previous; //track the previous state the player was in
+        console.log(this.music_vol, this.sfx_vol);
+
   },
   preload: function() {
     //all preloading done in Load state
   },
 	create: function(){
+    game.sound.stopAll();
     game.add.image(0, 0, "background");
     //Victory screen
     if(this.victory) {
       game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});
+      this.menu = game.add.button(game.width/2, 7*game.height/8 + 40, "return to menu", this.changeState, this).anchor.set(0.5);
+
     }
     //Loss screen
     else {
       game.add.image(0, 0, "gameover loss");
-      game.add.bitmapText(game.width/2, game.height/8 + 40, "aldrich64", 'Game Over', 100).anchor.set(0.5);
-      game.add.bitmapText(game.width/2, 7*game.height/8, "aldrich64", 'Press R to Retry', 84).anchor.set(0.5);
+      game.add.bitmapText(game.width/2, game.height/8 + 40, "aldrich64", 'Game Over', 150).anchor.set(0.5);
+      this.retry = game.add.button(game.width/2, 5*game.height/6, "retry", this.changeState, this).anchor.set(0.5);
+      this.menu = game.add.button(game.width/2, 7*game.height/8 + 40, "return to menu", this.changeState, this).anchor.set(0.5);
+      // game.add.bitmapText(game.width/2, 7*game.height/8, "aldrich64", 'Press R to Retry', 84).anchor.set(0.5);
     }
 	},
 	update: function(){
@@ -36,5 +43,22 @@ GameOver.prototype = {
     }
 
 
-	}
+	},
+    //detects which button was pressed and goes to the corresponding state
+    changeState: function(button, pointer, isOver) {
+      var state;
+      switch(button.key) {
+        case "retry":
+          state = this.previous;
+          break;
+        case "return to menu":
+          state = "MainMenu";
+          break;
+        default:
+          console.log(button);
+          break; 
+      }
+      game.sound.stopAll()﻿;
+      game.state.start(state, true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    }
 };
