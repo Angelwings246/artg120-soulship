@@ -455,6 +455,6 @@ Boss.prototype.fire4b = function() {
 
 //when the boss dies
 Boss.prototype.death = function() {
-  this.rotation = false;
+  this.rotating = false;
   console.log("ded");
 }
