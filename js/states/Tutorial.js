@@ -33,7 +33,7 @@ Tutorial.prototype = {
 
 	dialogue1: function(){
 		//Tutorial Dialogue/Instructions
-		var intro1 = game.add.text(game.width/2 -200, game.height/2,'Captain! Come in Captain!', {fontSize: "28px", fill:"#FFFFFF"});
+		var intro1 = game.add.bitmapText(game.width/2 -200, game.height/2, 'aldrich64', 'Captain! Come in Captain!', 28);
 		intro1.anchor.setTo = 0.5;
 		intro1.alpha = 0;
 
@@ -43,7 +43,7 @@ Tutorial.prototype = {
 
 	dialogue2: function(){
 		//Tutorial Dialogue/Instructions
-		var intro2 = game.add.text(game.width/2 -400, game.height/2, 'Get ahold of yourself! You are in the middle of an asteroid belt!', {fontSize: "28px", fill:"#FFFFFF"});
+		var intro2 = game.add.bitmapText(game.width/2 -400, game.height/2, 'aldrich64', 'Get ahold of yourself! You are in the middle of an asteroid belt!', 28);
 		intro2.anchor.setTo = 0.5;
 		intro2.alpha = 0;
 
@@ -52,7 +52,7 @@ Tutorial.prototype = {
 
 	dialogue3: function(){
 		//Tutorial Dialogue/Instructions
-		var intro3 = game.add.text(game.width/2 -400, game.height/2 -50, 'Remember how to pilot your ship? \nUse the WASD buttons on your terminal to steer and \nthe OUTER-SPACEBAR to fire your weapons', {fontSize: "28px", fill:"#FFFFFF"});
+		var intro3 = game.add.bitmapText(game.width/2 -400, game.height/2 -50, 'aldrich64', 'Remember how to pilot your ship? \nUse the WASD or arrow key buttons on your terminal to steer and \nthe OUTER-SPACEBAR to fire your weapons', 28);
 		intro3.anchor.setTo = 0.5;
 		intro3.alpha = 0;
 
@@ -63,7 +63,7 @@ Tutorial.prototype = {
 
 	dialogue4: function(){
 		//Tutorial Dialogue/Instructions
-		var intro4 = game.add.text(game.width/2 -300, game.height/2, 'Hazards inbound! Be careful Captain, and stay safe. \nWe will reconvene soon.', {fontSize: "28px", fill:"#FFFFFF"});
+		var intro4 = game.add.bitmapText(game.width/2 -300, game.height/2, 'aldrich64','Hazards inbound! Be careful Captain, and stay safe. \nWe will reconvene soon.', 28);
 		intro4.anchor.setTo = 0.5;
 		intro4.alpha = 0;
 		
@@ -77,7 +77,7 @@ Tutorial.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 
     if (timer >= 25 || game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()){ 
-	    game.state.start('TutorialPt1', true, false, this.main, this.alt);
+	    game.state.start('Cutscene1', true, false, this.main, this.alt);
 	}
 
 	}

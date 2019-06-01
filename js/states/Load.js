@@ -52,6 +52,18 @@ Load.prototype = {
     // game.load.image("button dark", "button dark.png");
     // game.load.image("button light", "button light.png");
 
+
+    // load the Cutscene1 images
+    game.load.path = 'cutscenes/Cutscene1/';
+    game.load.image('1commdevice', '1 comm device.png');
+    game.load.image('2asteroidbelt', '2 Asteroid belt.png');
+    game.load.image('3computerwarningblack', '3 computer warning black.png');
+    game.load.image('3computerwarningdarker', '3 computer warning darker.png');
+    game.load.image('3computerwarninglighter', '3 computer warning lighter.png');
+    game.load.image('4controls', '4 controls.png');
+
+
+    // load the Cutscene2 images
     game.load.path = "cutscenes/Cutscene2/";
     game.load.image("1alarmsoff", "1 alarms off.png");
     game.load.image("1alarmson", "1 alarms on.png"); 

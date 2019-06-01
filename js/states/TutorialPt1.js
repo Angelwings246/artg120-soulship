@@ -103,19 +103,19 @@ TutorialPt1.prototype = {
 
 
   warning1: function(){
-	    var warning1 = game.add.text(game.width/2 , game.height/2 + 220,'<- Warning!', {fontSize: "28px", fill:"#FF0000"});
+	    var warning1 = game.add.bitmapText(game.width/2 , game.height/2 + 220,'aldrich64', '<- Warning!', 28);
 			warning1.anchor.setTo = 0.5;
 			warning1.alpha = 0;
 			var tween = game.add.tween(warning1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
 	warning2: function(){
-			var warning2 = game.add.text(game.width/2 +100 , 250,'Unknown Threat', {fontSize: "28px", fill:"#FF0000"});
+			var warning2 = game.add.bitmapText(game.width/2 +100 , 250,'aldrich64', 'Unknown Threat', 28);
 			warning2.anchor.setTo = 0.5;
 			warning2.alpha = 0;
 			var tween = game.add.tween(warning2).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
 	warning3: function(){
-			var warning3 = game.add.text(100, 100,'COORDINATES SET, \nRECALCULATING', {fontSize: "28px", fill:"#FF0000"});
+			var warning3 = game.add.bitmapText(100, 100,'aldrich64', 'COORDINATES SET, \nRECALCULATING', 28);
 			warning3.anchor.setTo = 0.5;
 			warning3.alpha = 0;
 			var tween = game.add.tween(warning3).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);

@@ -17,9 +17,9 @@ GameOver.prototype = {
 	create: function(){
     game.add.image(0, 0, "background");
     //Victory message
-    if(this.victory) game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});
+    if(this.victory) game.add.bitmapText(game.width/2, game.height/3, 'aldrich64','Congrats you did it', 32);
 
-		var resetText = game.add.text(game.width/2, game.height/2, 'Game Over, Press R to reset', {fontSize: "32px", fill:"#FFFFFF"});
+		var resetText = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', 'Game Over, Press R to reset', 32);
 	},
 	update: function(){
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
