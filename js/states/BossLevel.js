@@ -47,13 +47,15 @@ BossLevel.prototype = {
 
     this.heal_sound = game.add.audio("heal");
 
+    //PlayerShip(game, sounds, key, frame)  
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
+    game.add.existing(this.player);
+
+
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
     this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle", "idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
-    //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
-    game.add.existing(this.player);
 
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();

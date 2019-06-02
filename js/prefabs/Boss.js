@@ -77,7 +77,9 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) 
   this.timer.start(); //remember to start it!
 
   // this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
-
+  this.target = game.add.image(0, 0, "target", 0);
+  this.target.anchor.setTo(0.5);
+  this.target.alpha = 0;
 
 }
 
@@ -292,6 +294,9 @@ Boss.prototype.fire2b = function() {
 */
 Boss.prototype.fire3a = function(x, y) {
 if(this.waves_fired < 4) {
+    this.target.x = x;
+    this.target.y = y;
+    this.target.alpha = 1;
     this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     
@@ -316,7 +321,10 @@ if(this.waves_fired < 4) {
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing); //remove timer when done
+  else {
+  this.timer.remove(this.firing); //remove timer when done
+  this.target.alpha = 0;
+  }
 
 }
 
@@ -350,6 +358,9 @@ Boss.prototype.fire3b = function(x, y) {
    console.log(this.asteroids);
   }
   if(this.waves_fired < 4) {
+    this.target.x = x;
+    this.target.y = y;
+    this.target.alpha = 1;
     this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     
@@ -374,7 +385,10 @@ Boss.prototype.fire3b = function(x, y) {
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing); //remove timer when done
+  else {
+  this.timer.remove(this.firing); //remove timer when done
+  this.target.alpha = 0;
+  }
 }
 
 /* --- Firing Type 4 Variation A ---

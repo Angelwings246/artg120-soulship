@@ -47,7 +47,7 @@ Load.prototype = {
     game.load.image("glow", "hp bar glow.png");
     game.load.image("red", "hp red.png");
     game.load.image("ball", "ball of tentacles.png");
-    // game.load.image("tentacle", "tentacle.png");
+    game.load.image("target", "target.png");
     game.load.atlas("tentacle", "tentacle.png", "tentacle.json");
     game.load.atlas("button", "button.png", "button.json");
 
