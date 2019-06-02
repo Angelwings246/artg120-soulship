@@ -53,7 +53,7 @@ Load.prototype = {
 
 
     // load the Cutscene1 images
-    game.load.path = 'cutscenes/Cutscene1/';
+    game.load.path = 'assets/img/cutscenes/Cutscene1/';
     game.load.image('1commdevice', '1 comm device.png');
     game.load.image('2asteroidbelt', '2 Asteroid belt.png');
     game.load.image('3computerwarningblack', '3 computer warning black.png');
@@ -63,7 +63,7 @@ Load.prototype = {
 
 
     // load the Cutscene2 images
-    game.load.path = "cutscenes/Cutscene2/";
+    game.load.path = "assets/img/cutscenes/Cutscene2/";
     game.load.image("1alarmsoff", "1 alarms off.png");
     game.load.image("1alarmson", "1 alarms on.png"); 
     game.load.image("1alarmsrays", "1 alarms rays.png");
@@ -108,10 +108,6 @@ Load.prototype = {
 		loadingBar.anchor.set(0.5);
 		game.load.setPreloadSprite(loadingBar);
 
-		//load graphics assets
-		//game.load.image('tempship', 'assets/img/tempship.png');	
-        // load cutscenes
-		game.load.setPreloadSprite(loadingBar);	
 
 	},
 	create: function(){

@@ -172,7 +172,7 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 23){
-		this.health_bar.outer.frameName = "hp bar01";
+		if(this.health_bar.outer.frameName == "hp bar pt 1") this.health_bar.outer.frameName = "hp bar01";
         this.player.frameName = "player ship broken";
         this.health_bar.outer.animations.play("idle");
 		if (timer >= 33){
@@ -183,7 +183,7 @@ TutorialPt1.prototype = {
 
   if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
       game.sound.stopAll()﻿;
-      game.state.start('Cutscene2', true, false, this.main, this.alt);
+      game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 
 	}
   }
