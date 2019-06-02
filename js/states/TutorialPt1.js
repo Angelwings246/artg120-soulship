@@ -172,7 +172,7 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 23){
-		this.health_bar.outer.frameName("hp bar01");
+		this.health_bar.outer.frameName = "hp bar01";
         this.player.frameName = "player ship broken";
 
 		if (timer >= 33){
