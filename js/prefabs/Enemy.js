@@ -6,7 +6,7 @@
  * sounds - array of sounds that the enemy will play upon certain events. 
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit
  */
-function Enemy(game, x, y, sounds, key, frame, animated) {
+function Enemy(game, x, y, sounds, key, frame, volume, animated) {
   console.log("enemy spawning at x: %s y: %s", x, y);
   //call Phaser.Sprite constructor (game, x, y, key, frame)
   Phaser.Sprite.call(this, game, x, y, key, frame);
@@ -20,6 +20,7 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.death_sound = sounds[0];
   this.firing_sound = sounds[1];
   this.hit_sound = sounds[2];
+  this.volume = volume;
   
   //adds a flag so that some enemies cannot shoot even if fire() is called
   this.can_fire = true;
@@ -36,9 +37,15 @@ function Enemy(game, x, y, sounds, key, frame, animated) {
   this.checkWorldBounds = true;
   this.outOfBoundsKill = false;
   // this.outOfBoundsKill = true;
+
+  //used to have the enemies move on a set path, see follow_path below
+  this.path = null;
+  this.path_index = 0;
+
   //add animations
-  if(this.animated) {
-  this.animations.add("idle", Phaser.Animation.generateFrameNames(key, 1, 8, "", 1), 10, true);
+  if(key == "tentacle") {
+    this.animations.add("idle", Phaser.Animation.generateFrameNames("idle", 1, 8, "", 1), 10, true);
+    this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
   }
   else if (key == "enemy") {
       this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 5, "", 1), 8, false);
@@ -54,6 +61,7 @@ Enemy.prototype.update = function() {
   //buffer the outofboundskill so that objects that spawn offscreen don't instantly die
   if(this.body != null && (this.body.x < game.width/2 || this.body.y < 0 || this.body.y > game.height)) this.outOfBoundsKill = true;
 
+  if(this.path != null && this.body != null) this.follow_path();
 
   if(this.animated) this.animations.play("idle");
   if(this.hp <= 0) {
@@ -84,13 +92,13 @@ Enemy.prototype.update = function() {
 //fire function: currently plays the shooting noise and fires a 3-bullet spread
 Enemy.prototype.fire = function() {
   if(this.can_fire) {
-    console.log("pew");
-    this.firing_sound.play();
+    // console.log("pew");
+    this.firing_sound.play("", 0, this.volume);
 
 // Bullet(game, x, y, speed, angle, color, damage, key, frame) 
     //var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 150, 3/4 * Math.PI, 0xff0000, this.dmg, "bullet", 0);
     //this.bullets.add(bullet);
-    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 220, Math.PI, 0xff0000, this.dmg, "bullet", 0);
+    var bullet = new Bullet(game, this.body.center.x, this.body.center.y, 250, Math.PI, 0xff0000, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
   }
 }
@@ -101,12 +109,12 @@ Enemy.prototype.damage = function(dmg) {
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
-    if(this.hp > 0) this.hit_sound.play();
+    if(this.hp > 0) this.hit_sound.play("", 0, this.volume);
   }
 }
 //overriding .kill() would just be confusing
 Enemy.prototype.death = function() {
-  if(!this.death_sound.isPlaying) this.death_sound.play();
+  if(!this.death_sound.isPlaying) this.death_sound.play("", 0, this.volume);
   this.can_fire = false;
   this.body = null;
   if(this.death_anim != null) {
@@ -114,9 +122,25 @@ Enemy.prototype.death = function() {
       this.destroy();
     }
     this.animations.play("death");
-
+    this.alpha = 0.7;
   }
   else {
   this.destroy(); //use .destroy instead of .kill() to actually remove the object from memory and save resources.
   }
+}
+/*if the enemy has a path, given to it by setting path an object (containing 2 objects, points and vels, each having
+* an x and  property of equal length arrays), then use those paths to determine movement.
+* the rounding is all in there because counting is weird
+* this.path_index determines which point we are hitting.
+*/
+Enemy.prototype.follow_path = function() {
+  if (this.path_index < this.path.points.x.length) {
+    if(Math.round(this.body.center.x) - Math.round(this.path.points.x[this.path_index]) <= 2 && 
+      Math.round(this.body.center.y) - Math.round(this.path.points.y[this.path_index]) <= 2) { //giving it a bit of flexibility 
+      this.body.velocity.x = this.path.vels.x[this.path_index]; //set velocities
+      this.body.velocity.y = this.path.vels.y[this.path_index];
+      this.path_index++;
+    }
+  }
+
 }

@@ -9,7 +9,7 @@ IMPORTANT: ANGLE - IN RADIANS, WITH THE BASE ASSET FACING THE RIGHT (at 0)  Posi
 Color - tints the bullet (format 0xFFFFFF).  The base asset is in greyscale.
 */
 function Bullet(game, x, y, speed, angle, color, damage, key, frame) {
-  console.log("spawned bullet");
+  // console.log("spawned bullet");
   //call Phaser.Sprite constructor (game, x, y, key, frame)
   Phaser.Sprite.call(this, game, x, y, key, frame);
   game.physics.arcade.enable(this);

@@ -5,9 +5,12 @@ var frames;
 
 var Tutorial = function(game) {};
 Tutorial.prototype = {
-	init: function(main, alt) {
+	init: function(main, alt, music_vol, sfx_vol) {
     this.main = main;
     this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
+
   },
 	preload: function() {
 		//all preloading done in Load state
@@ -38,7 +41,7 @@ Tutorial.prototype = {
 		intro1.alpha = 0;
 
 		var tween = game.add.tween(intro1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		this.transmission.play();
+		this.transmission.play("", 0, this.sfx_vol);
 	},
 
 	dialogue2: function(){
@@ -57,7 +60,7 @@ Tutorial.prototype = {
 		intro3.alpha = 0;
 
 		var tween = game.add.tween(intro3).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		this.transmission.play();
+		this.transmission.play("", 0, this.sfx_vol);
 
 	},
 
@@ -68,7 +71,7 @@ Tutorial.prototype = {
 		intro4.alpha = 0;
 		
 		var tween = game.add.tween(intro4).to( {alpha: 1}, 4000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-		this.transmission.play();
+		this.transmission.play("", 0, this.sfx_vol);
 
 	},
 
@@ -78,6 +81,7 @@ Tutorial.prototype = {
 
     if (timer >= 25 || game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()){ 
 	    game.state.start('Cutscene1', true, false, this.main, this.alt);
+
 	}
 
 	}

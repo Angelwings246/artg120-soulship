@@ -36,7 +36,7 @@ HpBar.prototype.update = function() {
     this.glow.alpha += this.delta;
   }
 
-  if(this.player.time_since_dmg < 4) {
+  if(this.player.time_since_dmg < 6) {
     this.health_bar.alpha = 0.7;
     this.glow.alpha += 0.25;
   }

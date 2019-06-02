@@ -10,7 +10,7 @@
  * main and alt are objects containing keybind settings, each with properies "up", "down", "left", "right", and "fire".
  * The properties are KeyCodes (NUMBERS that correspond to keys, NOT the keys themselves) and these objects will have to be passed from state to state.
  */
-function PlayerShip(game, sounds, key, frame, main, alt){
+function PlayerShip(game, sounds, key, frame, main, alt, volume){
 	// call Sprite constructor in here
 	// new Sprite( game, x, y, key, frame)
 	Phaser.Sprite.call(this, game, game.width/4, game.height/2, key, frame);
@@ -27,6 +27,7 @@ function PlayerShip(game, sounds, key, frame, main, alt){
   this.firing_sound = sounds[1];
   this.hit_sound = sounds[2];
   this.low_hp_sound = sounds[3];
+  this.volume = volume;
 
   //bullets are all grouped together for collision checks
   this.bullets = game.add.group();
@@ -65,9 +66,11 @@ function PlayerShip(game, sounds, key, frame, main, alt){
 
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
-  this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "flame small");
+  this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "s1");
   this.flame.anchor.x = 1;
   this.flame.anchor.y = 0.5;
+  this.flame.animations.add("small", Phaser.Animation.generateFrameNames("s", 1, 3, "", 1), 8, true);
+  this.flame.animations.add("big", Phaser.Animation.generateFrameNames("b", 1, 3, "", 1), 8, true);
 }
 
 // inherit prototype from Phaser.Sprite and set construct to player ship
@@ -201,28 +204,30 @@ PlayerShip.prototype.update = function(){
   }
 
   //play the annoying low hp sound when health is low
-  if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play();
+  if(this.hp < this.PLAYER_MAX_HP/4 && !this.low_hp_sound.isPlaying) this.low_hp_sound.play("", 0, this.volume);
 
   //play death stuff when dead
   if(this.hp <= 0) {
     this.animations.play("death");
-    if(!this.death_sound.isPlaying) this.death_sound.play();
+    this.flame.alpha = 0;
+    if(!this.death_sound.isPlaying) this.death_sound.play("", 0, this.volume);
     if(this.death_anim.isFinished) this.alpha = 0;
   }
 
   //keep the flame with the player
   this.flame.x = this.body.x - 5;
   this.flame.y = this.body.y + 16;
-  
+
+
   //make flame big when going forward
-  if(this.body.velocity.x > 10) this.flame.frameName = "flame big";
-  else this.flame.frameName = "flame small";
+  if(this.body.velocity.x > 10) this.flame.animations.play("big");
+  else this.flame.animations.play("small");
 }
 
 //player shoots a bullet and loses 1 hp
 PlayerShip.prototype.fire = function() {
   console.log("pew");
-  this.firing_sound.play();
+  this.firing_sound.play("", 0, this.volume);
 
   //Bullet(game, x, y, speed, angle, color, ally, key, frame)
   var bullet = new Bullet(game, this.body.center.x + this.width/2, this.body.center.y, 300, 0, 0x43DFF8, true, "bullet", 0);
@@ -243,6 +248,6 @@ PlayerShip.prototype.damage = function(dmg) {
   if(this.time_since_dmg >= this.INVULN_FRAMES) {
     this.hp -= dmg;
     this.time_since_dmg = 0;
-    if(this.hp > 0) this.hit_sound.play();
+    if(this.hp > 0) this.hit_sound.play("", 0, this.volume);
   }
 }
