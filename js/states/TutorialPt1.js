@@ -53,10 +53,10 @@ TutorialPt1.prototype = {
     this.player.inTutorial = true;
 	this.asteroids = game.add.group();
 
-	this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
+	this.health_bar = new HpBar(game, "hp bar", "hp bar pt 1", "red", 0, this.player);
 
 	//add tentacle 
-	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle', "idle1");
+	this.tentacle = game.add.sprite(game.width/2, -300, 'ball', 0);
 	game.physics.enable(this.tentacle, Phaser.Physics.ARCADE);
 		this.tentacle.anchor.set(0.5);
 		this.tentacle.scale.setTo(2);
@@ -172,7 +172,7 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 23){
-		this.health_bar.outer.loadTexture("corrupt bar");
+		this.health_bar.outer.frameName("hp bar01");
         this.player.frameName = "player ship broken";
 
 		if (timer >= 33){

@@ -69,7 +69,8 @@ BossLevel.prototype = {
     this.victory = false; //switch to true if the player wins
 
     //player health bar is from a prefab
-    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
+    this.health_bar.outer.animations.play("idle");
 	},
 	update: function() {
       

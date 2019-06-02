@@ -77,7 +77,8 @@ Level1.prototype = {
 
     this.timer = game.time.create(false);
     this.timer.start(); //don't forget to start timer
-    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
+    this.health_bar.outer.animations.play("idle");
 
     this.init_patterns();
 

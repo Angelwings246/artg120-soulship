@@ -42,10 +42,11 @@ Load.prototype = {
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
     game.load.image("heal", "hpDrop.png");
-    game.load.image("hp bar", "hp bar pt 1.png");
+    game.load.atlas("hp bar", "hp bar.png", "hp bar.json");
     game.load.image("corrupt bar", "hp bar.png");
     game.load.image("glow", "hp bar glow.png");
     game.load.image("red", "hp red.png");
+    game.load.image("ball", "ball of tentacles.png");
     // game.load.image("tentacle", "tentacle.png");
     game.load.atlas("tentacle", "tentacle.png", "tentacle.json");
     game.load.atlas("button", "button.png", "button.json");

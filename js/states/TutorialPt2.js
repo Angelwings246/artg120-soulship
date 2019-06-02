@@ -70,15 +70,16 @@ TutorialPt2.prototype = {
     //timer for spawning pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
-    this.timer.loop(2000, this.spawn, this); 
-    this.timer.loop(5000, this.fire, this); 
+    this.timer.add(100, this.spawn, this); 
+    this.firing1 = this.timer.loop(1000, this.fire, this); 
     this.timer.start(); //don't forget to start timer
 
 
     this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!",{fontSize: "32px", fill:"#FF0000"});
 
     //player's hp bar is from a prefab
-    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
+    this.health_bar.outer.animations.play("idle");
 
     this.movement = false; //flag to lock player movement
 
@@ -97,6 +98,12 @@ TutorialPt2.prototype = {
       this.player.body.velocity.y = 0;
       this.player.body.x = this.startX;
       this.player.body.y = this.startY;
+    }
+
+    //first enemy is stationary
+    if(this.enemies_spawned == 1 && this.enemies.countLiving() > 0) {
+      var first = this.enemies.getChildAt(0);
+      if (first.body != null && first.body.x <= game.width/2) first.body.velocity.x = 0;
     }
 
     //the player is ready to continue once all enemies are spawned and destroyed
@@ -119,7 +126,7 @@ TutorialPt2.prototype = {
       warning2.alpha = 0;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
-      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_vol/2);
+      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_v);
     }
 
 
@@ -172,9 +179,16 @@ TutorialPt2.prototype = {
     //the character, be it player or enemy, takes damage
   damage: function(character, bullet) {
     //because of naming conventions, this should work for both the enemy AND the player
+
+    //first enemy triggers the reset to spawn
+    if(character instanceof Enemy && this.enemies_spawned == 1)  {
+      this.timer.loop(2000, this.spawn, this); 
+      this.timer.remove(this.firing1);
+      this.firing2 = this.timer.loop(5000, this.fire, this); 
+    }
     if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
       this.lastX = character.body.center.x;
-      this.lastY = character.body.center.y;
+      // this.lastY = character.body.center.y;
     }
     if(character.body != null) {
       character.damage(bullet.dmg);
