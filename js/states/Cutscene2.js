@@ -4,9 +4,11 @@
 
 var Cutscene2 = function(game){};
 Cutscene2.prototype = {
-	init: function(main, alt){
+	init: function(main, alt, music_vol, sfx_vol){
 	this.main = main;
 	this.alt = alt;
+    this.music_vol = music_vol;
+    this.sfx_vol = sfx_vol;
 },
 
 	preload: function(){
