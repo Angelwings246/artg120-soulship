@@ -16,6 +16,7 @@ Cutscene2.prototype = {
 	create: function(){
 
 
+		// add cutscene images
 		this.alarmsoffscene = game.add.sprite(0, 0, '1alarmsoff');
 		this.alarmsonscene = game.add.sprite(0, 0, '1alarmson');
 		this.alarmsraysscene = game.add.sprite(0, 0, '1alarmsrays');
@@ -37,9 +38,13 @@ Cutscene2.prototype = {
 	    this.monsterexplodesscene = game.add.sprite(0, 0, '11monsterexplodes');
 		this.fullattackscene = game.add.sprite(0, 0, '13fullattack');
 
+		// add audio files
+		this.transmission = game.add.audio("transmission");
+
 		var timer = 0;
 		this.timer = game.time.create(false);
 		this.timer.add(10, this.cutscene, this);
+		this.timer.add(10000, this.cutscenetext, this);
 		this.timer.add(5000, this.skiptext, this);
 		this.timer.start();
 		timer = (Math.floor(this.timer.seconds)+1);
@@ -53,34 +58,34 @@ Cutscene2.prototype = {
 		// first scene
 		this.alarmsoffscene.alpha = 0;
 		this.tweenalarmsoffscene = game.add.tween(this.alarmsoffscene);
-		this.tweenalarmsoffscene.to( {alpha: 1}, 2000, Phaser.Easing.Linear.None, 2000);
+		this.tweenalarmsoffscene.to( {alpha: 1}, 1000, Phaser.Easing.Linear.None, 2000);
 
 		// Now set up the rest of the scenes!
 		// Alpha is set to 0 to allow fade in to alpha: 1
 		// Can adjust the Easing for cool effects
 		this.alarmsonscene.alpha = 0;
 		this.tweenalarmsonscene = game.add.tween(this.alarmsonscene);
-		this.tweenalarmsonscene.to( {alpha: 1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweenalarmsonscene.to( {alpha: 1}, 1000, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.alarmsraysscene.alpha = 0;
 		this.tweenalarmsraysscene = game.add.tween(this.alarmsraysscene);
-		this.tweenalarmsraysscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 2, true);
+		this.tweenalarmsraysscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 2, true);
 
 
 	  	this.computerblackscene.alpha = 0;
 		this.tweencomputerblackscene = game.add.tween(this.computerblackscene);
-		this.tweencomputerblackscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweencomputerblackscene.to( {alpha:1}, 1000, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 	  	this.computerdarkerscene.alpha = 0;
 		this.tweencomputerdarkerscene = game.add.tween(this.computerdarkerscene);
-		this.tweencomputerdarkerscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweencomputerdarkerscene.to( {alpha:1}, 1000, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.computerlighterscene.alpha = 0;
 		this.tweencomputerlighterscene = game.add.tween(this.computerlighterscene);
-		this.tweencomputerlighterscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweencomputerlighterscene.to( {alpha:1}, 1000, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.tentacleattackoffscene.alpha = 0;
@@ -95,7 +100,7 @@ Cutscene2.prototype = {
 
 		this.tentacleattackraysscene.alpha = 0;
 		this.tweententacleattackraysscene = game.add.tween(this.tentacleattackraysscene);
-		this.tweententacleattackraysscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweententacleattackraysscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 2, true);
 
 
 		this.commdevicescene.alpha = 0;
@@ -110,12 +115,12 @@ Cutscene2.prototype = {
 
 		this.firebuttonscene.alpha = 0;
 		this.tweenfirebuttonscene = game.add.tween(this.firebuttonscene);
-		this.tweenfirebuttonscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweenfirebuttonscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.firebuttondownscene.alpha = 0;
 		this.tweenfirebuttondownscene = game.add.tween(this.firebuttondownscene);
-		this.tweenfirebuttondownscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweenfirebuttondownscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.shipfiresscene.alpha = 0;
@@ -125,17 +130,17 @@ Cutscene2.prototype = {
 
 		this.tentaclesadvanceoffscene.alpha = 0;
 		this.tweententaclesadvanceoffscene = game.add.tween(this.tentaclesadvanceoffscene);
-		this.tweententaclesadvanceoffscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweententaclesadvanceoffscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.tentaclesadvanceonscene.alpha = 0;
 		this.tweententaclesadvanceonscene = game.add.tween(this.tentaclesadvanceonscene);
-		this.tweententaclesadvanceonscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweententaclesadvanceonscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.tentaclesadvanceraysscene.alpha = 0;
 		this.tweententaclesadvanceraysscene = game.add.tween(this.tentaclesadvanceraysscene);
-		this.tweententaclesadvanceraysscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweententaclesadvanceraysscene.to( {alpha:1}, 500, Phaser.Easing.Linear.None, false, 1000, 2, true);
 
 
 		this.shipattackedscene.alpha = 0;
@@ -145,12 +150,12 @@ Cutscene2.prototype = {
 
 		this.monsterexplodesscene.alpha = 0;
 		this.tweenmonsterexplodesscene = game.add.tween(this.monsterexplodesscene);
-		this.tweenmonsterexplodesscene.to( {alpha:1}, 2000, Phaser.Easing.Linear.None, false, 1000, 0);
+		this.tweenmonsterexplodesscene.to( {alpha:1}, 7000, Phaser.Easing.Linear.None, false, 1000, 0);
 
 
 		this.fullattackscene.alpha = 0;
 		this.tweenfullattackscene = game.add.tween(this.fullattackscene);
-		this.tweenfullattackscene.to( {alpha:1}, 3000, Phaser.Easing.Linear.None, false, 2000, 0);
+		this.tweenfullattackscene.to( {alpha:1}, 5000, Phaser.Easing.Linear.None, false, 2000, 0);
 
 
 		// Now CHAIN THESE GUYS
@@ -177,9 +182,85 @@ Cutscene2.prototype = {
 
 	},
 
+		cutscenetext: function(){
+		//Tutorial Dialogue/Instructions
+		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
+
+		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
+		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'Warning: Unknown Threat on Board \nWarning: Hull Integrity Low \nWarning: Engines Damaged', 28);
+		this.text1.alpha = 0;
+		this.text1.anchor.setTo = 0.5;
+		this.tween01 = game.add.tween(this.text1);
+		this.tween01.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
+
+
+		this.text2 = game.add.bitmapText(game.width/2, game.height/2 , 'aldrich64', '"Captain! It looks like something is coming..."', 36);
+		this.text2.alpha = 0;
+		this.text2.anchor.set(0.5);
+		this.tween02 = game.add.tween(this.text2);
+		this.tween02.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.blank01 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
+		this.blank01.alpha = 0;
+		this.blank01.anchor.setTo = 0.5;
+		this.tweenblank01 = game.add.tween(this.blank01);
+		this.tweenblank01.to( {alpha: 1}, 3000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.text3 = game.add.bitmapText(game.width/2, game.height/2-50, 'aldrich64','"Shields malfunctioning, engines damaged?!  What do we do?"', 36);
+		this.text3.alpha = 0;
+		this.text3.anchor.set(0.5);
+		this.tween03 = game.add.tween(this.text3);
+		this.tween03.to( {alpha: 1}, 2500, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.blank02 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
+		this.blank02.alpha = 0;
+		this.blank02.anchor.setTo = 0.5;
+		this.tweenblank02 = game.add.tween(this.blank02);
+		this.tweenblank02.to( {alpha: 1}, 5000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.text4 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64','Warning: Hull Integrity Low', 28);
+		this.text4.alpha = 0;
+		this.text4.anchor.set(0.5);
+		this.tween04 = game.add.tween(this.text4);
+		this.tween04.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.text5 = game.add.bitmapText(game.width/2-100, game.height/2, 'aldrich64','"Captain, I have no idea \nhow many more shots we can fire, \nbut it looks like every shot we take \nbrings our ship closer to being torn to pieces!"', 28);
+		this.text5.alpha = 0;
+		this.text5.anchor.set(0.5);
+		this.tween05 = game.add.tween(this.text5);
+		this.tween05.to( {alpha: 1}, 7000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+		this.text6 = game.add.bitmapText(game.width/2, game.height/2-50, 'aldrich64','"...but it looks like we are just getting started..."', 28);
+		this.text6.alpha = 0;
+		this.text6.anchor.set(0.5);
+		this.tween06 = game.add.tween(this.text6);
+		this.tween06.to( {alpha: 1}, 3000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+
+
+
+
+		//this.tweenblank01.chain(this.tween01);
+		this.tween01.chain(this.tween02);
+		this.tween02.chain(this.tweenblank01);
+		this.tweenblank01.chain(this.tween03);
+		this.tween03.chain(this.tweenblank02);
+		this.tweenblank02.chain(this.tween04);
+		this.tween04.chain(this.tween05);
+		this.tween05.chain(this.tween06);
+
+		this.transmission.play();
+
+	},
+
 	skiptext: function(){
 
-		var skiptext = game.add.bitmapText(50, game.height-50, 'aldrich64','Press Q to skip', 20);
+		var skiptext = game.add.bitmapText(50, game.height-50, 'aldrich64','Press X to skip', 28);
 		skiptext.alpha = 0;
 		var tween = game.add.tween(skiptext). to({alpha: 1}, 4000, Phaser.Easing.Linear.None, true);
 
@@ -188,7 +269,7 @@ Cutscene2.prototype = {
 
 	update: function(){
 
-    if (this.timer.seconds > 72 || game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()){ 
+    if (this.timer.seconds > 65 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
 	    game.state.start('TutorialPt2', true, false, this.main, this.alt);
 	}
 
