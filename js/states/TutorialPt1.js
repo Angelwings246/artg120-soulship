@@ -29,7 +29,7 @@ TutorialPt1.prototype = {
 	timer = (Math.floor(this.timer.seconds))+1;
 	// allow blackout background w/ text first
 
-	this.spawning = this.timer.loop(game.rnd.integerInRange(1000,3000), this.spawn, this);
+	this.spawning = this.timer.loop(game.rnd.integerInRange(1000,2000), this.spawn, this);
 
 
     	this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
@@ -71,7 +71,7 @@ TutorialPt1.prototype = {
 
 	spawn: function(){
 	var asteroid;
-    var num_asteroids = game.rnd.integerInRange(3, 6); //random number of asteroids
+    var num_asteroids = game.rnd.integerInRange(4, 7); //random number of asteroids
     var asteroid_key;
   	for(let i = 0; i < num_asteroids; i++) {
     
@@ -174,7 +174,7 @@ TutorialPt1.prototype = {
 	if(timer >= 23){
 		this.health_bar.outer.frameName = "hp bar01";
         this.player.frameName = "player ship broken";
-
+        this.health_bar.outer.animations.play("idle");
 		if (timer >= 33){
             game.sound.stopAll()﻿;
 			game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
