@@ -19,6 +19,7 @@ GameOver.prototype = {
 	create: function(){
     game.sound.stopAll();
     game.add.image(0, 0, "background");
+    
     //Victory screen
     if(this.victory) {
       game.add.text(game.width/2, game.height/3, 'Congrats you did it', {fontSize: "32px", fill:"#FFFFFF"});

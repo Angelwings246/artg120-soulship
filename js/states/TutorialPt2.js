@@ -75,7 +75,7 @@ TutorialPt2.prototype = {
     this.timer.start(); //don't forget to start timer
 
 
-    this.warning_text = game.add.text(game.width/8, 100,"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!",{fontSize: "32px", fill:"#FF0000"});
+    this.warning_text = game.add.bitmapText(game.width/8, 100, 'aldrich64',"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!", 32);
 
     //player's hp bar is from a prefab
     this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
@@ -117,11 +117,11 @@ TutorialPt2.prototype = {
     // flash warning every time player shoots 
     if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
 
-      var warning1 = game.add.text(game.width/4 - 75, game.height/3,'WARNING! WEAPONS ACTIVATION \nCAUSING FURTHER DAMAGE!', {fontSize: "28px", fill:"#FF0000"});
+      var warning1 = game.add.bitmapText(game.width/4 - 75, game.height/3, 'aldrich64', 'WARNING! WEAPONS ACTIVATION \nCAUSING FURTHER DAMAGE!', 28);
       warning1.anchor.setTo = 0.5;
       warning1.alpha = 0;
       var tween = game.add.tween(warning1).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
-      var warning2 = game.add.text(120, game.height/2 + 180,'WARNING! Hull Unstable!', {fontSize: "28px", fill:"#FF0000"});
+      var warning2 = game.add.bitmapText(120, game.height/2 + 180, 'aldrich64', 'WARNING! Hull Unstable!', 28);
       warning2.anchor.setTo = 0.5;
       warning2.alpha = 0;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
@@ -228,7 +228,7 @@ TutorialPt2.prototype = {
     this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
     this.warning_text.fill = "#00FFFF";
 
-    game.add.text(game.width/8, 170,"CAUTION: HULL STABILITY STILL LOW",{fontSize: "32px", fill:"#FFFF00"});
+    game.add.bitmapText(game.width/8, 170,'aldrich64', "CAUTION: HULL STABILITY STILL LOW", 32);
     // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.player.flame.alpha = 1; //bring flame back

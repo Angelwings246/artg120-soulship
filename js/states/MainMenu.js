@@ -58,7 +58,7 @@ MainMenu.prototype = {
     var state;
     switch(button) {
       case this.start:
-        state = "Tutorial";
+        state = "Cutscene1";
         break;
       case this.settings:
         state = "Settings";
