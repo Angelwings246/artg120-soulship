@@ -272,7 +272,7 @@ Cutscene2.prototype = {
 	update: function(){
 
     if (this.timer.seconds > 65 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
-	    game.state.start('TutorialPt2', true, false, this.main, this.alt);
+	    game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
 
 	}

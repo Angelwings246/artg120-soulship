@@ -181,7 +181,7 @@ TutorialPt1.prototype = {
 
   if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
       game.sound.stopAll()﻿;
-      game.state.start('Cutscene2', true, false, this.main, this.alt);
+      game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 
 	}
   }

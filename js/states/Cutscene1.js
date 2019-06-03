@@ -149,7 +149,7 @@ Cutscene1.prototype = {
 
     if (this.timer.seconds > 26 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
     	this.alarm.pause();
-	    game.state.start('TutorialPt1', true, false, this.main, this.alt);
+	    game.state.start('TutorialPt1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
 
 	}
