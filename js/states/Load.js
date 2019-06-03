@@ -32,6 +32,7 @@ Load.prototype = {
     game.load.image("options", "options.png");
     game.load.image("credits", "credits.png");
     game.load.image("restore defaults", "restore defaults.png");
+    game.load.image("retry", "retry.png");
     game.load.image("return to menu", "return to menu.png");
     game.load.atlas("player", "player.png", "player.json");
     game.load.atlas("flame", "flame.png", "flame.json");
@@ -41,17 +42,18 @@ Load.prototype = {
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
     game.load.image("heal", "hpDrop.png");
-    game.load.image("hp bar", "hp bar pt 1.png");
+    game.load.atlas("hp bar", "hp bar.png", "hp bar.json");
     game.load.image("corrupt bar", "hp bar.png");
     game.load.image("glow", "hp bar glow.png");
     game.load.image("red", "hp red.png");
-    // game.load.image("tentacle", "tentacle.png");
+    game.load.image("ball", "ball of tentacles.png");
+    game.load.image("target", "target.png");
     game.load.atlas("tentacle", "tentacle.png", "tentacle.json");
     game.load.atlas("button", "button.png", "button.json");
 
 
     // load the Cutscene1 images
-    game.load.path = 'cutscenes/Cutscene1/';
+    game.load.path = 'assets/img/cutscenes/Cutscene1/';
     game.load.image('1commdevice', '1 comm device.png');
     game.load.image('2asteroidbelt', '2 Asteroid belt.png');
     game.load.image('3computerwarningblack', '3 computer warning black.png');
@@ -61,7 +63,7 @@ Load.prototype = {
 
 
     // load the Cutscene2 images
-    game.load.path = "cutscenes/Cutscene2/";
+    game.load.path = "assets/img/cutscenes/Cutscene2/";
     game.load.image("1alarmsoff", "1 alarms off.png");
     game.load.image("1alarmson", "1 alarms on.png"); 
     game.load.image("1alarmsrays", "1 alarms rays.png");
@@ -106,10 +108,6 @@ Load.prototype = {
 		loadingBar.anchor.set(0.5);
 		game.load.setPreloadSprite(loadingBar);
 
-		//load graphics assets
-		//game.load.image('tempship', 'assets/img/tempship.png');	
-        // load cutscenes
-		game.load.setPreloadSprite(loadingBar);	
 
 	},
 	create: function(){

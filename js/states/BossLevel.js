@@ -10,6 +10,7 @@ BossLevel.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+    console.log(this.music_vol, this.sfx_vol);
 
   },
 	preload: function(){
@@ -54,6 +55,10 @@ BossLevel.prototype = {
     this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
 
+    this.target = game.add.sprite(0, 0, "target", 0);
+    this.target.anchor.setTo(0.5);
+    this.target.alpha = 0;
+
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();
     this.HEALING = 5; //value of heal pickup
@@ -68,7 +73,8 @@ BossLevel.prototype = {
     this.victory = false; //switch to true if the player wins
 
     //player health bar is from a prefab
-    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
+    this.health_bar.outer.animations.play("idle");
 	},
 	update: function() {
       
@@ -129,7 +135,13 @@ BossLevel.prototype = {
     },
     //called in the loop for the boss to attack
 	  fire: function() {
-	  this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
+	    var pattern = this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
+      if(pattern == 2) {
+        this.target.x = this.player.x;
+        this.target.y = this.player.y;
+        this.target.alpha = 1;
+        this.timer.add(1000, function() {this.target.alpha = 0}, this);
+      }
     },
     //the character, be it player or enemy, takes damage
     damage: function(character, bullet) {
@@ -143,6 +155,7 @@ BossLevel.prototype = {
     heal: function(player, pickup) {
       if(player.hp > 0) {
         player.hp += this.HEALING;
+        this.player.time_since_heal = 0;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
         this.heal_sound.play("", 0, this.sfx_vol);
         pickup.destroy();

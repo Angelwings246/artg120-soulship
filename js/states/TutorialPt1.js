@@ -10,6 +10,8 @@ TutorialPt1.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+        console.log(this.music_vol, this.sfx_vol);
+
 
   },
   preload: function() {
@@ -27,7 +29,7 @@ TutorialPt1.prototype = {
 	timer = (Math.floor(this.timer.seconds))+1;
 	// allow blackout background w/ text first
 
-	this.spawning = this.timer.loop(game.rnd.integerInRange(1000,3000), this.spawn, this);
+	this.spawning = this.timer.loop(game.rnd.integerInRange(1000,2000), this.spawn, this);
 
 
     	this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
@@ -51,10 +53,10 @@ TutorialPt1.prototype = {
     this.player.inTutorial = true;
 	this.asteroids = game.add.group();
 
-	this.health_bar = new HpBar(game, "hp bar", 0, "red", 0, this.player);
+	this.health_bar = new HpBar(game, "hp bar", "hp bar pt 1", "red", 0, this.player);
 
 	//add tentacle 
-	this.tentacle = game.add.sprite(game.width/2, -300, 'tentacle', "idle1");
+	this.tentacle = game.add.sprite(game.width/2, -300, 'ball', 0);
 	game.physics.enable(this.tentacle, Phaser.Physics.ARCADE);
 		this.tentacle.anchor.set(0.5);
 		this.tentacle.scale.setTo(2);
@@ -69,7 +71,7 @@ TutorialPt1.prototype = {
 
 	spawn: function(){
 	var asteroid;
-    var num_asteroids = game.rnd.integerInRange(3, 6); //random number of asteroids
+    var num_asteroids = game.rnd.integerInRange(4, 7); //random number of asteroids
     var asteroid_key;
   	for(let i = 0; i < num_asteroids; i++) {
     
@@ -170,9 +172,9 @@ TutorialPt1.prototype = {
 	}
 
 	if(timer >= 23){
-		this.health_bar.outer.loadTexture("corrupt bar");
+		if(this.health_bar.outer.frameName == "hp bar pt 1") this.health_bar.outer.frameName = "hp bar01";
         this.player.frameName = "player ship broken";
-
+        this.health_bar.outer.animations.play("idle");
 		if (timer >= 33){
             game.sound.stopAll()﻿;
 			game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);

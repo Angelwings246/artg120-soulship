@@ -77,7 +77,9 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) 
   this.timer.start(); //remember to start it!
 
   // this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
-
+  // this.target = game.add.image(0, 0, "target", 0);
+  // this.target.anchor.setTo(0.5);
+  // this.target.alpha = 0;
 
 }
 
@@ -151,6 +153,7 @@ Boss.prototype.fire = function(x, y) {
       break;
   }  
   console.log("pew pew " + pattern);
+  return pattern;
 }
 
 
@@ -316,7 +319,9 @@ if(this.waves_fired < 4) {
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing); //remove timer when done
+  else {
+  this.timer.remove(this.firing); //remove timer when done
+  }
 
 }
 
@@ -374,7 +379,9 @@ Boss.prototype.fire3b = function(x, y) {
     } 
     this.waves_fired++; //count the number of times this subfunction has looped
   }
-  else this.timer.remove(this.firing); //remove timer when done
+  else {
+  this.timer.remove(this.firing); //remove timer when done
+  }
 }
 
 /* --- Firing Type 4 Variation A ---
@@ -455,6 +462,6 @@ Boss.prototype.fire4b = function() {
 
 //when the boss dies
 Boss.prototype.death = function() {
-  this.rotation = false;
+  this.rotating = false;
   console.log("ded");
 }

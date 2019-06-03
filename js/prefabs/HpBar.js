@@ -19,6 +19,8 @@ function HpBar(game, key_outer, frame_outer, key_inner, frame_inner, player) {
 
   //need to be able to keep track of the player's hp, so store it 
   this.player = player;
+
+  this.outer.animations.add("idle", Phaser.Animation.generateFrameNames("hp bar", 1, 2, "", 2), 5, true);
 }
 
 //assign prototype and constructor
@@ -26,7 +28,6 @@ HpBar.prototype = Object.create(Phaser.Group.prototype);
 HpBar.prototype.constructor = HpBar;
 
 HpBar.prototype.update = function() {
-
   //update player hp bar
   this.health_bar.width = this.HP_WIDTH_MAX * this.player.hp/this.player.PLAYER_MAX_HP;
   if(this.player.hp < 0) this.health_bar.width = 0;

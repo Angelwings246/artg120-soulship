@@ -11,6 +11,7 @@ Level1.prototype = {
 		this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
+    console.log(this.music_vol, this.sfx_vol);
 
 	},
 	preload: function(){
@@ -76,7 +77,8 @@ Level1.prototype = {
 
     this.timer = game.time.create(false);
     this.timer.start(); //don't forget to start timer
-    this.health_bar = new HpBar(game, "corrupt bar", 0, "red", 0, this.player);
+    this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
+    this.health_bar.outer.animations.play("idle");
 
     this.init_patterns();
 
@@ -175,6 +177,7 @@ Level1.prototype = {
   //called when the player picks up a health pack
   heal: function(player, pickup) {
     if(player.hp > 0) {
+      this.player.time_since_heal = 0;
       player.hp += this.HEALING;
       if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
       this.heal_sound.play("", 0, this.sfx_vol);
@@ -287,19 +290,6 @@ Level1.prototype = {
   }, this);
 	},
 
-  // updateZagA: function(enemy){    
-  //       if(enemy.body != null) {
-
-  //     //set the velocity going upwards on spawn
-  //     //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
-  //     //if the enemy is above the 1/4 line, go down
-  //     if (enemy.body.x < game.width/5){
-  //         enemy.body.velocity.y = 200;
-  //         enemy.body.velocity.x = 150;
-  //     }
-  //   }
-  // },
-
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
 	spawnZagB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -323,7 +313,6 @@ Level1.prototype = {
   }, this);
   },
 
-
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeA: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -335,7 +324,6 @@ Level1.prototype = {
     }else this.timer.remove(this.loop);
   }, this);
 	},
-
 
 	    //spawns a series of three sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeB: function() {
@@ -420,9 +408,10 @@ Level1.prototype = {
 
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level
   ending: function() {
+
     game.add.bitmapText(game.width/8, 170, 'aldrich64', "LEVEL CLEARED", 32);
     game.add.bitmapText(game.width/8, 250, 'aldrich64', "ENTERING VOID. PLEASE PREPARE",32);
-    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt);
+    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   },
     //set up all the movement patterns, kept outside create for organization 
   init_patterns: function(){
