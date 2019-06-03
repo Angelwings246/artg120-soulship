@@ -38,6 +38,7 @@ function PlayerShip(game, sounds, key, frame, main, alt, volume){
 
   this.FIRE_RATE = 30;//once every x frames
   this.time_since_last_shot = 0; //allows for lockout between shots when fire button is held
+  this.time_since_heal = 6;
 
   this.inTutorial = false;
   this.INVULN_FRAMES = 20; //number of invuneraiblity frames (i-frames)
@@ -185,9 +186,12 @@ PlayerShip.prototype.update = function(){
 
   //count up for checking invulnerability
   this.time_since_dmg++;
+  //and for healing
+  this.time_since_heal++;
 
-   //feedback for taking damage: flash red, then blink during invulnerability
-  if(this.time_since_dmg < this.INVULN_FRAMES) {
+  if(this.time_since_heal < 6) this.tint = 0x00FF00; //feedback for healing: flash green
+  else if(this.time_since_dmg < this.INVULN_FRAMES) {
+    //feedback for taking damage: flash red, then blink during invulnerability
     if(this.time_since_dmg < 4) this.tint = 0xFF0000;
     else if(this.time_since_dmg % 4 == 0) {
       this.tint = 0xFFFFFF;

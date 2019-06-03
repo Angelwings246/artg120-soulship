@@ -47,15 +47,17 @@ BossLevel.prototype = {
 
     this.heal_sound = game.add.audio("heal");
 
-    //PlayerShip(game, sounds, key, frame)  
-    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
-    game.add.existing(this.player);
-
-
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
     this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle", "idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
+    //PlayerShip(game, sounds, key, frame)  
+    this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
+    game.add.existing(this.player);
+
+    this.target = game.add.sprite(0, 0, "target", 0);
+    this.target.anchor.setTo(0.5);
+    this.target.alpha = 0;
 
     //group of pickups (for now, just a heal)
     this.pickups = game.add.group();
@@ -133,7 +135,13 @@ BossLevel.prototype = {
     },
     //called in the loop for the boss to attack
 	  fire: function() {
-	  this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
+	    var pattern = this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
+      if(pattern == 2) {
+        this.target.x = this.player.x;
+        this.target.y = this.player.y;
+        this.target.alpha = 1;
+        this.timer.add(1000, function() {this.target.alpha = 0}, this);
+      }
     },
     //the character, be it player or enemy, takes damage
     damage: function(character, bullet) {
@@ -147,6 +155,7 @@ BossLevel.prototype = {
     heal: function(player, pickup) {
       if(player.hp > 0) {
         player.hp += this.HEALING;
+        this.player.time_since_heal = 0;
         if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
         this.heal_sound.play("", 0, this.sfx_vol);
         pickup.destroy();

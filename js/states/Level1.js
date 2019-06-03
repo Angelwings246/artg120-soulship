@@ -177,6 +177,7 @@ Level1.prototype = {
   //called when the player picks up a health pack
   heal: function(player, pickup) {
     if(player.hp > 0) {
+      this.player.time_since_heal = 0;
       player.hp += this.HEALING;
       if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
       this.heal_sound.play("", 0, this.sfx_vol);
@@ -289,19 +290,6 @@ Level1.prototype = {
   }, this);
 	},
 
-  // updateZagA: function(enemy){    
-  //       if(enemy.body != null) {
-
-  //     //set the velocity going upwards on spawn
-  //     //if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.y = -300;
-  //     //if the enemy is above the 1/4 line, go down
-  //     if (enemy.body.x < game.width/5){
-  //         enemy.body.velocity.y = 200;
-  //         enemy.body.velocity.x = 150;
-  //     }
-  //   }
-  // },
-
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then zags away
 	spawnZagB: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -325,7 +313,6 @@ Level1.prototype = {
   }, this);
   },
 
-
 	    //spawns a series of two sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeA: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -337,7 +324,6 @@ Level1.prototype = {
     }else this.timer.remove(this.loop);
   }, this);
 	},
-
 
 	    //spawns a series of three sets of enemies that goes straight towards the player (about game.world.centerX and then game.world.centerX +- 250 then go up or down offscreen away
 	spawnLshapeB: function() {

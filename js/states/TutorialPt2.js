@@ -66,7 +66,6 @@ TutorialPt2.prototype = {
     this.pickups = game.add.group();
     this.HEALING = 5; //value of heal pickup
 
-
     //timer for spawning pattern
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
@@ -146,6 +145,7 @@ TutorialPt2.prototype = {
     if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
       this.debug = !this.debug;
     }
+
   },
   render: function() {
     if(this.debug) {
@@ -199,6 +199,7 @@ TutorialPt2.prototype = {
   heal: function(player, pickup) {
     if(player.hp > 0) {
       player.hp += this.HEALING;
+      this.player.time_since_heal = 0;
       if(player.hp > player.PLAYER_MAX_HP) player.hp = player.PLAYER_MAX_HP; //don't let the player overflow on health
       this.heal_sound.play("", 0, this.sfx_vol);
       pickup.destroy();
