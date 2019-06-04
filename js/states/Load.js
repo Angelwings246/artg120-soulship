@@ -27,6 +27,7 @@ Load.prototype = {
 	  game.load.path = "assets/img/";
     game.load.image("background", "bg.png");
     game.load.image("gameover loss", "gameover loss.png");
+    game.load.image("gameover win", "gameover win.png");
     game.load.bitmapFont("aldrich64", "aldrich64.png", "aldrich64.fnt");
     game.load.image("start adventure", "start adventure.png");
     game.load.image("options", "options.png");
