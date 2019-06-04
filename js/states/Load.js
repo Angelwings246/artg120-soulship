@@ -90,12 +90,13 @@ Load.prototype = {
 
     //load all audio files
     game.load.path = "assets/audio/";
-    game.load.audio("MainMenu", ["MainMenu.mp3", "MainMenu.ogg"], 1, true);
+    game.load.audio("MainMenu", ["MainMenu.mp3", "MainMenu.ogg"]);
     game.load.audio("transmission", ["Transmission.mp3"]);
+    game.load.audio("cutscene2", ["Cutscene2.mp3"]);
     game.load.audio("boom", ["boom1.mp3", "boom1.ogg"]);
     game.load.audio("pew", ["shoot2.mp3", "shoot2.ogg"]);
     game.load.audio("ouch", ["PlayerGetsHit.mp3"]);
-    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"], 1, true);
+    game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"]);
     game.load.audio("hit", ["EnemyGetsHit.mp3"]);
     game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
     game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);

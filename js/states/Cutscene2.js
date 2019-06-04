@@ -55,6 +55,7 @@ Cutscene2.prototype = {
 		this.timer.start();
 		timer = (Math.floor(this.timer.seconds)+1);
 
+		game.add.audio("cutscene2").play("", 0 , this.music_vol, true);
 		this.timer.add(14000, this.play_sound, this, this.transmission, false);
 		this.timer.add(25000, this.play_sound, this, this.transmission, false);
 		this.timer.add(500, this.play_sound, this, this.alarm, true);
@@ -246,7 +247,7 @@ Cutscene2.prototype = {
 		this.tween04.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
 
 
-		this.text5 = game.add.bitmapText(game.width/2-75, game.height/2, 'aldrich64','"Captain, it looks like EVERY SHOT we take \nbrings our ship closer to being torn to pieces!\nI don\'t know how much more we can handle..."', 28);
+		this.text5 = game.add.bitmapText(game.width/2-75, game.height/2, 'aldrich64','"Captain, it looks like EVERY SHOT we take \nbrings our ship closer to being torn to pieces!\nI don\'t know how much more we can handle..."', 32);
 		this.text5.alpha = 0;
 		this.text5.anchor.set(0.5);
 		this.tween05 = game.add.tween(this.text5);
