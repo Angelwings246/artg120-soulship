@@ -17,7 +17,8 @@ BossLevel.prototype = {
    //all preloading done in Load state
 	},
 	create: function(){
-	
+	    game.sound.stopAll();
+
     //set up scrolling background with multiple layers of stars
     //scroll speed is set to all be coprime so the loops are less frequent/obvious  
     this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
@@ -113,11 +114,12 @@ BossLevel.prototype = {
 	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || 
-      (this.boss.hp <= 0 && (this.boss.top_pt.death_anim.isFinished && this.boss.bot_pt.death_anim.isFinished)) || 
-      game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
-		if(this.boss.hp <= 0) this.victory = true;
-        game.sound.stopAll();
-        game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
+        (this.boss.hp <= 0 && (this.boss.top_pt.death_anim.isFinished && this.boss.bot_pt.death_anim.isFinished)) || 
+        game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
+		  if(this.boss.hp <= 0) this.victory = true;
+      game.sound.stopAll();
+      this.intro.onStop.removeAll();
+      game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
 	  }
       //debug cred: Nathan Altice inputs08.js
       if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {

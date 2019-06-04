@@ -23,7 +23,7 @@ GameOver.prototype = {
     if(this.victory) {
       game.add.image(0, 0, "gameover win");
       game.add.bitmapText(game.width/2, game.height/7, "aldrich64", 'Congratulations!', 96).anchor.set(0.5);
-      game.add.bitmapText(game.width/4 + 40, game.height/4, "aldrich64", 'You Won!', 48).anchor.set(0.5);
+      game.add.bitmapText(game.width/4, game.height/4 + 30, "aldrich64", 'You Won!', 48).anchor.set(0.5);
       this.menu = game.add.button(3* game.width/4 + 30, 7*game.height/8, "return to menu", this.changeState, this).anchor.set(0.5);
 
     }
