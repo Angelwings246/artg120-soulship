@@ -177,7 +177,7 @@ TutorialPt1.prototype = {
         this.health_bar.outer.animations.play("idle");
 		if (timer >= 33){
             game.sound.stopAll()﻿;
-			game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+			game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 		}
 	}
 

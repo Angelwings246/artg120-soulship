@@ -131,7 +131,7 @@ Cutscene1.prototype = {
 		this.tweenblank.chain(this.tween02);
 		this.tween02.chain(this.tween03);
 
-		this.transmission.play();
+		this.transmission.play('', 0, this.sfx_vol, false);
 
 	},
 
@@ -140,7 +140,7 @@ Cutscene1.prototype = {
 		var skiptext = game.add.bitmapText(50, game.height-50, 'aldrich64','Press X to skip', 28);
 		skiptext.alpha = 0;
 		var tween = game.add.tween(skiptext). to({alpha: 1}, 4000, Phaser.Easing.Linear.None, true);
-		this.alarm.play('', 0, 0.4, true);
+		this.alarm.play('', 0, this.sfx_vol, true);
 
 
 	},
@@ -148,7 +148,7 @@ Cutscene1.prototype = {
 	update: function(){
 
     if (this.timer.seconds > 26 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
-    	this.alarm.pause();
+      game.sound.stopAll()﻿;
 	    game.state.start('TutorialPt1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
 
