@@ -326,7 +326,7 @@ if(this.waves_fired < 4) {
 }
 
 /* --- Firing Type 3 Variation B ---
-*  Fires 4 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
+*  Fires 5 waves of 3 single-bullet shots that aim at the player's location (recorded when the first shot fires).
 *  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 *  Also spawns a random number of asteroids that spawn on the right side of the screen and travel to the left,
@@ -354,7 +354,7 @@ Boss.prototype.fire3b = function(x, y) {
    }
    console.log(this.asteroids);
   }
-  if(this.waves_fired < 4) {
+  if(this.waves_fired < 5) {
     this.firing_sound.play("", 0, this.volume);
     console.log("phase 1 " + this.waves_fired);
     
@@ -423,12 +423,12 @@ Boss.prototype.fire4a = function() {
 }
 
 /* --- Firing Type 4 Variation B ---
-*  Fires 6 waves of 3 3-bullet spreads.
+*  Fires 7 waves of 3 3-bullet spreads.
 *  One shot originates from the center and one originating from each tentacle.
 *  If a tentacle has been destroyed, it does not shoot.
 */
 Boss.prototype.fire4b = function() {
-  if(this.waves_fired < 6) {
+  if(this.waves_fired < 7) {
     this.firing_sound.play("", 0, this.volume);
     console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)

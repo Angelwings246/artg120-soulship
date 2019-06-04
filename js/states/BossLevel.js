@@ -93,9 +93,10 @@ BossLevel.prototype = {
 
       //adjust timing of shots - in phase 2 (i.e. when the boss is < 50% HP) the attacks are more powerful
       //thus, to compensate, they fire less frequently
-      if(this.boss.hp < this.boss.MAX_HEALTH/2 && this.phase2 == null) {
-          this.phase2 = this.timer.loop(15000, this.fire, this);
+      if(this.boss.hp <= this.boss.MAX_HEALTH/2 && this.phase2 == null) {
+          this.phase2 = this.timer.loop(8000, this.fire, this);
           this.timer.remove(this.phase1);
+          console.log(this.phase2);
       }
 
     //spawn a health pack when the first part of the boss dies
