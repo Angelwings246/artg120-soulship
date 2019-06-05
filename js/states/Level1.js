@@ -18,9 +18,9 @@ Level1.prototype = {
  //all preloading done in Load state
 	},
 	create: function(){
+    game.sound.stopAll()﻿;
     //set up scrolling background with multiple layers of stars
     //scroll speed is set to all be coprime so the loops are less frequent/obvious  
-    frames = 0;
     this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
     this.background.autoScroll(-200, 0);
     game.add.existing(this.background);

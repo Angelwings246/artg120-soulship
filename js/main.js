@@ -26,6 +26,7 @@ window.onload = function(){
 	game.state.add('Load', Load);
 	game.state.add('MainMenu', MainMenu);
 	game.state.add('Settings', Settings);
+	game.state.add('Credits', Credits);
 	game.state.add('Cutscene1', Cutscene1);
 	game.state.add('Tutorial', Tutorial);
 	game.state.add('TutorialPt1', TutorialPt1);

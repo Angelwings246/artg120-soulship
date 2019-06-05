@@ -34,6 +34,8 @@ Settings.prototype = {
 
     game.add.bitmapText(2*game.width/3, game.height/2 + 40, "aldrich64", "Click a button\nto change the hotkey", 24);
     game.add.bitmapText(2*game.width/3, game.height/2 + 150, "aldrich64", "Then press a key\nto bind that key", 24);
+    this.warning = game.add.bitmapText(game.width/3, game.height/3 + 40, "aldrich64", "WARNING: UNBOUND KEY", 30);
+    this.warning.alpha = 0;
     this.go_back = game.add.button(game.width/3, 7*game.height/8 + 35, "return to menu", this.back, this);
     this.reset = game.add.button(2 * game.width/3, 7*game.height/8 + 35, "restore defaults", this.reset_settings, this);
     // game.add.bitmapText(game.width/3, 7*game.height/8 + 25, "aldrich64", 'Press ESC to return to menu', 30);
@@ -367,6 +369,7 @@ Settings.prototype = {
       this.change_button.setFrames("button dark", "button dark", "button dark", "button dark"); //make the button dark again
       this.update_hotkey_text(textbox, string);
       this.capturing = false;
+      this.check(this.change_hotkey, this.change_hotkey_direction);
     }
   },
   reset_settings: function() {
@@ -395,6 +398,89 @@ Settings.prototype = {
     game.input.keyboard.removeCallbacks(); //clear the key capturing callbacks
     game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   },
+  check: function(hotkey, direction) {
+    //array that holds all the various keybinds
+    var binds = [this.main.up, this.main.down, this.main.left, this.main.right, this.main.fire, this.alt.up, this.alt.down, this.alt.left, this.alt.right, this.alt.fire]
+    var index = 0; //finds the index of the hotkey being changed
+    
+    //index refers to the above binds array
+    if(hotkey == this.alt) index += 5;
+    switch(direction) {
+      case "up": //index += 0, do nothing
+        break;
+      case "down":
+        index += 1;
+        break;
+      case "left":
+        index += 2;
+        break;
+      case "right":
+        index += 3;
+        break;
+      case "fire":
+        index +=4;
+      default:
+        break;
+    }
+
+  var dupes = false; //if there are duplicate i.e. unbound hotkeys
+  for(let i = 0; i <= 9; i++) { //check every keybind
+    if(i != index) { //don't test the same thing against itself
+      if(binds[i] == binds[index]){ //if any hotkey matches what just changed
+        switch(i) { //depending on which key matches what just changed, change the text and variable
+          case 0:
+            this.main.up = 0;
+            this.update_hotkey_text(this.main_up_text, "");
+            break;
+          case 1:
+            this.main.down = 0;
+            this.update_hotkey_text(this.main_down_text, "");
+            break;
+          case 2:
+            this.main.left = 0;
+            this.update_hotkey_text(this.main_left_text, "");
+            break;        
+          case 3:
+            this.main.right = 0;
+            this.update_hotkey_text(this.main_right_text, "");
+            break;  
+          case 4:
+            this.main.fire = 0;
+            this.update_hotkey_text(this.main_fire_text, "");
+            break;  
+          case 5:
+            this.alt.up = 0;
+            this.update_hotkey_text(this.alt_up_text, "");
+            break;  
+          case 6:
+            this.alt.down = 0;
+            this.update_hotkey_text(this.alt_down_text, "");          
+            break;  
+          case 7:
+            this.alt.left = 0;
+            this.update_hotkey_text(this.alt_left_text, "");  
+            break;  
+          case 8:
+            this.alt.right = 0;
+            this.update_hotkey_text(this.alt_right_text, "");  
+            break;
+          case 9:
+            this.alt.fire = 0;
+            this.update_hotkey_text(this.alt_fire_text, "");  
+            break;
+          default:
+            break;
+          }
+          dupes = true;
+        }
+      if(binds[i] == 0) dupes = true;
+      }
+    }
+    //display warning text if needed
+    if(dupes) this.warning.alpha = 1;
+    else this.warning.alpha = 0;
+  },
+
   /*when you go to the menu and come back, the custom rebinds save but the text does not. 
   * so when the settings menu loads up, somehow the numbers have to be reconverted to strings and
   * display the correct text on the buttons.  there is unfortunately no "keyCodeToString" function that
@@ -425,7 +511,7 @@ Settings.prototype = {
       Phaser.KeyCode.OPEN_BRACKET, Phaser.KeyCode.CLOSED_BRACKET, Phaser.KeyCode.BACKWARD_SLASH, Phaser.KeyCode.COLON,
       Phaser.KeyCode.QUOTES, Phaser.KeyCode.COMMA, Phaser.KeyCode.PERIOD, Phaser.KeyCode.QUESTION_MARK,
       Phaser.KeyCode.TILDE, Phaser.KeyCode.UP, Phaser.KeyCode.DOWN, Phaser.KeyCode.LEFT,
-      Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR
+      Phaser.KeyCode.RIGHT, Phaser.KeyCode.SPACEBAR, 0
     ]
     //then all the strings. note that everything must be in the same order
     var strings = [
@@ -445,7 +531,7 @@ Settings.prototype = {
      "[", "]", "\\", ";", 
      "'", ",", ".", "/", 
      "`", "UP", "DOWN", "LEFT", 
-     "RIGHT", "SPACEBAR"
+     "RIGHT", "SPACEBAR", ""
     ]
 
     //pair everything up and put them into an array.  the array is an array of arrays
@@ -467,8 +553,9 @@ Settings.prototype = {
     this.update_hotkey_text(this.alt_left_text, keycode_to_string.get(this.alt.left));
     this.update_hotkey_text(this.alt_right_text, keycode_to_string.get(this.alt.right));
     this.update_hotkey_text(this.alt_fire_text, keycode_to_string.get(this.alt.fire));
-
+    this.warning.alpha = 0;
     this.update_volume_text(); //and do volume while we're at it
 
   }
+
 };

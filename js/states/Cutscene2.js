@@ -42,6 +42,10 @@ Cutscene2.prototype = {
 
 		// add audio files
 		this.transmission = game.add.audio("transmission");
+		this.pew = game.add.audio("pew");
+		this.damaged = game.add.audio("ouch");
+		this.boom = game.add.audio("boom"); 
+		this.alarm = game.add.audio("alarm");
 
 		var timer = 0;
 		this.timer = game.time.create(false);
@@ -50,6 +54,18 @@ Cutscene2.prototype = {
 		this.timer.add(5000, this.skiptext, this);
 		this.timer.start();
 		timer = (Math.floor(this.timer.seconds)+1);
+
+		game.add.audio("cutscene2").play("", 0 , this.music_vol, true);
+		this.timer.add(14000, this.play_sound, this, this.transmission, false);
+		this.timer.add(25000, this.play_sound, this, this.transmission, false);
+		this.timer.add(500, this.play_sound, this, this.alarm, true);
+		this.timer.add(34000, this.play_sound, this, this.pew, false);
+		this.timer.add(38000, this.play_sound, this, this.damaged, false);
+		this.timer.add(45000, this.play_sound, this, this.damaged, false);
+		this.timer.add(48000, this.play_sound, this, this.boom, false);
+		this.timer.add(32250, this.alarm.pause, this.alarm);
+		this.timer.add(36500, this.alarm.resume, this.alarm);
+		this.timer.add(44250, this.alarm.pause, this.alarm);
 
 	},
 
@@ -189,7 +205,7 @@ Cutscene2.prototype = {
 		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
 
 		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
-		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'Warning: Unknown Threat on Board \nWarning: Hull Integrity Low \nWarning: Engines Damaged', 28);
+		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'Warning: Unknown Threat Detected \nWarning: Hull Integrity Low \nWarning: Engines Damaged', 36);
 		this.text1.alpha = 0;
 		this.text1.anchor.setTo = 0.5;
 		this.tween01 = game.add.tween(this.text1);
@@ -224,14 +240,14 @@ Cutscene2.prototype = {
 		this.tweenblank02.to( {alpha: 1}, 5000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
 
 
-		this.text4 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64','Warning: Hull Integrity Low', 28);
+		this.text4 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64','Warning: Hull Integrity Low', 42);
 		this.text4.alpha = 0;
 		this.text4.anchor.set(0.5);
 		this.tween04 = game.add.tween(this.text4);
 		this.tween04.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
 
 
-		this.text5 = game.add.bitmapText(game.width/2-100, game.height/2, 'aldrich64','"Captain, I have no idea \nhow many more shots we can fire, \nbut it looks like every shot we take \nbrings our ship closer to being torn to pieces!"', 28);
+		this.text5 = game.add.bitmapText(game.width/2-75, game.height/2, 'aldrich64','"Captain, it looks like EVERY SHOT we take \nbrings our ship closer to being torn to pieces!\nI don\'t know how much more we can handle..."', 32);
 		this.text5.alpha = 0;
 		this.text5.anchor.set(0.5);
 		this.tween05 = game.add.tween(this.text5);
@@ -256,7 +272,7 @@ Cutscene2.prototype = {
 		this.tween04.chain(this.tween05);
 		this.tween05.chain(this.tween06);
 
-		this.transmission.play();
+		// this.transmission.play();
 
 	},
 
@@ -268,10 +284,14 @@ Cutscene2.prototype = {
 
 
 	},
+	play_sound: function(sound, loop) {
+		sound.play('', 0, this.sfx_vol, loop);
+	},
 
 	update: function(){
 
     if (this.timer.seconds > 65 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
+    	game.sound.stopAll();
 	    game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
 

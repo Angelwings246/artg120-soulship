@@ -14,7 +14,7 @@ MainMenu.prototype = {
 	create: function() {
 		// game.stage.backgroundColor = '#facade';
 		game.add.image(0, 0, "background");
-		var titleText = game.add.bitmapText(game.width/4, game.height/4, "aldrich64", 'Soul Ship', 96);
+		var titleText = game.add.bitmapText(game.width/4 - 100, game.height/4, "aldrich64", 'Cosmic Corruption', 96);
 
     //buttons
     this.start = game.add.button(game.width/3, game.height/2, "start adventure", this.changeState, this);
@@ -64,7 +64,7 @@ MainMenu.prototype = {
         state = "Settings";
         break;
       case this.credits:
-        state = "Settings";
+        state = "Credits";
         break;
       default:
         break; 
