@@ -97,6 +97,17 @@ Level1.prototype = {
     this.timer.add(63000, this.ending, this);
     // this.timer.loop(2000, this.fire, this); 
 
+    this.kill_bar = [];
+    for(let i = 0; i < 5; i ++) {
+      this.kill_bar.push(game.add.image(this.health_bar.outer.width/5 * i + 120, 3*game.height/4 +123, "red", 0));
+      this.kill_bar[i].alpha = 0;
+      this.kill_bar[i].width = this.health_bar.outer.width/5;
+      this.kill_bar[i].height = 15;
+    }
+    game.add.image(115 + this.health_bar.outer.width, 3*game.height/4 +110, "heal", 0).tint = 0x00FF00;
+
+    game.add.bitmapText(70, 3*game.height/4 +122, "aldrich64", "KILLS:", 18).tint = 0xFF0000;
+
 	},
 	update: function(){
 
@@ -128,13 +139,13 @@ Level1.prototype = {
           this.basic_enemies.forEach(this.updateAssault, this);
     } 
 
-    // Call upon the wrath of the gods to smite your ship with big space rocks
-    if (this.asteroid_enemies_spawned <= 30){
-      this.asteroid_enemies.forEach(this.updateAsteroidStorm, this);
-    }
-
     //cleanup enemies that die from going offscreen
     this.enemies.forEachDead(this.cleanup, this);
+
+    for(let i = 0; i < 5; i++) {
+      if (i < this.enemies_killed % 5) this.kill_bar[i].alpha = 1;
+      else this.kill_bar[i].alpha = 0;
+    }
 
 
 	},
@@ -248,8 +259,10 @@ Level1.prototype = {
       console.log('spawning asteroid');
       var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
       this.asteroid_enemies.add(enemy);
-      enemy.can_fire = false;
-      enemy.body.velocity.x = -200;
+      enemy.can_fire = false;        
+      enemy.body.velocity.y = game.rnd.integerInRange(10, 600);
+      if(enemy.body.x < 2*game.height/3) enemy.body.velocity.x = game.rnd.integerInRange(300, -300)
+      else enemy.body.velocity.x = game.rnd.integerInRange(-100, -600);
       enemy.body.angularVelocity = 300;
 
   },
@@ -355,7 +368,7 @@ Level1.prototype = {
       //set the velocity going upwards on spawn
       if(enemy.body.x >= 15/16 * game.width) enemy.body.velocity.x = -150;
       //if the enemy is above the 1/4 line, go down
-      if (enemy.body.x < game.rnd.integerInRange(0,600)){
+      if (enemy.body.x < game.width-70){
           enemy.body.velocity.y = 0;
           enemy.body.velocity.x = 0;
       }
@@ -384,7 +397,7 @@ Level1.prototype = {
       }
     }
   },
-
+  // Call upon the wrath of the gods to smite your ship with big space rocks  
 	    //spawns a set of random asteriods like that fall from top right to bottom left
 	spawnAsteroidStorm: function() {
 		//Enemy(game, x, y, sounds, key, frame)
@@ -395,16 +408,6 @@ Level1.prototype = {
     }else this.timer.remove(this.loop);
   }, this);
 	},
-
-  updateAsteroidStorm: function(enemy){
-        if(enemy.body != null) {
-
-    if(enemy.body.x <= 15/16 * game.width) {
-      enemy.body.velocity.y = game.rnd.integerInRange(100, 600);
-      enemy.body.velocity.x = game.rnd.integerInRange(-100, -600);
-    }
-  }
-  },
 
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level
   ending: function() {

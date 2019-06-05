@@ -57,9 +57,10 @@ TutorialPt2.prototype = {
     this.enemies = game.add.group();
 
     //put as constant for adjustments
-    this.NUM_ENEMIES = 7;
+    this.NUM_ENEMIES = 5;
 
     this.enemies_spawned = 0; //track enemies already spawned
+    this.enemies_killed = 0;
     this.all_enemy_bullets = game.add.group(); //keep track of all enemy bullets, for more info see this.transfer below
 
     //group of pickups (for now, just a heal)
@@ -79,6 +80,17 @@ TutorialPt2.prototype = {
     //player's hp bar is from a prefab
     this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
     this.health_bar.outer.animations.play("idle");
+
+    this.kill_bar = [];
+    for(let i = 0; i < 5; i ++) {
+      this.kill_bar.push(game.add.image(this.health_bar.outer.width/5 * i + 120, 3*game.height/4 +123, "red", 0));
+      this.kill_bar[i].alpha = 0;
+      this.kill_bar[i].width = this.health_bar.outer.width/5;
+      this.kill_bar[i].height = 15;
+    }
+    game.add.image(115 + this.health_bar.outer.width, 3*game.height/4 +110, "heal", 0).tint = 0x00FF00;
+
+    game.add.bitmapText(70, 3*game.height/4 +122, "aldrich64", "KILLS:", 18).tint = 0xFF0000;
 
     this.movement = false; //flag to lock player movement
 
@@ -128,6 +140,10 @@ TutorialPt2.prototype = {
       if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_v);
     }
 
+  for(let i = 0; i < 5; i++) {
+      if (i < this.enemies_killed % 5) this.kill_bar[i].alpha = 1;
+      else this.kill_bar[i].alpha = 0;
+    }
 
     //restart upon death
     if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
@@ -181,15 +197,19 @@ TutorialPt2.prototype = {
     //because of naming conventions, this should work for both the enemy AND the player
 
     //first enemy triggers the reset to spawn
-    if(character instanceof Enemy && this.enemies_spawned == 1)  {
+    if(character instanceof Enemy)  {
+      this.enemies_killed++;
+      if(this.enemies_spawned == 1) {
       this.timer.loop(2000, this.spawn, this); 
       this.timer.remove(this.firing1);
       this.firing2 = this.timer.loop(5000, this.fire, this); 
-    }
-    if(character instanceof Enemy && this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
+     }
+    
+    if(this.enemies_spawned >= this.NUM_ENEMIES && this.enemies.countLiving() == 1) {
       this.lastX = character.body.center.x;
       // this.lastY = character.body.center.y;
     }
+  }
     if(character.body != null) {
       character.damage(bullet.dmg);
       bullet.destroy(); //destroy instead of kill to free memory
