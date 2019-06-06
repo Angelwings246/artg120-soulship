@@ -97,11 +97,12 @@ Level1.prototype = {
     this.timer.add(63000, this.ending, this);
     // this.timer.loop(2000, this.fire, this); 
 
+    //bar that displays progress towards spawning a health pack, which increments one per kill
     this.kill_bar = [];
     for(let i = 0; i < 5; i ++) {
       this.kill_bar.push(game.add.image(this.health_bar.outer.width/5 * i + 120, 3*game.height/4 +123, "red", 0));
       this.kill_bar[i].alpha = 0;
-      this.kill_bar[i].width = this.health_bar.outer.width/5;
+      this.kill_bar[i].width = this.health_bar.outer.width/5 - 3;
       this.kill_bar[i].height = 15;
     }
     game.add.image(115 + this.health_bar.outer.width, 3*game.height/4 +110, "heal", 0).tint = 0x00FF00;
@@ -142,6 +143,7 @@ Level1.prototype = {
     //cleanup enemies that die from going offscreen
     this.enemies.forEachDead(this.cleanup, this);
 
+  //update the kill bar
     for(let i = 0; i < 5; i++) {
       if (i < this.enemies_killed % 5) this.kill_bar[i].alpha = 1;
       else this.kill_bar[i].alpha = 0;

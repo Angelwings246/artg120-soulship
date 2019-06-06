@@ -81,11 +81,12 @@ TutorialPt2.prototype = {
     this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
     this.health_bar.outer.animations.play("idle");
 
+     //bar that displays progress towards spawning a health pack, which increments one per kill
     this.kill_bar = [];
     for(let i = 0; i < 5; i ++) {
       this.kill_bar.push(game.add.image(this.health_bar.outer.width/5 * i + 120, 3*game.height/4 +123, "red", 0));
       this.kill_bar[i].alpha = 0;
-      this.kill_bar[i].width = this.health_bar.outer.width/5;
+      this.kill_bar[i].width = this.health_bar.outer.width/5 - 3;
       this.kill_bar[i].height = 15;
     }
     game.add.image(115 + this.health_bar.outer.width, 3*game.height/4 +110, "heal", 0).tint = 0x00FF00;
@@ -140,6 +141,7 @@ TutorialPt2.prototype = {
       if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_v);
     }
 
+  //update the kill bar
   for(let i = 0; i < 5; i++) {
       if (i < this.enemies_killed % 5) this.kill_bar[i].alpha = 1;
       else this.kill_bar[i].alpha = 0;
