@@ -205,7 +205,7 @@ Cutscene2.prototype = {
 		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
 
 		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
-		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'Warning: Unknown Threat Detected \nWarning: Hull Integrity Low \nWarning: Engines Damaged', 36);
+		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'WARNING: Unknown Threat Detected \nWARNING: Hull Integrity Low \nWARNING: Engines Damaged', 36);
 		this.text1.alpha = 0;
 		this.text1.anchor.setTo = 0.5;
 		this.tween01 = game.add.tween(this.text1);

@@ -49,7 +49,7 @@ BossLevel.prototype = {
     this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
-    this.boss = new Boss(game, this.boss_sounds, "boss main", 0, "tentacle", "idle3", this.sfx_vol);
+    this.boss = new Boss(game, this.boss_sounds, "vortex", "vortex 1", "tentacle", "idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  

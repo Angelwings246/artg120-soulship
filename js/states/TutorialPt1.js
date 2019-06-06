@@ -112,21 +112,24 @@ TutorialPt1.prototype = {
 
 
   warning1: function(){
-	    var warning1 = game.add.bitmapText(game.width/2 , game.height/2 + 220,'aldrich64', '<- Warning!', 28);
+	    var warning1 = game.add.bitmapText(game.width/2 , game.height/2 + 250,'aldrich64', '!  <-- WARNING   !', 28);
 			warning1.anchor.setTo = 0.5;
 			warning1.alpha = 0;
+            warning1.tint = 0xFF0000;
 			var tween = game.add.tween(warning1).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
 	warning2: function(){
-			var warning2 = game.add.bitmapText(game.width/2 +100 , 250,'aldrich64', 'Unknown Threat', 28);
+			var warning2 = game.add.bitmapText(game.width/2 +100 , 250,'aldrich64', 'Unknown Threat Detected', 28);
 			warning2.anchor.setTo = 0.5;
 			warning2.alpha = 0;
+            warning2.tint = 0xFF0000;
 			var tween = game.add.tween(warning2).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
 	warning3: function(){
 			var warning3 = game.add.bitmapText(100, 100,'aldrich64', 'COORDINATES SET, \nRECALCULATING', 28);
 			warning3.anchor.setTo = 0.5;
 			warning3.alpha = 0;
+            warning3.tint = 0xFFFF00;
 			var tween = game.add.tween(warning3).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
 
@@ -134,7 +137,7 @@ TutorialPt1.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 		frames++;
 
-          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending;
+          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
 
 

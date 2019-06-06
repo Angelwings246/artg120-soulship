@@ -77,7 +77,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) 
   this.timer.start(); //remember to start it!
 
   // this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
-  // this.target = game.add.image(0, 0, "target", 0);
+    this.center_pt.animations.add("idle", Phaser.Animation.generateFrameNames("vortex ", 1, 4, "", 1), 8, true);
+// this.target = game.add.image(0, 0, "target", 0);
   // this.target.anchor.setTo(0.5);
   // this.target.alpha = 0;
 
@@ -92,7 +93,7 @@ Boss.prototype.constructor = Boss;
 Boss.prototype.update = function() {
   //calculate boss overall hp
   this.hp = this.top_pt.hp + this.bot_pt.hp;
-  if(this.hp < this.MAX_HEALTH) this.dmg = 3;  //increase damage when low hp ?
+  if(this.hp < this.MAX_HEALTH) this.dmg = 3;  //increase damage when low hp
   
   //kill the individual tentacles if their health reaches 0
   if(this.top_pt.exists && this.top_pt.hp <= 0) {
@@ -102,6 +103,7 @@ Boss.prototype.update = function() {
     this.bot_pt.death();
   }
 
+  this.center_pt.animations.play("idle");
 
   //rotation
   if(this.rotating) {

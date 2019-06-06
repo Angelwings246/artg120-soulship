@@ -75,7 +75,7 @@ TutorialPt2.prototype = {
     this.timer.start(); //don't forget to start timer
 
 
-    this.warning_text = game.add.bitmapText(game.width/8, 100, 'aldrich64',"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!", 32);
+    this.warning_text = game.add.bitmapText(game.width/8, 100, 'aldrich64',"!  WARNING: ENGINES DAMAGED  !\n!  WARNING: HULL UNSTABLE  !", 32);
     this.warning_text.tint = 0xFF0000;
 
     //player's hp bar is from a prefab
@@ -252,9 +252,9 @@ TutorialPt2.prototype = {
   //when a player reaches the end of the tutorial, allow the player to move again and prepare to advance to the next level
   ending: function() {
     this.warning_text.text = "SYSTEMS REPAIRED, MOVEMENT RESTORED";
-    this.warning_text.fill = "#00FFFF";
+    this.warning_text.tint = 0x00FFFF;
 
-    game.add.bitmapText(game.width/8, 170,'aldrich64', "CAUTION: HULL STABILITY STILL LOW", 32);
+    game.add.bitmapText(game.width/8, 170,'aldrich64', "CAUTION: HULL STABILITY STILL LOW", 32).tint = 0xFFFF00;
     // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.player.flame.alpha = 1; //bring flame back
