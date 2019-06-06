@@ -421,7 +421,8 @@ Level1.prototype = {
     this.timer.add(7000, this.player.flame.kill, this.player.flame); 
   },
     change_state: function() {
-    game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    game.state.start('Cutscene3', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+
   },
     //set up all the movement patterns, kept outside create for organization 
   init_patterns: function(){

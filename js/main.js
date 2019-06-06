@@ -33,6 +33,7 @@ window.onload = function(){
 	game.state.add('Cutscene2', Cutscene2);
 	game.state.add('TutorialPt2', TutorialPt2);
 	game.state.add('Level1', Level1);
+	game.state.add('Cutscene3', Cutscene3);
 	game.state.add('BossLevel', BossLevel);
 	game.state.add('GameOver', GameOver);
 

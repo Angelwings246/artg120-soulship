@@ -68,7 +68,7 @@ BossLevel.prototype = {
     //cred: Nathan Altice Paddle Parkour Redux
     this.timer = game.time.create(false);
     this.timer.add(0, this.fire, this); //fire at the start
-    this.phase1 = this.timer.loop(5000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
+    this.phase1 = this.timer.loop(4000, this.fire, this) //calls once every x milliseconds NOTE WILL PROBABLY ADJUST ONCE ANIMS ARE IN
     this.timer.start(); //don't forget to start timer
 
     this.victory = false; //switch to true if the player wins
@@ -95,7 +95,7 @@ BossLevel.prototype = {
       //adjust timing of shots - in phase 2 (i.e. when the boss is < 50% HP) the attacks are more powerful
       //thus, to compensate, they fire less frequently
       if(this.boss.hp <= this.boss.MAX_HEALTH/2 && this.phase2 == null) {
-          this.phase2 = this.timer.loop(8000, this.fire, this);
+          this.phase2 = this.timer.loop(6000, this.fire, this);
           this.timer.remove(this.phase1);
           console.log(this.phase2);
       }
