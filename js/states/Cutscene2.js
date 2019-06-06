@@ -49,7 +49,7 @@ Cutscene2.prototype = {
 
 		var timer = 0;
 		this.timer = game.time.create(false);
-		this.timer.add(10, this.cutscene, this);
+		this.timer.add(0, this.cutscene, this);
 		this.timer.add(10000, this.cutscenetext, this);
 		this.timer.add(5000, this.skiptext, this);
 		this.timer.start();

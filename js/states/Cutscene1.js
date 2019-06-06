@@ -38,7 +38,7 @@ Cutscene1.prototype = {
 
 		var timer = 0;
 		this.timer = game.time.create(false);
-		this.timer.add(10, this.cutscene, this);
+		this.timer.add(0, this.cutscene, this);
 		this.timer.add(1000, this.cutscenetext, this);
 		this.timer.add(5000, this.skiptext, this);
 		this.timer.start();
@@ -101,7 +101,7 @@ Cutscene1.prototype = {
 		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
 
 		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
-		this.intro1 = game.add.bitmapText(game.width/2-400, game.height/2-100, 'aldrich64', '"Captain! Come in Captain! We are approaching an asteroid belt!"', 28);
+		this.intro1 = game.add.bitmapText(game.width/2-400, game.height/2-100, 'aldrich64', '"Captain! Come in Captain! We\'re approaching an asteroid belt!"', 28);
 		this.intro1.alpha = 0;
 		this.intro1.anchor.setTo = 0.5;
 		this.tween01 = game.add.tween(this.intro1);

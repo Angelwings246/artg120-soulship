@@ -22,25 +22,23 @@ Cutscene3.prototype = {
 		this.voidscene = game.add.sprite(0, 0, '2void');
 		this.massscene = game.add.sprite(0, 0, '3tentaclemass');
 
-
-	    // cutscene text
-	    // this.intro1 = game.add.bitmapText(game.width/2 -200, game.height/2, 'aldrich64', 'Captain! Come in Captain! We are approaching an asteroid belt!', 28);
-		// this.intro2 = game.add.bitmapText(game.width/2 -400, game.height/2 -50, 'aldrich64', 'Hazards inbound!', 28);
-		// this.intro3 = game.add.bitmapText(game.width/2 -300, game.height/2, 'aldrich64','Hope you remember how to pilot this thing. Be careful!', 28);
-		// this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
-
 		// add audio
 		this.transmission = game.add.audio("transmission");
     	this.alarm = game.add.audio("alarm");
+    	this.spooky = game.add.audio("cutscene2")
 
 
 		var timer = 0;
 		this.timer = game.time.create(false);
-		this.timer.add(10, this.cutscene, this);
+		this.timer.add(0, this.cutscene, this);
 		this.timer.add(1000, this.cutscenetext, this);
 		this.timer.add(3000, this.skiptext, this);
 		this.timer.start();
-		timer = (Math.floor(this.timer.seconds)+1);
+
+		this.timer.add(0, this.play_sound, this, this.transmission, false);
+	  this.timer.add(8000, this.play_sound, this, this.transmission, false);
+
+		game.add.audio("cutscene2").play("", 0 , this.music_vol, true);
 
 
 	},
@@ -81,7 +79,7 @@ Cutscene3.prototype = {
 		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
 
 		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
-		this.intro1 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '"That was intense, but at least it is over!"', 28);
+		this.intro1 = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '"That was intense, but at least it\'s over!"', 28);
 		this.intro1.alpha = 0;
 		this.intro1.anchor.set(0.5);
 		this.tween01 = game.add.tween(this.intro1);
@@ -92,7 +90,7 @@ Cutscene3.prototype = {
 		this.intro2.alpha = 0;
 		this.intro2.anchor.set(0.5);
 		this.tween02 = game.add.tween(this.intro2);
-		this.tween02.to( {alpha: 1}, 2000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
+		this.tween02.to( {alpha: 1}, 2500, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
 
 
 		this.intro3 = game.add.bitmapText(game.width/2-120, game.height/2-200, 'aldrich64','"Oh...oh god..."', 36);
@@ -125,6 +123,9 @@ Cutscene3.prototype = {
 		var tween = game.add.tween(skiptext). to({alpha: 1}, 4000, Phaser.Easing.Linear.None, true);
 
 
+	},	
+	play_sound: function(sound, loop) {
+		sound.play('', 0, this.sfx_vol, loop);
 	},
 
 	update: function(){
