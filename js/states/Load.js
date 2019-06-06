@@ -87,6 +87,12 @@ Load.prototype = {
     game.load.image('13fullattack', '13 full attack.png');
 
 
+    // load the Cutscene3 images
+    game.load.path = "assets/img/cutscenes/Cutscene3/";
+    game.load.image("1ship", "1.png");
+    game.load.image("2void", "2.png"); 
+    game.load.image("3tentaclemass", "3.png");
+
 
     //load all audio files
     game.load.path = "assets/audio/";
