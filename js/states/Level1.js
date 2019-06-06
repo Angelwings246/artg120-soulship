@@ -416,7 +416,12 @@ Level1.prototype = {
 
     game.add.bitmapText(game.width/8, 170, 'aldrich64', "LEVEL CLEARED", 32);
     game.add.bitmapText(game.width/8, 250, 'aldrich64', "ENTERING VOID. PLEASE PREPARE",32);
-    this.timer.add(7000, game.state.start, game.state, "BossLevel", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    this.timer.add(7000, this.player.animations.play, this.player.animations, "warp");// game.state.start, game.state, "Level1", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    this.player.warp_anim.onComplete.add(this.change_state, this);
+    this.timer.add(7000, this.player.flame.kill, this.player.flame); 
+  },
+    change_state: function() {
+    game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   },
     //set up all the movement patterns, kept outside create for organization 
   init_patterns: function(){

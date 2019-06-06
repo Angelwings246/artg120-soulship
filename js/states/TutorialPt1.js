@@ -67,6 +67,9 @@ TutorialPt1.prototype = {
 	this.timer.add(26000, this.warning2, this);
 	this.timer.add(28000, this.warning3, this);
 
+    this.timer.add(33000, this.player.animations.play, this.player.animations, "warp");
+    this.player.warp_anim.onComplete.add(this.ending, this);
+
 	},
 
 	spawn: function(){
@@ -131,6 +134,8 @@ TutorialPt1.prototype = {
 		timer = (Math.floor(this.timer.seconds))+1;
 		frames++;
 
+          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending;
+
 
 
 	if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
@@ -173,18 +178,12 @@ TutorialPt1.prototype = {
 
 	if(timer >= 23){
 		if(this.health_bar.outer.frameName == "hp bar pt 1") this.health_bar.outer.frameName = "hp bar01";
-        this.player.frameName = "player ship broken";
+        if(this.player.frameName == "player ship")this.player.frameName = "player ship broken";
         this.health_bar.outer.animations.play("idle");
-		if (timer >= 33){
-            game.sound.stopAll()﻿;
-			game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 		}
-	}
-
-  if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) {
-      game.sound.stopAll()﻿;
-      game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-
-	}
-  }
+	},
+    ending: function() {
+            game.sound.stopAll()﻿;
+            game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    }
 };

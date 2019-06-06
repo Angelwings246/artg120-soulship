@@ -67,6 +67,7 @@ function PlayerShip(game, sounds, key, frame, main, alt, volume){
 
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
+  this.warp_anim = this.animations.add("warp", ["player ship broken", "player_death5", "player_death6"], 2, false, false);
   this.flame = game.add.sprite(this.body.x - 5, this.body.y + 16, "flame", "s1");
   this.flame.anchor.x = 1;
   this.flame.anchor.y = 0.5;

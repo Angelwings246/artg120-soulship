@@ -76,6 +76,7 @@ TutorialPt2.prototype = {
 
 
     this.warning_text = game.add.bitmapText(game.width/8, 100, 'aldrich64',"!--WARNING: ENGINES DAMAGED--!\n!--WARNING: HULL UNSTABLE--!", 32);
+    this.warning_text.tint = 0xFF0000;
 
     //player's hp bar is from a prefab
     this.health_bar = new HpBar(game, "hp bar", "hp bar01", "red", 0, this.player);
@@ -130,15 +131,17 @@ TutorialPt2.prototype = {
     if(game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).justPressed() || game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).isDown && this.player.time_since_last_shot % this.player.FIRE_RATE == 0) {
 
       var warning1 = game.add.bitmapText(game.width/4 - 75, game.height/3, 'aldrich64', 'WARNING! WEAPONS ACTIVATION \nCAUSING FURTHER DAMAGE!', 28);
-      warning1.anchor.setTo = 0.5;
+      // warning1.anchor.setTo(0.5);
       warning1.alpha = 0;
+      warning1.tint = 0xFF0000;
       var tween = game.add.tween(warning1).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       var warning2 = game.add.bitmapText(120, game.height/2 + 180, 'aldrich64', 'WARNING! Hull Unstable!', 28);
-      warning2.anchor.setTo = 0.5;
+      // warning2.anchor.setTo(0.5);
       warning2.alpha = 0;
+      warning2.tint = 0xFF0000;
       var tween2 = game.add.tween(warning2).to( {alpha: 1}, 750, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
       this.shots_fired++;
-      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_v);
+      if(!this.alarm_sound.isPlaying) this.alarm_sound.play("", 0 , this.sfx_vol);
     }
 
   //update the kill bar
@@ -148,7 +151,7 @@ TutorialPt2.prototype = {
     }
 
     //restart upon death
-    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
+    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
@@ -255,8 +258,12 @@ TutorialPt2.prototype = {
     // game.add.text(game.width/8, 250,"PREPARE TO FIGHT THE BOSS...",{fontSize: "32px", fill:"#00FFFF"});
     this.movement = true;
     this.player.flame.alpha = 1; //bring flame back
-    this.timer.add(7000, game.state.start, game.state, "Level1", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-
+    this.timer.add(7000, this.player.animations.play, this.player.animations, "warp");// game.state.start, game.state, "Level1", true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    this.player.warp_anim.onComplete.add(this.change_state, this);
+    this.timer.add(7000, this.player.flame.kill, this.player.flame); 
+  },
+  change_state: function() {
+    game.state.start('Level1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
   }
 
 };
