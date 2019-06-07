@@ -16,6 +16,7 @@ Cutscene3.prototype = {
 	},
 
 	create: function(){
+    game.sound.stopAll()﻿;
 
 		// cutscene images
 		this.shipscene = game.add.sprite(0, 0, '1ship');

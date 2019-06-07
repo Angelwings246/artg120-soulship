@@ -10,7 +10,6 @@ TutorialPt1.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
-        console.log(this.music_vol, this.sfx_vol);
 
 
   },
@@ -49,6 +48,7 @@ TutorialPt1.prototype = {
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
     this.music = game.add.audio("tutorial");
     this.music.play("", 0, this.music_vol, true);
+    this.alarm = game.add.audio("alarm");
 
     this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
@@ -68,7 +68,7 @@ TutorialPt1.prototype = {
 	this.timer.add(24000, this.warning1, this);
 	this.timer.add(26000, this.warning2, this);
 	this.timer.add(28000, this.warning3, this);
-
+    this.timer.add(23500, this.play_sound, this, this.alarm, true);
     this.timer.add(30000, this.player.animations.play, this.player.animations, "warp");
     this.player.warp_anim.onComplete.add(this.ending, this);
 
@@ -114,7 +114,7 @@ TutorialPt1.prototype = {
 
 
   warning1: function(){
-	    var warning1 = game.add.bitmapText(game.width/2 , game.height/2 + 250,'aldrich64', '!  <-- WARNING   !', 28);
+	    var warning1 = game.add.bitmapText(game.width/2 , game.height/2 + 220,'aldrich64', '!  <-- WARNING   !', 28);
 			warning1.anchor.setTo = 0.5;
 			warning1.alpha = 0;
             warning1.tint = 0xFF0000;
@@ -134,7 +134,9 @@ TutorialPt1.prototype = {
             warning3.tint = 0xFFFF00;
 			var tween = game.add.tween(warning3).to( {alpha: 1}, 1000, Phaser.Easing.Bounce.InOut, true, 0, 0, true);
 		},
-
+    play_sound: function(sound, loop) {
+        sound.play('', 0, this.sfx_vol, loop);
+    },
 	update: function(){
 		timer = (Math.floor(this.timer.seconds))+1;
 		frames++;
