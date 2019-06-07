@@ -30,7 +30,7 @@ function Enemy(game, x, y, sounds, key, frame, volume, animated) {
 
   this.bullets = game.add.group();
   this.dmg = 1;
-
+  this.dead = false;
   this.animated = animated;
 
   // checks and deletes offscreen enemies
@@ -45,7 +45,7 @@ function Enemy(game, x, y, sounds, key, frame, volume, animated) {
   //add animations
   if(key == "tentacle") {
     this.animations.add("idle", Phaser.Animation.generateFrameNames("idle", 1, 8, "", 1), 10, true);
-    this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
+    this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 10, false);
   }
   else if (key == "enemy") {
       this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 5, "", 1), 8, false);
@@ -114,7 +114,11 @@ Enemy.prototype.damage = function(dmg) {
 }
 //overriding .kill() would just be confusing
 Enemy.prototype.death = function() {
-  if(!this.death_sound.isPlaying) this.death_sound.play("", 0, this.volume);
+  //stop the sound from playing twice
+  if(!this.dead) {
+    this.death_sound.play("", 0, this.volume);
+    this.dead = true;
+  }
   this.can_fire = false;
   this.body = null;
   if(this.death_anim != null) {

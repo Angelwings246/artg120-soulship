@@ -49,7 +49,7 @@ BossLevel.prototype = {
     this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
-    this.boss = new Boss(game, this.boss_sounds, "vortex", "vortex 1", "tentacle", "idle3", this.sfx_vol);
+    this.boss = new Boss(game, this.boss_sounds, "vortex", "vortex1", "tentacle", "idle3", this.sfx_vol);
     game.add.existing(this.boss);
 
     //PlayerShip(game, sounds, key, frame)  
@@ -114,7 +114,7 @@ BossLevel.prototype = {
 	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || 
-        (this.boss.hp <= 0 && (this.boss.top_pt.death_anim.isFinished && this.boss.bot_pt.death_anim.isFinished)) || 
+        (this.boss.hp <= 0 && this.boss.death_anim.isFinished) || 
         game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		  if(this.boss.hp <= 0) this.victory = true;
       game.sound.stopAll();
@@ -138,12 +138,15 @@ BossLevel.prototype = {
     },
     //called in the loop for the boss to attack
 	  fire: function() {
-	    var pattern = this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
-      if(pattern == 2) {
-        this.target.x = this.player.x;
-        this.target.y = this.player.y;
-        this.target.alpha = 1;
-        this.timer.add(1000, function() {this.target.alpha = 0}, this);
+      if(this.boss.hp > 0) {
+  	    var pattern = this.boss.fire(this.player.x, this.player.y); //simply call the fire function of boss, which has all of the functionality set up
+        //add the target picture over the player for the correct fire pattern
+        if(pattern == 2) {
+          this.target.x = this.player.x;
+          this.target.y = this.player.y;
+          this.target.alpha = 1;
+          this.timer.add(1000, function() {this.target.alpha = 0}, this);
+        }
       }
     },
     //the character, be it player or enemy, takes damage

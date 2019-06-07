@@ -42,7 +42,7 @@ Load.prototype = {
     game.load.atlas("vortex", "vortex.png", "vortex.json");
     game.load.image("stars", "Stars.png");
     game.load.image("stars2", "Stars2.png");
-    game.load.image("heal", "hpDrop.png");
+    game.load.atlas("heal", "hpDrop.png", "hpDrop.json");
     game.load.atlas("hp bar", "hp bar.png", "hp bar.json");
     game.load.image("corrupt bar", "hp bar.png");
     game.load.image("glow", "hp bar glow.png");

@@ -202,7 +202,7 @@ Cutscene2.prototype = {
 
 		cutscenetext: function(){
 		//Tutorial Dialogue/Instructions
-		//this.blank = game.add.bitmapText(game.width/2, game.height/2, 'aldrich64', '', 20);
+
 
 		// .to({properties}, <duration>, <ease>, <autoStart>, <delay>, <repeat>, <yoyo>)
 		this.text1 = game.add.bitmapText(game.width/2-400, game.height/2-200, 'aldrich64', 'WARNING: Unknown Threat Detected \nWARNING: Hull Integrity Low \nWARNING: Engines Damaged', 36);

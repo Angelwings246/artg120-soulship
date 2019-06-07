@@ -13,6 +13,8 @@ function Pickup(game, x, y, key, frame) {
   this.body.velocity.x = -50;
   this.body.velocity.y = -20;
   this.anchor.set(0.5);
+
+  this.animations.add("idle", [0, 1], 2, true);
 }
 
 //assign prototype and constructor
@@ -20,5 +22,6 @@ Pickup.prototype = Object.create(Phaser.Sprite.prototype);
 Pickup.prototype.constructor = Pickup;
 
 Pickup.prototype.update = function() {
+  this.animations.play("idle");
   if(Math.abs(this.body.y - this.starty) >= 30) this.body.velocity.y *= -1;
 }

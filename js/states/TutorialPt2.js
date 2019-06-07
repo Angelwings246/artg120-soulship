@@ -30,11 +30,6 @@ TutorialPt2.prototype = {
     game.add.existing(this.stars2);
     this.stars2.alpha = 0.4;
 
-    // //set up music
-    // this.intro = game.add.audio("intro");
-    // this.intro.play();
-    // this.music = game.add.audio("loop", 1, true);
-
     //set up sounds
     this.heal_sound = game.add.audio("heal");
     this.alarm_sound = game.add.audio("alarm");
@@ -44,6 +39,7 @@ TutorialPt2.prototype = {
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
     this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
 
+    //set up music
     this.music = game.add.audio("tutorial");
     this.music.play("", 0, this.music_vol, true);
     game.add.audio("cutscene2").play("", 0 , this.music_vol, true);

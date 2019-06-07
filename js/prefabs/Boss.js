@@ -76,8 +76,8 @@ function Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume) 
   this.timer = game.time.create(false); //timer for firing stuff
   this.timer.start(); //remember to start it!
 
-  // this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("death", 1, 12, "", 2), 8, false);
-    this.center_pt.animations.add("idle", Phaser.Animation.generateFrameNames("vortex ", 1, 4, "", 1), 8, true);
+    this.death_anim = this.center_pt.animations.add("death", Phaser.Animation.generateFrameNames("", 1, 8, "", 1), 4, false);
+    this.center_pt.animations.add("idle", Phaser.Animation.generateFrameNames("vortex", 1, 4, "", 1), 8, true);
 // this.target = game.add.image(0, 0, "target", 0);
   // this.target.anchor.setTo(0.5);
   // this.target.alpha = 0;
@@ -103,7 +103,6 @@ Boss.prototype.update = function() {
     this.bot_pt.death();
   }
 
-  this.center_pt.animations.play("idle");
 
   //rotation
   if(this.rotating) {
@@ -118,6 +117,7 @@ Boss.prototype.update = function() {
 
   //when both parts are dead, so is the boss
   if(this.top_pt.hp <= 0 && this.bot_pt.hp <= 0) this.death();
+  else this.center_pt.animations.play("idle");
 
   //because we have overridden Phaser.Group, we have to manually call the children's update
   if(this.top_pt.exists && this.top_pt.hp > 0) this.top_pt.update();
@@ -465,5 +465,6 @@ Boss.prototype.fire4b = function() {
 //when the boss dies
 Boss.prototype.death = function() {
   this.rotating = false;
+  this.center_pt.animations.play("death");
   console.log("ded");
 }
