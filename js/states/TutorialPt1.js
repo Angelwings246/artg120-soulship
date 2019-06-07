@@ -19,34 +19,36 @@ TutorialPt1.prototype = {
   },
 	create: function(){
 
-    //set up scrolling background with multiple layers of stars
-    //scroll speed is set to all be coprime so the loops are less frequent/obvious
     game.sound.stopAll();
     var timer = 0;
     frames = 0;  
 	this.timer = game.time.create(false);
 	this.timer.start();
 	timer = (Math.floor(this.timer.seconds))+1;
-	// allow blackout background w/ text first
 
+    //spawn some dudes
 	this.spawning = this.timer.loop(game.rnd.integerInRange(1000,2000), this.spawn, this);
 
 
-    	this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
-    	this.background.autoScroll(-50, 0);
-    	game.add.existing(this.background);
-    	this.stars = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars");
-    	this.stars.autoScroll(-100, 0);
-    	this.stars.alpha = 0.9;
-    	game.add.existing(this.stars);
-    	this.stars2 = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars2");
-    	this.stars2.autoScroll(-125, 0);
-    	game.add.existing(this.stars2);
-    	this.stars2.alpha = 0.4;
+    //set up scrolling background with multiple layers of stars
+    //scroll speed is set to all be coprime so the loops are less frequent/obvious
+	this.background = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "background");
+	this.background.autoScroll(-50, 0);
+	game.add.existing(this.background);
+	this.stars = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars");
+	this.stars.autoScroll(-100, 0);
+	this.stars.alpha = 0.9;
+	game.add.existing(this.stars);
+	this.stars2 = new Phaser.TileSprite(game, 0, 0, game.width, game.height, "stars2");
+	this.stars2.autoScroll(-125, 0);
+	game.add.existing(this.stars2);
+	this.stars2.alpha = 0.4;
 
+    //set up sounds
     this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
     this.enemy_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit")];
-
+    this.music = game.add.audio("tutorial");
+    this.music.play("", 0, this.music_vol, true);
 
     this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
@@ -67,7 +69,7 @@ TutorialPt1.prototype = {
 	this.timer.add(26000, this.warning2, this);
 	this.timer.add(28000, this.warning3, this);
 
-    this.timer.add(33000, this.player.animations.play, this.player.animations, "warp");
+    this.timer.add(30000, this.player.animations.play, this.player.animations, "warp");
     this.player.warp_anim.onComplete.add(this.ending, this);
 
 	},

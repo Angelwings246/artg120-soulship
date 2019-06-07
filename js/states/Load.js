@@ -109,6 +109,9 @@ Load.prototype = {
     game.load.audio('alarm', ["Alarm.mp3", "Alarm.ogg"]);
     game.load.audio("boss intro", ["music intro.mp3", "music intro.ogg"]);
     game.load.audio("boss loop", ["music loop.mp3", "music loop.ogg"]);
+    game.load.audio('tutorial', ["TutorialTheme.mp3", "TutorialTheme.ogg"]);
+    game.load.audio('level1', ["Level1Theme.mp3", "Level1Theme.ogg"]);
+
 
 
 		//create Loading bar image

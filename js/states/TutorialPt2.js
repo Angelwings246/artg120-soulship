@@ -44,8 +44,12 @@ TutorialPt2.prototype = {
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
     this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
 
-    //PlayerShip(game, sounds, key, frame)  
+    this.music = game.add.audio("tutorial");
+    this.music.play("", 0, this.music_vol, true);
+    game.add.audio("cutscene2").play("", 0 , this.music_vol, true);
 
+
+    //PlayerShip(game, sounds, key, frame)  
     this.player = new PlayerShip(game, this.player_sounds, "player", "player ship broken", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
     this.player.body.x = this.startX = game.width/4;
