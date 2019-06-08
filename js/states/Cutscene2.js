@@ -66,6 +66,9 @@ Cutscene2.prototype = {
 		this.timer.add(32250, this.alarm.pause, this.alarm);
 		this.timer.add(36500, this.alarm.resume, this.alarm);
 		this.timer.add(44250, this.alarm.pause, this.alarm);
+		this.timer.add(45000, this.play_sound, this, this.transmission, false);
+		this.timer.add(54500, this.play_sound, this, this.transmission, false);
+
 
 	},
 
@@ -254,7 +257,7 @@ Cutscene2.prototype = {
 		this.tween05.to( {alpha: 1}, 7000, Phaser.Easing.Bounce.InOut, false, 0, 0, true);
 
 
-		this.text6 = game.add.bitmapText(game.width/2, game.height/2-50, 'aldrich64','"...but it looks like we are just getting started..."', 28);
+		this.text6 = game.add.bitmapText(game.width/2, game.height/2-50, 'aldrich64','"...but it looks like we\'re just getting started..."', 28);
 		this.text6.alpha = 0;
 		this.text6.anchor.set(0.5);
 		this.tween06 = game.add.tween(this.text6);

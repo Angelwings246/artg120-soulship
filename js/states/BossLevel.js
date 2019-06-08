@@ -39,13 +39,15 @@ BossLevel.prototype = {
     this.music = game.add.audio("boss loop", 1, true);
 
     //set up sounds
+    this.void_hit = game.add.audio("void hit"); //take out these two guys to play them together
+    this.boom = game.add.audio("boom"); 
+    this.void_hit.onPlay.add(function() {this.boom.play("", 0, this.sfx_vol, false);}, this);
 
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit
-    this.boss_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("hit boss")];
+    this.boss_sounds = [this.void_hit, game.add.audio("pew"), game.add.audio("hit boss")];
 
     //ORDER OF SOUNDS: Death, Shooting, [Being] Hit, Low HP
-    this.player_sounds = [game.add.audio("boom"), game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
-
+    this.player_sounds = [this.boom, game.add.audio("pew"), game.add.audio("ouch"), game.add.audio("panic")];
     this.heal_sound = game.add.audio("heal");
 
     //Boss(game, sounds, key_main, frame_main, key_side, frame_side, volume)
@@ -118,7 +120,7 @@ BossLevel.prototype = {
         game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
 		  if(this.boss.hp <= 0) this.victory = true;
       game.sound.stopAll();
-      this.intro.onStop.removeAll();
+      this.intro.onStop.removeAll(); //remove the trigger to play the next part of audio
       game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
 	  }
       //debug cred: Nathan Altice inputs08.js
