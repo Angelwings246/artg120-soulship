@@ -118,8 +118,7 @@ Enemy.prototype.death = function() {
   if(!this.dead) {
     this.death_sound.play("", 0, this.volume);
     this.dead = true;
-    console.log("boom");
-    console.log(this.death_sound);
+    // console.log("boom");
   }
   this.can_fire = false;
   this.body = null;
