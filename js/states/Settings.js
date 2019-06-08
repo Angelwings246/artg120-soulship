@@ -46,6 +46,11 @@ Settings.prototype = {
     this.music_up = game.add.button(game.width/5 + 300, game.height/4 - 20, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
     this.sfx_up = game.add.button(game.width/5 + 300, game.height/4 + 30, "button", this.vol_change, this, "button dark", "button dark", "button light", "button dark");
 
+    game.add.bitmapText(game.width/5 + 165, game.height/4 + 3, "aldrich64", "-", 64).anchor.set(0.5);
+    game.add.bitmapText(game.width/5 + 365, game.height/4 + 3, "aldrich64", "+", 56).anchor.set(0.5);
+    game.add.bitmapText(game.width/5 + 165, game.height/4 + 53, "aldrich64", "-", 64).anchor.set(0.5);
+    game.add.bitmapText(game.width/5 + 365, game.height/4 + 53, "aldrich64", "+", 56).anchor.set(0.5);
+
     //set up the buttons for hotkeys
     this.main_up = game.add.button(game.width/5 + 100, game.height/2, "button", this.begin_capture, this, "button dark", "button dark");
     this.alt_up = game.add.button(game.width/5 + 230, game.height/2, "button", this.begin_capture, this, "button dark", "button dark");
