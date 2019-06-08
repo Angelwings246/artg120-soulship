@@ -69,7 +69,7 @@ TutorialPt1.prototype = {
 	this.timer.add(24000, this.warning1, this);
 	this.timer.add(26000, this.warning2, this);
 	this.timer.add(28000, this.warning3, this);
-    this.timer.add(21500, this.play_sound, this, this.void_hit, true);
+    this.timer.add(21500, this.play_sound, this, this.void_hit, false);
     this.timer.add(23500, this.play_sound, this, this.alarm, true);
     this.timer.add(30000, this.player.animations.play, this.player.animations, "warp");
     this.player.warp_anim.onComplete.add(this.ending, this);
@@ -79,7 +79,7 @@ TutorialPt1.prototype = {
         timer = (Math.floor(this.timer.seconds))+1;
         frames++;
 
-          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
+          // if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
 
 

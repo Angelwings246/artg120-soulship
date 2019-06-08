@@ -62,8 +62,8 @@ function PlayerShip(game, sounds, key, frame, main, alt, volume){
     'right': alt.right,
     'fire': alt.fire});
 
-    console.log(this.main);
-    console.log(this.alt);
+    // console.log(this.main);
+    // console.log(this.alt);
 
   //implement animations
   this.death_anim = this.animations.add("death", Phaser.Animation.generateFrameNames("player_death", 1, 6, "", 1), 8, false);
@@ -174,6 +174,9 @@ PlayerShip.prototype.update = function(){
       break;
   }
 
+  if(this.body.y > 7/8 * game.height) this.body.y = 7/8 * game.height
+
+
   //when the fire button is held, shoot at a constant rate
 	if(this.main.fire.isDown || this.alt.fire.isDown){
     if(this.time_since_last_shot % this.FIRE_RATE == 0){
@@ -231,7 +234,7 @@ PlayerShip.prototype.update = function(){
 
 //player shoots a bullet and loses 1 hp
 PlayerShip.prototype.fire = function() {
-  console.log("pew");
+  // console.log("pew");
   this.firing_sound.play("", 0, this.volume);
 
   //Bullet(game, x, y, speed, angle, color, ally, key, frame)

@@ -10,8 +10,6 @@ BossLevel.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
-    console.log(this.music_vol, this.sfx_vol);
-
   },
 	preload: function(){
    //all preloading done in Load state
@@ -99,7 +97,7 @@ BossLevel.prototype = {
       if(this.boss.hp <= this.boss.MAX_HEALTH/2 && this.phase2 == null) {
           this.phase2 = this.timer.loop(6000, this.fire, this);
           this.timer.remove(this.phase1);
-          console.log(this.phase2);
+          // console.log(this.phase2);
       }
 
     //spawn a health pack when the first part of the boss dies
@@ -116,27 +114,27 @@ BossLevel.prototype = {
 	  // game ends when player or boss hits 0 hp
 	  // also debug button to go to game over
 	  if((this.player.hp <= 0 && this.player.death_anim.isFinished) || 
-        (this.boss.hp <= 0 && this.boss.death_anim.isFinished) || 
-        game.input.keyboard.justPressed(Phaser.Keyboard.Q)){
+        (this.boss.hp <= 0 && this.boss.death_anim.isFinished) /*|| 
+         game.input.keyboard.justPressed(Phaser.Keyboard.Q)*/){
 		  if(this.boss.hp <= 0) this.victory = true;
       game.sound.stopAll();
       this.intro.onStop.removeAll(); //remove the trigger to play the next part of audio
       game.state.start('GameOver', true, false, this.victory, this.main, this.alt, this.music_vol, this.sfx_vol, 'BossLevel');
 	  }
-      //debug cred: Nathan Altice inputs08.js
-      if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
-        this.debug = !this.debug;
-      }
+      // //debug cred: Nathan Altice inputs08.js
+      // if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
+      //   this.debug = !this.debug;
+      // }
     },
     render: function() {
-      if(this.debug) {
-        //turn on all debug bodies
-        game.debug.body(this.player);
-        this.boss.forEach(game.debug.body, game.debug);
-        this.boss.bullets.forEach(game.debug.body, game.debug);
-        this.player.bullets.forEach(game.debug.body, game.debug);
-        game.debug.text(this.timer.seconds, 50, 50);
-      }
+      // if(this.debug) {
+      //   //turn on all debug bodies
+      //   game.debug.body(this.player);
+      //   this.boss.forEach(game.debug.body, game.debug);
+      //   this.boss.bullets.forEach(game.debug.body, game.debug);
+      //   this.player.bullets.forEach(game.debug.body, game.debug);
+      //   game.debug.text(this.timer.seconds, 50, 50);
+      // }
     },
     //called in the loop for the boss to attack
 	  fire: function() {

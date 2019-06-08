@@ -10,8 +10,6 @@ GameOver.prototype = {
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
     this.previous = previous; //track the previous state the player was in
-        console.log(this.music_vol, this.sfx_vol);
-
   },
   preload: function() {
     //all preloading done in Load state
@@ -37,12 +35,12 @@ GameOver.prototype = {
     }
 	},
 	update: function(){
-		if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
-			game.state.start(this.previous, true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-    }
-   if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
-        game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-    }
+		// if (game.input.keyboard.justPressed(Phaser.Keyboard.R)){
+		// 	game.state.start(this.previous, true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+  //   }
+  //  if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
+  //       game.state.start('MainMenu', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+  //   }
 
 
 	},
@@ -57,7 +55,7 @@ GameOver.prototype = {
           state = "MainMenu";
           break;
         default:
-          console.log(button);
+          // console.log(button);
           break; 
       }
       game.sound.stopAll()﻿;

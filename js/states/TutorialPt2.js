@@ -9,8 +9,6 @@ TutorialPt2.prototype = {
     this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
-    console.log(this.music_vol, this.sfx_vol);
-
   },
 	preload: function() {
    //all preloading done in Load state
@@ -160,23 +158,23 @@ TutorialPt2.prototype = {
     game.physics.arcade.overlap(this.player, this.enemies, this.crashing, null, this);
 
     //for testing purposes, Q triggers the ending of the tutorial
-    if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
+    // if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 		
-    //debug cred: Nathan Altice inputs08.js
-    if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
-      this.debug = !this.debug;
-    }
+    // //debug cred: Nathan Altice inputs08.js
+    // if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
+    //   this.debug = !this.debug;
+    // }
 
   },
   render: function() {
-    if(this.debug) {
-      //turn on all debug bodies
-      game.debug.body(this.player);
-      this.enemies.forEach(game.debug.body, game.debug);
-      // this.boss.bullets.forEach(game.debug.body, game.debug);
-      this.player.bullets.forEach(game.debug.body, game.debug);
-      game.debug.text(this.timer.seconds, 50, 50);
-    }
+    // if(this.debug) {
+    //   //turn on all debug bodies
+    //   game.debug.body(this.player);
+    //   this.enemies.forEach(game.debug.body, game.debug);
+    //   // this.boss.bullets.forEach(game.debug.body, game.debug);
+    //   this.player.bullets.forEach(game.debug.body, game.debug);
+    //   game.debug.text(this.timer.seconds, 50, 50);
+    // }
   },
   //spawns an enemy that goes straight towards the player
 	spawn: function() {

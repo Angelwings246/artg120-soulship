@@ -108,9 +108,9 @@ Settings.prototype = {
   update: function(){
 
     this.capture_cursors(); //the keyboard callback doesn't capture the arrow keys, which might be important
-    if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
-      this.back();
-    }
+    // if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
+    //   this.back();
+    // }
   },
   //update the text counting the volume
   update_volume_text: function() {
@@ -156,7 +156,7 @@ Settings.prototype = {
       default:
         break;
       }
-    console.log(this.music_vol + " " + this.sfx_vol);
+    // console.log(this.music_vol + " " + this.sfx_vol);
     this.update_volume_text();
 
   },

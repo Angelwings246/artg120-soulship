@@ -7,7 +7,7 @@
  * ORDER OF SOUNDS: Death, Shooting, [Being] Hit
  */
 function Enemy(game, x, y, sounds, key, frame, volume, animated) {
-  console.log("enemy spawning at x: %s y: %s", x, y);
+  // console.log("enemy spawning at x: %s y: %s", x, y);
   //call Phaser.Sprite constructor (game, x, y, key, frame)
   Phaser.Sprite.call(this, game, x, y, key, frame);
   game.physics.arcade.enable(this);
@@ -118,6 +118,8 @@ Enemy.prototype.death = function() {
   if(!this.dead) {
     this.death_sound.play("", 0, this.volume);
     this.dead = true;
+    console.log("boom");
+    console.log(this.death_sound);
   }
   this.can_fire = false;
   this.body = null;
@@ -133,7 +135,7 @@ Enemy.prototype.death = function() {
   }
 }
 /*if the enemy has a path, given to it by setting path an object (containing 2 objects, points and vels, each having
-* an x and  property of equal length arrays), then use those paths to determine movement.
+* an x and y property of equal length arrays), then use those paths to determine movement.
 * the rounding is all in there because counting is weird
 * this.path_index determines which point we are hitting.
 */

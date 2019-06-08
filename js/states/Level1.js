@@ -11,7 +11,7 @@ Level1.prototype = {
 		this.alt = alt;
     this.music_vol = music_vol;
     this.sfx_vol = sfx_vol;
-    console.log(this.music_vol, this.sfx_vol);
+    // console.log(this.music_vol, this.sfx_vol);
 
 	},
 	preload: function(){
@@ -127,12 +127,12 @@ Level1.prototype = {
     game.physics.arcade.overlap(this.player, this.basic_enemies, this.crashing, null, this);
     game.physics.arcade.overlap(this.player, this.asteroid_enemies, this.crashing, null, this);
 
-            //debug cred: Nathan Altice inputs08.js
-    if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
-      this.debug = !this.debug;
-    }
+    //         //debug cred: Nathan Altice inputs08.js
+    // if(game.input.keyboard.addKey(Phaser.KeyCode.T).justPressed()) {
+    //   this.debug = !this.debug;
+    // }
     // cheat to get to ending quickly
-    if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
+    // if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
 
     //Update Stationary and Assault Enemies
     if (this.basic_enemies_spawned > 0 && this.basic_enemies_spawned <= 15){
@@ -154,14 +154,14 @@ Level1.prototype = {
 
 	},
    render: function() {
-    if(this.debug) {
-      //turn on all debug bodies
-      game.debug.body(this.player);
-      this.enemies.forEach(game.debug.body, game.debug);
-      // this.boss.bullets.forEach(game.debug.body, game.debug);
-      this.player.bullets.forEach(game.debug.body, game.debug);
-      game.debug.text(this.timer.seconds, 50, 50);
-    }
+    // if(this.debug) {
+    //   //turn on all debug bodies
+    //   game.debug.body(this.player);
+    //   this.enemies.forEach(game.debug.body, game.debug);
+    //   // this.boss.bullets.forEach(game.debug.body, game.debug);
+    //   this.player.bullets.forEach(game.debug.body, game.debug);
+    //   game.debug.text(this.timer.seconds, 50, 50);
+    // }
   },
     //the character, be it player or enemy, takes damage
   damage: function(character, bullet) {
@@ -232,7 +232,6 @@ Level1.prototype = {
   },
   spawn: function(x, y, key, frame, path) {
     //spawns a series of enemies that goes in a sine wave towards the player
-      console.log('spawning enemy');
       var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, this.sfx_vol, false);
       this.enemies.add(enemy);
       enemy.path = path;
@@ -247,7 +246,6 @@ Level1.prototype = {
   },
   basicSpawn: function(x, y, key, frame) {
     //spawns a series of enemies that goes in a sine wave towards the player
-      console.log('spawning enemy');
       var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, this.sfx_vol, false);
       this.basic_enemies.add(enemy);
       enemy.rotation = Math.PI;
@@ -260,8 +258,7 @@ Level1.prototype = {
   },
   asteroidSpawn: function(x, y, key, frame){
     // spawns asteroid storms
-      console.log('spawning asteroid');
-      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, false);
+      var enemy = new Enemy(game, x, y, this.enemy_sounds, key, frame, this.sfx_vol, false);
       this.asteroid_enemies.add(enemy);
       enemy.can_fire = false;        
       enemy.body.velocity.y = game.rnd.integerInRange(10, 600);
@@ -279,7 +276,6 @@ Level1.prototype = {
         this.enemies_spawned++;
        } else this.timer.remove(this.loop); 
       }, this);
-    console.log(this.loop);
 	},
 
 	    //spawns a series of enemies that goes in two alternating sine waves towards the player
@@ -478,12 +474,6 @@ Level1.prototype = {
       this.sineApattern.vels.x.push(vx);
       this.sineApattern.vels.y.push(vy);
     }
-
-    // console.log(this.sineApattern);
-    this.tester = new Enemy(game, game.width + 50, game.height/2, this.enemy_sounds, "enemy", "sine", false);
-    this.tester.body.velocity.x = vx;
-    this.tester.path = this.sineApattern;
-    // this.enemies.add(this.tester);
 
     //small pattern as diagrammed above, top half
     this.sineBpattern1 = {

@@ -154,7 +154,7 @@ Boss.prototype.fire = function(x, y) {
     default:
       break;
   }  
-  console.log("pew pew " + pattern);
+  // console.log("pew pew " + pattern);
   return pattern;
 }
 
@@ -168,7 +168,7 @@ Boss.prototype.fire1a = function() {
     var i;
     if(this.waves_fired % 2 == 0) i = 1;
     else i = 0;
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
     var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+13)/18 * Math.PI, 0xFF3366, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
@@ -196,7 +196,7 @@ Boss.prototype.fire1b = function() {
     var i;
     if(this.waves_fired % 2 == 0) i = 1;
     else i = 0;
-    console.log("phase 2 " + this.waves_fired);
+    // console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
     var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, (i+11)/18 * Math.PI, 0xFF0D42, this.dmg, "bullet", 0);
     this.bullets.add(bullet);
@@ -225,7 +225,7 @@ Boss.prototype.fire1b = function() {
 Boss.prototype.fire2a = function() {
   if(this.waves_fired < 4) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
     if(this.top_pt.body != null) {
@@ -257,7 +257,7 @@ Boss.prototype.fire2a = function() {
 Boss.prototype.fire2b = function() {
   if(this.waves_fired < 4) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet;
     if(this.top_pt.body != null) {
@@ -298,7 +298,7 @@ Boss.prototype.fire2b = function() {
 Boss.prototype.fire3a = function(x, y) {
 if(this.waves_fired < 4) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     
     var bullet;
     //do math stuff to calculate the angle of fire
@@ -342,7 +342,7 @@ Boss.prototype.fire3b = function(x, y) {
     var num_asteroids = game.rnd.integerInRange(2, 5); //random number of asteroids
     var asteroid_key;
   for(let i = 0; i < num_asteroids; i++) {
-     console.log("asteroid " + i);
+     // console.log("asteroid " + i);
      //switch between the two asteroid assets
      if(i % 2 == 0) asteroid_key = "asteroid2";
      else asteroid_key = "asteroid";
@@ -354,11 +354,11 @@ Boss.prototype.fire3b = function(x, y) {
      asteroid.body.velocity.y = 0; //remove velocity from the base Enemy type
      this.asteroids.add(asteroid);
    }
-   console.log(this.asteroids);
+   // console.log(this.asteroids);
   }
   if(this.waves_fired < 5) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     
     var bullet;
     //do math stuff to calculate the angle of fire
@@ -394,7 +394,7 @@ Boss.prototype.fire3b = function(x, y) {
 Boss.prototype.fire4a = function() {
   if(this.waves_fired < 3) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 1 " + this.waves_fired);
+    // console.log("phase 1 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xFF62F0, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
@@ -432,7 +432,7 @@ Boss.prototype.fire4a = function() {
 Boss.prototype.fire4b = function() {
   if(this.waves_fired < 7) {
     this.firing_sound.play("", 0, this.volume);
-    console.log("phase 2 " + this.waves_fired);
+    // console.log("phase 2 " + this.waves_fired);
     //Bullet(game, x, y, speed, angle, color, damage, key, frame)
       var bullet = new Bullet(game, this.center_pt.centerX, this.center_pt.centerY, 100, 3/4 * Math.PI, 0xE41AD0, this.dmg, "bullet", 0);
       this.bullets.add(bullet);
@@ -466,5 +466,5 @@ Boss.prototype.fire4b = function() {
 Boss.prototype.death = function() {
   this.rotating = false;
   this.center_pt.animations.play("death");
-  console.log("ded");
+  // console.log("ded");
 }
