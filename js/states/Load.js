@@ -105,6 +105,7 @@ Load.prototype = {
     game.load.audio("panic", ["LowHP.mp3", "LowHP.ogg"]);
     game.load.audio("hit", ["EnemyGetsHit.mp3"]);
     game.load.audio("hit boss", ["EnemyGetsHit.mp3"]);
+    game.load.audio("void hit", ["VoidHit.mp3"]);
     game.load.audio("heal", ["HealthUp2.mp3", "HealthUp2.ogg"]);
     game.load.audio('alarm', ["Alarm.mp3", "Alarm.ogg"]);
     game.load.audio("boss intro", ["music intro.mp3", "music intro.ogg"]);

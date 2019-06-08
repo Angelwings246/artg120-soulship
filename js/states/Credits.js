@@ -16,6 +16,7 @@ Credits.prototype = {
   create: function(){
     game.add.image(0, 0, "background");
     game.add.bitmapText(game.width/4, game.height/4 - 100, "aldrich64", 'Credits', 96);
+    game.add.bitmapText(game.width/4 + 5, game.height/4 - 10, "aldrich64", 'ARTG/CMPM 120 Spring 2019', 30);
     game.add.bitmapText(game.width/4 + 50, game.height/4 + 50, "aldrich64", 'Taylor Fagundes', 48);
     game.add.bitmapText(game.width/4 + 50, game.height/4 + 100, "aldrich64", 'Art', 30);
     game.add.bitmapText(game.width/4 + 50, game.height/4 + 150, "aldrich64", 'Hunter Lynch', 48);

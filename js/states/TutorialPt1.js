@@ -49,6 +49,7 @@ TutorialPt1.prototype = {
     this.music = game.add.audio("tutorial");
     this.music.play("", 0, this.music_vol, true);
     this.alarm = game.add.audio("alarm");
+    this.void_hit = game.add.audio("void hit");
 
     this.player = new PlayerShip(game, this.player_sounds, "player", "player ship", this.main, this.alt, this.sfx_vol);
     game.add.existing(this.player);
@@ -68,6 +69,7 @@ TutorialPt1.prototype = {
 	this.timer.add(24000, this.warning1, this);
 	this.timer.add(26000, this.warning2, this);
 	this.timer.add(28000, this.warning3, this);
+    this.timer.add(21500, this.play_sound, this, this.void_hit, true);
     this.timer.add(23500, this.play_sound, this, this.alarm, true);
     this.timer.add(30000, this.player.animations.play, this.player.animations, "warp");
     this.player.warp_anim.onComplete.add(this.ending, this);
