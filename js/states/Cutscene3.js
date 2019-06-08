@@ -44,6 +44,14 @@ Cutscene3.prototype = {
 
 	},
 
+	update: function(){
+
+    if (this.timer.seconds > 16 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
+      game.sound.stopAll()﻿;
+	    game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+	  }
+	},
+
 	cutscene: function(){
 		// from Nathan Altice's tweens slides
 		// names are the names of the frames + scene 
@@ -127,15 +135,6 @@ Cutscene3.prototype = {
 	},	
 	play_sound: function(sound, loop) {
 		sound.play('', 0, this.sfx_vol, loop);
-	},
-
-	update: function(){
-
-    if (this.timer.seconds > 16 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
-      game.sound.stopAll()﻿;
-	    game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-	}
-
 	}
 
 };

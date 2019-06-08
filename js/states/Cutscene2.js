@@ -72,6 +72,14 @@ Cutscene2.prototype = {
 
 	},
 
+	update: function(){
+
+    if (this.timer.seconds > 65 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
+    	game.sound.stopAll();
+	    game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+	  }
+  },
+
 	cutscene: function(){
 		// from Nathan Altice's tweens slides
 		// names are the names of the frames + scene 
@@ -289,15 +297,7 @@ Cutscene2.prototype = {
 	},
 	play_sound: function(sound, loop) {
 		sound.play('', 0, this.sfx_vol, loop);
-	},
-
-	update: function(){
-
-    if (this.timer.seconds > 65 || game.input.keyboard.addKey(Phaser.KeyCode.X).justPressed()){ 
-    	game.sound.stopAll();
-	    game.state.start('TutorialPt2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
 	}
 
-	}
 
 };

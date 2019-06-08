@@ -75,6 +75,58 @@ TutorialPt1.prototype = {
     this.player.warp_anim.onComplete.add(this.ending, this);
 
 	},
+    update: function(){
+        timer = (Math.floor(this.timer.seconds))+1;
+        frames++;
+
+          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
+
+
+
+    if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
+        game.sound.stopAll()﻿;
+        game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt1');;
+    }
+    game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
+    game.physics.arcade.overlap(this.player, this.asteroids, this.crashing, null, this);
+
+    //var playerposx;
+    //var playerposy;
+
+    if (timer >= 15){
+        if (this.spawning != null){
+            this.timer.remove(this.spawning);
+        }
+    }
+    if (timer == 20 && frames%32 == 0){
+
+    //locate the player's current position
+        this.playerposx = this.player.body.x;
+        this.playerposy = this.player.body.y;
+        //console.log('posx'+this.playerposx);
+        //console.log('posy'+this.playerposy);
+
+    }
+
+    if(timer >= 21 ){
+
+    //lock player movement
+        this.player.body.x = this.playerposx;
+        this.player.body.y = this.playerposy;
+        this.player.body.velocity.x = this.player.body.velocity.y = 0;
+        this.player.flame.alpha = 0;
+    //move the tentacle through the player's location
+        this.tentacle.body.velocity.x = (this.playerposx - game.width/2);
+        this.tentacle.body.velocity.y = this.playerposy + 100;
+
+    }
+
+    if(timer >= 23){
+        if(this.health_bar.outer.frameName == "hp bar pt 1") this.health_bar.outer.frameName = "hp bar01";
+        if(this.player.frameName == "player ship")this.player.frameName = "player ship broken";
+        this.health_bar.outer.animations.play("idle");
+        }
+    },
 
 	spawn: function(){
 	var asteroid;
@@ -139,58 +191,6 @@ TutorialPt1.prototype = {
     play_sound: function(sound, loop) {
         sound.play('', 0, this.sfx_vol, loop);
     },
-	update: function(){
-		timer = (Math.floor(this.timer.seconds))+1;
-		frames++;
-
-          if(game.input.keyboard.addKey(Phaser.KeyCode.Q).justPressed()) this.ending();
-
-
-
-	if (this.player.hp <= 0 && this.player.death_anim.isFinished) {
-        game.sound.stopAll()﻿;
-		game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt1');;
-	}
-	game.physics.arcade.overlap(this.asteroids, this.player.bullets, this.damage, null, this);
-	game.physics.arcade.overlap(this.player, this.asteroids, this.crashing, null, this);
-
-	//var playerposx;
-	//var playerposy;
-
-	if (timer >= 15){
-		if (this.spawning != null){
-			this.timer.remove(this.spawning);
-		}
-	}
-	if (timer == 20 && frames%32 == 0){
-
-    //locate the player's current position
-		this.playerposx = this.player.body.x;
-		this.playerposy = this.player.body.y;
-		//console.log('posx'+this.playerposx);
-		//console.log('posy'+this.playerposy);
-
-	}
-
-	if(timer >= 21 ){
-
-    //lock player movement
-		this.player.body.x = this.playerposx;
-		this.player.body.y = this.playerposy;
-		this.player.body.velocity.x = this.player.body.velocity.y = 0;
-        this.player.flame.alpha = 0;
-    //move the tentacle through the player's location
-		this.tentacle.body.velocity.x = (this.playerposx - game.width/2);
-		this.tentacle.body.velocity.y = this.playerposy + 100;
-
-	}
-
-	if(timer >= 23){
-		if(this.health_bar.outer.frameName == "hp bar pt 1") this.health_bar.outer.frameName = "hp bar01";
-        if(this.player.frameName == "player ship")this.player.frameName = "player ship broken";
-        this.health_bar.outer.animations.play("idle");
-		}
-	},
     ending: function() {
             game.sound.stopAll()﻿;
             game.state.start('Cutscene2', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
