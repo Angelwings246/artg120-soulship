@@ -43,10 +43,10 @@ MainMenu.prototype = {
     //   game.sound.stopAll()﻿;
     //   game.state.start('Level1', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
     // } 
-    if (game.input.keyboard.justPressed(Phaser.KeyCode.FOUR)){
-      game.sound.stopAll()﻿;
-      game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
-    }
+    // if (game.input.keyboard.justPressed(Phaser.KeyCode.FOUR)){
+    //   game.sound.stopAll()﻿;
+    //   game.state.start('BossLevel', true, false, this.main, this.alt, this.music_vol, this.sfx_vol);
+    // }
 
     // if (game.input.keyboard.justPressed(Phaser.KeyCode.ESC)){
     //   game.sound.stopAll()﻿;
