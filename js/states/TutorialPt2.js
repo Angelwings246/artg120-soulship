@@ -149,7 +149,7 @@ TutorialPt2.prototype = {
     }
 
     //restart upon death
-    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
+    if(this.player.hp <= 0 && this.player.death_anim.isFinished) game.state.start('GameOver', true, false, false, this.main, this.alt, this.music_vol, this.sfx_vol, 'TutorialPt2');
 
     //collision checks
     this.all_enemy_bullets.forEach(this.bullet_collision, this);
