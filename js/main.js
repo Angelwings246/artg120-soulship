@@ -1,7 +1,6 @@
-/* Soul Ship (Working Title)
+/* Cosmic Corruption
 * by Hunter Lynch, Angel Tan, Taylor Fagundes
-* First Prototype Build: 5/13/19
-* First Tutorial Build: 5/15/19
+* Final Build!
 * GitHub repository: https://github.com/Angelwings246/artg120-soulship
 * Enjoy!
 */
@@ -21,7 +20,6 @@ window.onload = function(){
 	game = new Phaser.Game(960, 640, Phaser.AUTO);
 
 	//define states
-	// more will be added later
 	game.state.add('Boot', Boot);
 	game.state.add('Load', Load);
 	game.state.add('MainMenu', MainMenu);
