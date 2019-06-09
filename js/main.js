@@ -38,6 +38,7 @@ window.onload = function(){
 	// start game
 	game.state.start('Boot');
 
+
+
+
 }
-
-
